@@ -12,10 +12,11 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          FitnessSpot
+
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>Developed by Sharon Levi</div>
       </q-toolbar>
     </q-header>
 
@@ -25,13 +26,22 @@
       content-class="bg-grey-2"
     >
       <q-list>
-        <q-item-label header>Essential Links</q-item-label>
+        <q-item-label header>What would you like to do ?</q-item-label>
         <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
           <q-item-section avatar>
             <q-icon name="school" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Docs</q-item-label>
+            <q-item-label>Profile</q-item-label>
+            <q-item-label caption>quasar.dev</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
+          <q-item-section avatar>
+            <q-icon name="school" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Your Activities</q-item-label>
             <q-item-label caption>quasar.dev</q-item-label>
           </q-item-section>
         </q-item>
@@ -40,7 +50,7 @@
             <q-icon name="code" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Github</q-item-label>
+            <q-item-label>New Feed</q-item-label>
             <q-item-label caption>github.com/quasarframework</q-item-label>
           </q-item-section>
         </q-item>
@@ -49,7 +59,7 @@
             <q-icon name="chat" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Discord Chat Channel</q-item-label>
+            <q-item-label>Chat with Friends</q-item-label>
             <q-item-label caption>chat.quasar.dev</q-item-label>
           </q-item-section>
         </q-item>
@@ -67,27 +77,55 @@
             <q-icon name="rss_feed" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Twitter</q-item-label>
+            <q-item-label>Groups</q-item-label>
             <q-item-label caption>@quasarframework</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item clickable tag="a" target="_blank" href="https://github.com/sharonlevi94">
+          <q-item-section avatar>
+            <q-icon name="rss_feed" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>My GitHub</q-item-label>
+            <q-item-label caption>My projects</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item clickable tag="a" target="_blank" href="https://www.linkedin.com/in/sharon-levy-8434471a5/">
+          <q-item-section avatar>
+            <q-icon name="rss_feed" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>My LinkedIn</q-item-label>
+            <q-item-label caption>My page in LinkedIn</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
     </q-drawer>
 
     <q-page-container>
-      <HelloWorld />
+      <Header/>
+      <AboutUs/>
+      <Login/>
+      <JoinUs/>
+      <Users :tableName="'grid-users'"/>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import Users from './components/Users.vue'
+import Header from './components/Header.vue'
+import AboutUs from './components/AboutUs.vue'
+import JoinUs from "./components/JoinUs";
+import Login from "./components/Login";
 
 export default {
   name: 'LayoutDefault',
 
   components: {
-    HelloWorld
+    JoinUs, Login,
+    HelloWorld, Users, Header, AboutUs
   },
 
   data () {
