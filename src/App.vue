@@ -107,25 +107,29 @@
       <AboutUs/>
       <Login/>
       <JoinUs/>
-      <Users :tableName="'grid-users'"/>
+      <AddActivity/>
+      <TableViewer :tableName="'grid-users'" tableTitle="Users" settings='settings-users'/>
     </q-page-container>
   </q-layout>
 </template>
 
+<!------------------------------------------------------------------------------->
+
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-import Users from './components/Users.vue'
+import TableViewer from './components/TableViewer.vue'
 import Header from './components/Header.vue'
 import AboutUs from './components/AboutUs.vue'
 import JoinUs from "./components/JoinUs";
 import Login from "./components/Login";
+import AddActivity from "./components/AddActivity";
 
 export default {
   name: 'LayoutDefault',
 
   components: {
-    JoinUs, Login,
-    HelloWorld, Users, Header, AboutUs
+    JoinUs, Login, AddActivity,
+    HelloWorld, TableViewer, Header, AboutUs
   },
 
   data () {
@@ -135,6 +139,6 @@ export default {
   }
 }
 </script>
-
+<!------------------------------------------------------------------------------->
 <style>
 </style>
