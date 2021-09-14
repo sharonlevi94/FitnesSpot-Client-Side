@@ -35,5 +35,13 @@ export default {
         let ObjectsTable = this.getObjects(objType);
         ObjectsTable[id][key] = newData;
         localStorage.setItem(objType, JSON.stringify(ObjectsTable));
+    },
+    //-----------------------------------------------------------------------------
+    getObjById: function (objType, id){
+        let objects = this.getObjects(objType);
+        return objects[id];
+    },
+    getIdByValue(objType, value){
+        let ObjectsTable = this.getObjects(objType);
     }
 }

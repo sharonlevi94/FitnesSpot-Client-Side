@@ -1,5 +1,17 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <AboutUs/>
   </div>
 </template>
+
+<script>
+// @ is an alias to /src
+import AboutUs from "../components/AboutUs";
+
+export default {
+  name: 'About',
+  components: {
+    AboutUs
+  }
+}
+</script>

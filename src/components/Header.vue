@@ -13,7 +13,7 @@ export default {
 
 <style scoped>
 .header{
-  font-family: "Courier New";
+  font-family: "Berlin Sans FB";
   text-align: center;
   background-image: url("../resources/header1.jpg");
   color: black;

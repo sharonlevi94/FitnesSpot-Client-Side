@@ -1,18 +1,30 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Header/>
+    <AddActivity :tableName="'table-activities'" @addSomeThing="reloadTable()"/>
+    <TableViewer :tableName="'table-activities'" tableTitle="Activities" settings='settings-activities' :isReload="isReload"/>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Header from "../components/Header";
+import AddActivity from "../components/AddActivity";
+import TableViewer from "../components/TableViewer";
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    AddActivity, TableViewer, Header
+  },
+  data(){
+    return{
+      isReload: false,
+    }
+  },
+  methods: {
+    reloadTable(){
+      this.isReload = !this.isReload;
+    }
   }
 }
 </script>

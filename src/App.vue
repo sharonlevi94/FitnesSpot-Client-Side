@@ -27,7 +27,8 @@
     >
       <q-list>
         <q-item-label header>What would you like to do ?</q-item-label>
-        <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
+
+        <q-item clickable tag="a" href="/about">
           <q-item-section avatar>
             <q-icon name="school" />
           </q-item-section>
@@ -36,6 +37,7 @@
             <q-item-label caption>quasar.dev</q-item-label>
           </q-item-section>
         </q-item>
+
         <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
           <q-item-section avatar>
             <q-icon name="school" />
@@ -45,6 +47,7 @@
             <q-item-label caption>quasar.dev</q-item-label>
           </q-item-section>
         </q-item>
+
         <q-item clickable tag="a" target="_blank" href="https://github.com/quasarframework/">
           <q-item-section avatar>
             <q-icon name="code" />
@@ -54,6 +57,7 @@
             <q-item-label caption>github.com/quasarframework</q-item-label>
           </q-item-section>
         </q-item>
+
         <q-item clickable tag="a" target="_blank" href="https://chat.quasar.dev">
           <q-item-section avatar>
             <q-icon name="chat" />
@@ -63,6 +67,7 @@
             <q-item-label caption>chat.quasar.dev</q-item-label>
           </q-item-section>
         </q-item>
+
         <q-item clickable tag="a" target="_blank" href="https://forum.quasar.dev">
           <q-item-section avatar>
             <q-icon name="forum" />
@@ -72,6 +77,7 @@
             <q-item-label caption>forum.quasar.dev</q-item-label>
           </q-item-section>
         </q-item>
+
         <q-item clickable tag="a" target="_blank" href="https://twitter.com/quasarframework">
           <q-item-section avatar>
             <q-icon name="rss_feed" />
@@ -81,6 +87,7 @@
             <q-item-label caption>@quasarframework</q-item-label>
           </q-item-section>
         </q-item>
+
         <q-item clickable tag="a" target="_blank" href="https://github.com/sharonlevi94">
           <q-item-section avatar>
             <q-icon name="rss_feed" />
@@ -90,6 +97,7 @@
             <q-item-label caption>My projects</q-item-label>
           </q-item-section>
         </q-item>
+
         <q-item clickable tag="a" target="_blank" href="https://www.linkedin.com/in/sharon-levy-8434471a5/">
           <q-item-section avatar>
             <q-icon name="rss_feed" />
@@ -99,16 +107,18 @@
             <q-item-label caption>My page in LinkedIn</q-item-label>
           </q-item-section>
         </q-item>
+
       </q-list>
     </q-drawer>
 
     <q-page-container>
-      <Header/>
-      <AboutUs/>
+      <Home/>
+      <Posts :cardName="'table_posts'" :cardSettings="'posts-settings'"/>
       <Login/>
       <JoinUs/>
-      <AddActivity/>
       <TableViewer :tableName="'grid-users'" tableTitle="Users" settings='settings-users'/>
+      <CardViewer  :cardName="'grid-users'" settings='settings-users'/>
+
     </q-page-container>
   </q-layout>
 </template>
@@ -116,20 +126,21 @@
 <!------------------------------------------------------------------------------->
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import TableViewer from './components/TableViewer.vue'
+import Home from "./views/Home";
 import Header from './components/Header.vue'
-import AboutUs from './components/AboutUs.vue'
+import About from "./views/About";
 import JoinUs from "./components/JoinUs";
 import Login from "./components/Login";
-import AddActivity from "./components/AddActivity";
+import TableViewer from "./components/TableViewer";
+import CardViewer from "./components/CardViewer";
+import Posts from "./components/Posts";
 
 export default {
   name: 'LayoutDefault',
 
   components: {
-    JoinUs, Login, AddActivity,
-    HelloWorld, TableViewer, Header, AboutUs
+    About,
+    JoinUs, Login, Home, Header, TableViewer, CardViewer, Posts
   },
 
   data () {

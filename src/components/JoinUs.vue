@@ -45,7 +45,6 @@
 <script>
 export default {
 name: "JoinUs",
-  lorem: 'Lorem ipsum dolor sit amet',
   data () {
     return {
       first_name: '',

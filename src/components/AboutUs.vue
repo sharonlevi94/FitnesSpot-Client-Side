@@ -25,7 +25,7 @@ name: "AboutUs"
 <style scoped>
 .about-us {
   text-align: center;
-  font-family: "Courier New";
+  font-family: "Berlin Sans FB";
   display: table;
   margin: 0 auto;
   background-image: url("../resources/header2.jpg");
