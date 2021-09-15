@@ -1,6 +1,6 @@
 <template>
   <div class="warapper" align="center">
-    <div class="cards-wrapper" >
+    <div class="cards-wrapper">
       <q-card
           class="my-card text-white"
           align="left"
@@ -9,7 +9,9 @@
       >
 
         <q-card-section v-for="titleValue in user" >
-           {{ titleValue }}
+          {{cardSettings[counter]}}: <br>
+          {{ titleValue }}
+          {{increase()}}
           <br>
         </q-card-section>
 
@@ -24,56 +26,56 @@
 import localStorageDriver from '../middleware/local-storage/index.js';
 
 export default {
-name: "CardViewer",
+  name: "CardViewer",
   props: ['cardName', 'settings'],
-  data () {
+  data() {
     return {
       cardSettings: [],
       rows: [],
+      counter: 0,
     }
   },
   methods: {
-    read(){
+    read() {
       this.cardSettings = [];
       this.rows = [];
       let cols = localStorageDriver.getObjects(this.settings);
-      for(let i in cols ){
-        this.cardSettings.push(cols[i]);
+      for (let i in cols) {
+        this.cardSettings.push(cols[i]['label']);
       }
-     //this.columns.push({name: "actions", label: "Actions", field: "actions"});
+      //this.columns.push({name: "actions", label: "Actions", field: "actions"});
 
-      let objects =  localStorageDriver.getObjects(this.cardName);
-     // this.rows = objects;
-      for(let i in objects ){
-        this.rows.push(objects[i]);
+      let objects = localStorageDriver.getObjects(this.cardName);
+      // this.rows = objects;
+      for (let obj of objects) {
+        this.rows.push(obj);
       }
     },
 
     //----------------------------------------------------------
 
-    deleteObj(id){
+    deleteObj(id) {
       localStorageDriver.remove(this.cardName, id);
       this.read();
     },
-
     //----------------------------------------------------------
-    getByValue(value){
-      let objects =  localStorageDriver.getObjects(this.cardName);
-      for(let key in objects){
-        if(objects[key][this.settings[0]] == value[this.settings[0]])
-          return key;
-      }
-    },
-    goToObj(id){
+    goToObj(id) {
       this.$router.push(`editedObj/${id}`);
+    },
+    //----------------------------------------------------------
+    increase(){
+        this.counter++;
+      if(this.counter == this.cardSettings.length){
+        this.counter = 0;
+      }
     }
   },
   //---------------------------------------------------------------------------------------
-  created(){
+  created() {
     this.read();
   },
   watch: {
-    isReload(){
+    isReload() {
       this.read();
 
     }
@@ -82,7 +84,7 @@ name: "CardViewer",
 </script>
 
 <style scoped>
-.my-card{
+.my-card {
   width: 300px;
   margin: 50px;
   border-radius: 30px;

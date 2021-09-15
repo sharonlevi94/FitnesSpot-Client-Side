@@ -3,45 +3,48 @@ export default {
         // get the objects list from the DB
         var result = localStorage.getItem(objType);
         if(result == null){
-            result = '{}';
+            result = '[]';
         }
         return JSON.parse(result);
     },
     //-----------------------------------------------------------------------------
     insert:function (tableType, obj){
         let id = new Date().getTime();
+        let newObj = obj;
+        newObj.id = id;
         // insert user into DB
-        let objMap = this.getObjects(tableType);
-        objMap[id] = obj;
-        localStorage.setItem(tableType, JSON.stringify(objMap));
+        let objArr = this.getObjects(tableType);
+        objArr.push(newObj);
+        localStorage.setItem(tableType, JSON.stringify(objArr));
     },
     //-----------------------------------------------------------------------------
     remove:function (objType, id){
         let ObjectsTable = this.getObjects(objType);
-        delete ObjectsTable[id];
-        localStorage.setItem(objType, JSON.stringify(ObjectsTable));
-    },
-    //-----------------------------------------------------------------------------
-    update:function (objType, id, newobj){
-        let ObjectsTable = this.getObjects(objType);
-        for (var att in newobj){
-            if(newobj[att])
-                ObjectsTable[id][att] = newobj[att];
+        for (let i = 0 ; i < ObjectsTable.length ; i++){
+            if(ObjectsTable[i].id == id)
+                ObjectsTable.slice(i, 1);
         }
         localStorage.setItem(objType, JSON.stringify(ObjectsTable));
     },
     //-----------------------------------------------------------------------------
-    updateByKey:function (objType, id, newData, key){
+    update:function (objType, id, newObj){
         let ObjectsTable = this.getObjects(objType);
-        ObjectsTable[id][key] = newData;
+        for (let obj of ObjectsTable){
+            if(obj.id == id) {
+                obj = newObj;
+                break;
+            }
+        }
         localStorage.setItem(objType, JSON.stringify(ObjectsTable));
     },
     //-----------------------------------------------------------------------------
     getObjById: function (objType, id){
         let objects = this.getObjects(objType);
-        return objects[id];
+        for (let obj of objects){
+            if(obj.id == id) {
+                return obj;
+            }
+        }
     },
-    getIdByValue(objType, value){
-        let ObjectsTable = this.getObjects(objType);
-    }
+
 }

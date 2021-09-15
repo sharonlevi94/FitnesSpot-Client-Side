@@ -11,12 +11,8 @@
     >
 
       <template v-slot:body="props">
-        <q-tr :props="props" @click="goToObj(getByValue(props.row))">
+        <q-tr :props="props" @click="goToObj(props.row.id)">
           <!--TODO: generic v-slots -->
-
-<!--          <q-td v-for="col of columns" key="col" :props="props">
-            {{props.row.col}}
-          </q-td>-->
 
           <!-- Activities Table -->
           <q-td key="workoutType" :props="props"> {{ props.row.workoutType }} </q-td>
@@ -38,7 +34,7 @@
           <q-td key="favorite_sports" :props="props"> {{ props.row.favorite_sports }} </q-td>
 
             <q-td key="actions" :props="props">
-              <q-btn @click="deleteObj(getByValue(props.row))">
+              <q-btn @click="deleteObj(props.row.id)">
                 Delete
               </q-btn>
             </q-td>
@@ -76,8 +72,8 @@ export default {
       this.columns.push({name: "actions", label: "Actions", field: "actions"});
 
       let objects =  localStorageDriver.getObjects(this.tableName);
-      for(let i in objects ){
-        this.rows.push(objects[i]);
+      for(let obj of objects ){
+        this.rows.push(obj);
       }
     },
 
@@ -89,21 +85,20 @@ export default {
     },
 
     //----------------------------------------------------------
-    getByValue(value){
-      let objects =  localStorageDriver.getObjects(this.tableName);
-      for(let key in objects){
-        if(objects[key][this.settings[0]] == value[this.settings[0]])
-          return key;
-      }
-    },
+
     goToObj(id){
       this.$router.push(`editedObj/${id}`);
-    }
+    },
   },
+
   //---------------------------------------------------------------------------------------
+
   created(){
     this.read();
   },
+
+  //----------------------------------------------------------
+
   watch: {
     isReload(){
       this.read();

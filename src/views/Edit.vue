@@ -3,6 +3,7 @@
     <AddActivity :tableName="tableType"
                  :editedActivity="editedObj"
                  :objId="getId()"></AddActivity>
+    <tableViewer :tableName="'table-activities'" tableTitle="Activities" settings='settings-activities'/>
   </div>
 </template>
 
@@ -14,7 +15,7 @@ import AddActivity from "../components/AddActivity";
 export default {
 name: "Edit",
   components:{
-  AddActivity
+  AddActivity, tableViewer
   },
   data(){
   return{

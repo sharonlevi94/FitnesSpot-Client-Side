@@ -1,20 +1,19 @@
 <template>
   <div class="home">
     <Header/>
-    <AddActivity :tableName="'table-activities'" @addSomeThing="reloadTable()"/>
-    <TableViewer :tableName="'table-activities'" tableTitle="Activities" settings='settings-activities' :isReload="isReload"/>
+    <Posts cardName="table_posts" carsSettings="posts-settings"/>
   </div>
 </template>
 
 <script>
 import Header from "../components/Header";
-import AddActivity from "../components/AddActivity";
-import TableViewer from "../components/TableViewer";
+import Posts from "../components/Posts";
+
 
 export default {
   name: 'Home',
   components: {
-    AddActivity, TableViewer, Header
+     Header, Posts
   },
   data(){
     return{

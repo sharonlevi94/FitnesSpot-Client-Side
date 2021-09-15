@@ -11,6 +11,7 @@
           <q-spinner-dots color="primary" size="40px" />
         </div>
       </template>
+
     </q-infinite-scroll>
   </div>
 </template>

@@ -1,6 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated class="glossy">
+      <div>
       <q-toolbar>
         <q-btn
           flat
@@ -11,13 +12,18 @@
           icon="menu"
         />
 
-        <q-toolbar-title>
+        <q-item clickable tag="a" href="#/">
+        <q-toolbar-title >
           FitnessSpot
-
         </q-toolbar-title>
+        </q-item>
 
-        <div>Developed by Sharon Levi</div>
+        <q-item>
+          <div align="right">Developed by Sharon Levi </div>
+        </q-item>
+
       </q-toolbar>
+      </div>
     </q-header>
 
     <q-drawer
@@ -25,10 +31,20 @@
       bordered
       content-class="bg-grey-2"
     >
-      <q-list>
+      <q-list @click="leftDrawerOpen = !leftDrawerOpen">
         <q-item-label header>What would you like to do ?</q-item-label>
 
-        <q-item clickable tag="a" href="/about">
+        <q-item clickable tag="a" href="#/" >
+          <q-item-section avatar>
+            <q-icon name="school" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Home</q-item-label>
+            <q-item-label caption></q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable tag="a" href="#/signin">
           <q-item-section avatar>
             <q-icon name="school" />
           </q-item-section>
@@ -38,7 +54,7 @@
           </q-item-section>
         </q-item>
 
-        <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
+        <q-item clickable tag="a" href="#/activities">
           <q-item-section avatar>
             <q-icon name="school" />
           </q-item-section>
@@ -78,12 +94,12 @@
           </q-item-section>
         </q-item>
 
-        <q-item clickable tag="a" target="_blank" href="https://twitter.com/quasarframework">
+        <q-item clickable tag="a" href="#/about">
           <q-item-section avatar>
             <q-icon name="rss_feed" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Groups</q-item-label>
+            <q-item-label>About</q-item-label>
             <q-item-label caption>@quasarframework</q-item-label>
           </q-item-section>
         </q-item>
@@ -112,12 +128,7 @@
     </q-drawer>
 
     <q-page-container>
-      <Home/>
-      <Posts :cardName="'table_posts'" :cardSettings="'posts-settings'"/>
-      <Login/>
-      <JoinUs/>
-      <TableViewer :tableName="'grid-users'" tableTitle="Users" settings='settings-users'/>
-      <CardViewer  :cardName="'grid-users'" settings='settings-users'/>
+      <router-view/>
 
     </q-page-container>
   </q-layout>
@@ -126,26 +137,17 @@
 <!------------------------------------------------------------------------------->
 
 <script>
-import Home from "./views/Home";
-import Header from './components/Header.vue'
-import About from "./views/About";
-import JoinUs from "./components/JoinUs";
-import Login from "./components/Login";
-import TableViewer from "./components/TableViewer";
-import CardViewer from "./components/CardViewer";
-import Posts from "./components/Posts";
 
 export default {
   name: 'LayoutDefault',
 
   components: {
-    About,
-    JoinUs, Login, Home, Header, TableViewer, CardViewer, Posts
+
   },
 
   data () {
     return {
-      leftDrawerOpen: this.$q.platform.is.desktop
+      leftDrawerOpen: !this.$q.platform.is.desktop
     }
   }
 }
