@@ -4,20 +4,20 @@
 
         <div class="join-us-fields">
 
-          <q-input v-model="first_name" filled type="text" hint="First Name" />
+          <q-input v-model="editedObj.first_name" filled type="text" hint="First Name" />
 
-          <q-input v-model="last_name" filled type="text" hint="Last Name" />
+          <q-input v-model="editedObj.last_name" filled type="text" hint="Last Name" />
 
-          <q-input v-model="user_name" filled type="text" hint="User Name" />
+          <q-input v-model="editedObj.user_name" filled type="text" hint="User Name" />
 
-          <q-input v-model="password" filled type="password" hint="Password" />
+          <q-input v-model="editedObj.password" filled type="password" hint="Password" />
 
-          <q-input v-model="password" filled :type="isPwd ? 'password' : 'text'" hint="Password with toggle">
+          <q-input v-model="editedObj.password" filled :type="editedObj.isPwd ? 'password' : 'text'" hint="Password with toggle">
             <template v-slot:append>
               <q-icon
-                  :name="isPwd ? 'visibility_off' : 'visibility'"
+                  :name="editedObj.isPwd ? 'visibility_off' : 'visibility'"
                   class="cursor-pointer"
-                  @click="isPwd = !isPwd"
+                  @click="editedObj.isPwd = !editedObj.isPwd"
               />
             </template>
           </q-input>
@@ -26,38 +26,55 @@
 
         <div class="join-us-fields">
 
-          <q-input v-model="email" filled type="email" hint="Email" />
+          <q-input v-model="editedObj.email" filled type="email" hint="Email" />
 
-          <q-input v-model="phone_number" filled type="tel" hint="Telephone number" />
+          <q-input v-model="editedObj.phone_number" filled type="tel" hint="Telephone number" />
 
-          <q-input v-model="date_of_birth" filled type="date" hint="Date of birth" />
+          <q-input v-model="editedObj.date_of_birth" filled type="date" hint="Date of birth" />
 
-          <q-input v-model="address" filled type="text" hint="Address" />
+          <q-input v-model="editedObj.address" filled type="text" hint="Address" />
 
-          <q-input v-model="favorite_sports" filled type="text" hint="Favorite Sports" />
+          <q-input v-model="editedObj.favorite_sports" filled type="text" hint="Favorite Sports" />
 
         </div>
 
-        <div> <q-btn push class="join-us-button" color="white" text-color="black" label="Sign In" /> </div>
+        <div> <q-btn push class="join-us-button" color="white" text-color="black" label="Sign In" @click="insert()"/> </div>
   </div>
 </template>
 
 <script>
+import localStorageDrive from "../middleware/local-storage";
+
 export default {
 name: "JoinUs",
   data () {
     return {
-      first_name: '',
-      last_name: '',
-      user_name: '',
-      password: '',
-      isPwd: true,
-      email: '',
-      date_of_birth: '',
-      phone_number: '',
-      address: '',
-      favorite_sports: '',
+      editedObj: {
+        first_name: '',
+        last_name: '',
+        user_name: '',
+        password: '',
+        isPwd: true,
+        email: '',
+        date_of_birth: '',
+        phone_number: '',
+        address: '',
+        favorite_sports: '',
+      },
     }
+  },
+  methods: {
+    insert(){
+      localStorageDrive.insert('grid-users', this.editedObj);
+      this.$emit('addSomeThing');
+    },
+    update(id){
+      localStorageDrive.update('grid-users', id, this.editedObj);
+      this.$router.push(`/signin`);
+    }
+  },
+  created() {
+
   }
 }
 </script>

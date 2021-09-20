@@ -11,11 +11,11 @@
     >
 
       <template v-slot:body="props">
-        <q-tr :props="props" @click="goToObj(props.row.id)">
+        <q-tr :props="props" >
           <!--TODO: generic v-slots -->
 
           <!-- Activities Table -->
-          <q-td key="workoutType" :props="props"> {{ props.row.workoutType }} </q-td>
+          <q-td key="workoutType" :props="props" @click="goToObj(props.row.id)"> {{ props.row.workoutType }} </q-td>
           <q-td key="date" :props="props"> {{ props.row.date }} </q-td>
           <q-td key="time" :props="props"> {{ props.row.time }} </q-td>
           <q-td key="location" :props="props"> {{ props.row.location }} </q-td>
@@ -24,7 +24,7 @@
           <q-td key="note" :props="props"> {{ props.row.note }} </q-td>
 
           <!-- Users Table -->
-          <q-td key="first_name" :props="props"> {{ props.row.first_name }} </q-td>
+          <q-td key="first_name" :props="props" @click="goToObj(props.row.id)"> {{ props.row.first_name }} </q-td>
           <q-td key="last_name" :props="props"> {{ props.row.last_name }} </q-td>
           <q-td key="user_name" :props="props"> {{ props.row.user_name }} </q-td>
           <q-td key="password" :props="props"> {{ props.row.password }} </q-td>

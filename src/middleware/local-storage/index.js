@@ -21,8 +21,10 @@ export default {
     remove:function (objType, id){
         let ObjectsTable = this.getObjects(objType);
         for (let i = 0 ; i < ObjectsTable.length ; i++){
-            if(ObjectsTable[i].id == id)
-                ObjectsTable.slice(i, 1);
+            if(ObjectsTable[i].id == id) {
+                ObjectsTable.splice(i, 1);
+                break;
+            }
         }
         localStorage.setItem(objType, JSON.stringify(ObjectsTable));
     },

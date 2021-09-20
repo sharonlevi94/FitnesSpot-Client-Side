@@ -8,8 +8,8 @@
           v-for="user of rows"
       >
 
-        <q-card-section v-for="titleValue in user" >
-          {{cardSettings[counter]}}: <br>
+        <q-card-section v-if="!isId(user, titleValue)" v-for="titleValue in user" >
+         <div class="sectionTitle"> {{cardSettings[counter]}} </div>
           {{ titleValue }}
           {{increase()}}
           <br>
@@ -68,6 +68,9 @@ export default {
       if(this.counter == this.cardSettings.length){
         this.counter = 0;
       }
+    },
+    isId(obj, value){
+      return obj.id == value;
     }
   },
   //---------------------------------------------------------------------------------------
@@ -90,5 +93,8 @@ export default {
   border-radius: 30px;
   font-size: 20px;
   font-family: "Berlin Sans FB";
+}
+.sectionTitle{
+  color: black;
 }
 </style>

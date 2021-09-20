@@ -1,7 +1,7 @@
 <template>
   <div class="signnin">
-    <JoinUs/>
-    <TableViewer :tableName="'grid-users'" tableTitle="Users" settings='settings-users'/>
+    <JoinUs @addSomeThing="reloadTable()"/>
+    <TableViewer :tableName="'grid-users'" tableTitle="Users" settings='settings-users' :isReload="isReload"/>
     <CardViewer  :cardName="'grid-users'" settings='settings-users'/>
   </div>
 </template>
@@ -20,11 +20,13 @@ export default {
   },
   data(){
     return{
-
+      isReload: false,
     }
   },
   methods: {
-
+    reloadTable(){
+      this.isReload = !this.isReload;
+    },
   }
 }
 </script>

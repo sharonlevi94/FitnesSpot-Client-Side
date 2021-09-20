@@ -50,7 +50,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>Profile</q-item-label>
-            <q-item-label caption>quasar.dev</q-item-label>
+            <q-item-label caption></q-item-label>
           </q-item-section>
         </q-item>
 
@@ -60,7 +60,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>Your Activities</q-item-label>
-            <q-item-label caption>quasar.dev</q-item-label>
+            <q-item-label caption></q-item-label>
           </q-item-section>
         </q-item>
 
@@ -70,7 +70,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>New Feed</q-item-label>
-            <q-item-label caption>github.com/quasarframework</q-item-label>
+            <q-item-label caption></q-item-label>
           </q-item-section>
         </q-item>
 
@@ -80,7 +80,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>Chat with Friends</q-item-label>
-            <q-item-label caption>chat.quasar.dev</q-item-label>
+            <q-item-label caption></q-item-label>
           </q-item-section>
         </q-item>
 
@@ -90,7 +90,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>Forum</q-item-label>
-            <q-item-label caption>forum.quasar.dev</q-item-label>
+            <q-item-label caption></q-item-label>
           </q-item-section>
         </q-item>
 
@@ -100,7 +100,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>About</q-item-label>
-            <q-item-label caption>@quasarframework</q-item-label>
+            <q-item-label caption></q-item-label>
           </q-item-section>
         </q-item>
 

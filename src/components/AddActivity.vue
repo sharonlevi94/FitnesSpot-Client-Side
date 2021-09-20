@@ -59,7 +59,7 @@ export default {
     },
     update(id){
       localStorageDrive.update(this.tableName, id, this.editedObj);
-      this.$router.push(`/`);
+      this.$router.push(`/activities`);
     }
   },
   created() {
