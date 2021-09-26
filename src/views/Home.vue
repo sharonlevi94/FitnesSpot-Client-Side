@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Header/>
-    <Posts cardName="table_posts" carsSettings="posts-settings"/>
+    <Posts :cardName="'posts'" :cardSettings="'settings-posts'"/>
   </div>
 </template>
 

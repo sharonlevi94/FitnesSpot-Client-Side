@@ -12,7 +12,7 @@
 
           <q-input v-model="editedObj.password" filled type="password" hint="Password" />
 
-          <q-input v-model="editedObj.password" filled :type="editedObj.isPwd ? 'password' : 'text'" hint="Password with toggle">
+          <q-input v-model="editedObj.password" filled :type="editedObj.isPwd ? 'password' : 'text'" hint="Confirm Password">
             <template v-slot:append>
               <q-icon
                   :name="editedObj.isPwd ? 'visibility_off' : 'visibility'"
@@ -28,11 +28,9 @@
 
           <q-input v-model="editedObj.email" filled type="email" hint="Email" />
 
-          <q-input v-model="editedObj.phone_number" filled type="tel" hint="Telephone number" />
+          <q-input v-model="editedObj.phone_number" filled type="tel" hint="Phone number" />
 
           <q-input v-model="editedObj.date_of_birth" filled type="date" hint="Date of birth" />
-
-          <q-input v-model="editedObj.address" filled type="text" hint="Address" />
 
           <q-input v-model="editedObj.favorite_sports" filled type="text" hint="Favorite Sports" />
 
@@ -43,7 +41,7 @@
 </template>
 
 <script>
-import localStorageDrive from "../middleware/local-storage";
+import api from '../middleware/api/index.js';
 
 export default {
 name: "JoinUs",
@@ -58,19 +56,26 @@ name: "JoinUs",
         email: '',
         date_of_birth: '',
         phone_number: '',
-        address: '',
         favorite_sports: '',
       },
     }
   },
   methods: {
-    insert(){
-      localStorageDrive.insert('grid-users', this.editedObj);
+    async insert(){
+      delete this.editedObj.isPwd;
+      let dateArr = this.editedObj.date_of_birth.split('-');
+      let dateObj = {};
+      dateObj['year'] = Number(dateArr[0]);
+      dateObj['month'] = Number(dateArr [1]);
+      dateObj['day'] = Number(dateArr[2]);
+      this.editedObj.date_of_birth = dateObj;
+
+      await api.create({entity: 'users',item: this.editedObj});
       this.$emit('addSomeThing');
     },
-    update(id){
-      localStorageDrive.update('grid-users', id, this.editedObj);
-      this.$router.push(`/signin`);
+    async update(id){
+      await api.update({entity: 'grid-users', objId: id, newObj: this.editedObj })
+      return this.$router.replace(`/signin`);
     }
   },
   created() {

@@ -4,15 +4,18 @@
       <q-card
           class="my-card text-white"
           align="left"
-          style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%)"
-          v-for="user of rows"
+          style="background: radial-gradient(circle, #9d9999 0%, #434141 100%)"
+          v-for="row of rows"
       >
 
-        <q-card-section v-if="!isId(user, titleValue)" v-for="titleValue in user" >
-         <div class="sectionTitle"> {{cardSettings[counter]}} </div>
-          {{ titleValue }}
+        <q-card-section v-if="!isId(row, titleValue)" v-for="titleValue in row" >
+          <div class="sectionTitle"> {{settings[counter]}} </div>
+
+          <div v-if="isObj(titleValue)" v-for="item in titleValue">{{item}}</div>
+          <div v-if="!isObj(titleValue)">{{ titleValue }}</div>
+
           {{increase()}}
-          <br>
+
         </q-card-section>
 
 
@@ -23,39 +26,37 @@
 </template>
 
 <script>
-import localStorageDriver from '../middleware/local-storage/index.js';
+import api from '../middleware/api/index.js';
 
 export default {
   name: "CardViewer",
-  props: ['cardName', 'settings'],
+  props: ['cardName', 'settingsName', 'isReload'],
   data() {
     return {
-      cardSettings: [],
+      settings: [],
       rows: [],
       counter: 0,
     }
   },
   methods: {
-    read() {
-      this.cardSettings = [];
+    async read() {
+      this.settings = [];
       this.rows = [];
-      let cols = localStorageDriver.getObjects(this.settings);
+      let cols = await api.read({entity:this.settingsName, settings: true});
       for (let i in cols) {
-        this.cardSettings.push(cols[i]['label']);
+        this.settings.push(cols[i]['label']);
       }
-      //this.columns.push({name: "actions", label: "Actions", field: "actions"});
 
-      let objects = localStorageDriver.getObjects(this.cardName);
-      // this.rows = objects;
-      for (let obj of objects) {
-        this.rows.push(obj);
-      }
+      let objects = await api.read({entity:this.cardName});
+        for (let obj of objects) {
+          this.rows.push(obj);
+        }
     },
 
     //----------------------------------------------------------
 
-    deleteObj(id) {
-      localStorageDriver.remove(this.cardName, id);
+    async deleteObj(id) {
+      await api.remove({entity: this.cardName, objId: id});
       this.read();
     },
     //----------------------------------------------------------
@@ -65,12 +66,15 @@ export default {
     //----------------------------------------------------------
     increase(){
         this.counter++;
-      if(this.counter == this.cardSettings.length){
+      if(this.counter == this.settings.length){
         this.counter = 0;
       }
     },
     isId(obj, value){
       return obj.id == value;
+    },
+    isObj(item){
+      return (typeof item) === 'object'
     }
   },
   //---------------------------------------------------------------------------------------
@@ -89,7 +93,7 @@ export default {
 <style scoped>
 .my-card {
   width: 300px;
-  margin: 50px;
+  margin: 30px;
   border-radius: 30px;
   font-size: 20px;
   font-family: "Berlin Sans FB";
@@ -97,4 +101,5 @@ export default {
 .sectionTitle{
   color: black;
 }
+
 </style>

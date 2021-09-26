@@ -2,7 +2,7 @@
   <div class="q-pa-md" align="center">
     News Feed
     <q-infinite-scroll @load="onLoad" :offset="250">
-      <CardViewer :cardName="this.cardName" :settings="this.cardSettings"/>
+      <CardViewer :cardName="this.cardName" :settingsName="this.cardSettings"/>
       <div v-for="(item, index) in items" :key="index" class="caption">
 
       </div>
@@ -35,6 +35,10 @@ export default {
           done()
         }
       }, 2000)
+    },
+    check(){
+      console.log(this.cardName)
+      console.log((this.cardSettings))
     }
   }
 }

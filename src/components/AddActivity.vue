@@ -8,7 +8,7 @@
 
       <q-input v-model="editedObj.date" filled type="date" hint="Date" />
 
-      <q-input v-model="editedObj.time" filled type="text" hint="for how long?" />
+      <q-input v-model="editedObj.time" filled type="text" hint="for how long? (hh:mm)" />
 
       <q-input v-model="editedObj.location" filled type="text" hint="Where?" />
 
@@ -31,7 +31,7 @@
 
 <script>
 import localStorageDrive from '../middleware/local-storage/index.js';
-import tableViewer from './TableViewer.vue';
+import api from '../middleware/api/index.js';
 
 export default {
   name: "AddActivity",
@@ -53,13 +53,28 @@ export default {
     }
   },
   methods: {
-    insert(){
-      localStorageDrive.insert(this.tableName, this.editedObj);
+    async insert(){
+      let dateArr = this.editedObj.date.split('-');
+      let dateObj = {};
+      dateObj['year'] = Number(dateArr[0]);
+      dateObj['month'] = Number(dateArr [1]);
+      dateObj['day'] = Number(dateArr[2]);
+      this.editedObj.date = dateObj;
+
+      let timeArr = this.editedObj.time.split(':');
+      let timeObj = {};
+      timeObj['hours'] = Number(timeArr[0]);
+      timeObj['minutes'] = Number(timeArr [1]);
+      this.editedObj.time = timeObj;
+
+      await api.create({entity: this.tableName,item: this.editedObj});
+
       this.$emit('addSomeThing');
+
     },
-    update(id){
-      localStorageDrive.update(this.tableName, id, this.editedObj);
-      this.$router.push(`/activities`);
+    async update(id){
+      await api.update({entity:this.tableName, objId: id, newObj: this.editedObj })
+      this.$router.go(-1);
     }
   },
   created() {

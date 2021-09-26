@@ -1,7 +1,7 @@
 <template>
   <div class="myActivities">
-    <AddActivity :tableName="'table-activities'" @addSomeThing="reloadTable()"/>
-    <tableViewer :tableName="'table-activities'" tableTitle="Activities" settings='settings-activities' :isReload="isReload"/>
+    <AddActivity :tableName="'activities'" @addSomeThing="reloadTable()"/>
+    <tableViewer :tableName="'activities'" tableTitle="Activities" :settings="'settings-activities'" :isReload="isReload"/>
   </div>
 </template>
 

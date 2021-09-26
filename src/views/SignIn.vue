@@ -1,8 +1,8 @@
 <template>
   <div class="signnin">
     <JoinUs @addSomeThing="reloadTable()"/>
-    <TableViewer :tableName="'grid-users'" tableTitle="Users" settings='settings-users' :isReload="isReload"/>
-    <CardViewer  :cardName="'grid-users'" settings='settings-users'/>
+    <TableViewer :tableName="'users'" tableTitle="Users" :settings="'settings-users'" :isReload="isReload"/>
+    <CardViewer  :cardName="'users'" :settingsName="'settings-users'" :isReload="isReload"/>
   </div>
 </template>
 

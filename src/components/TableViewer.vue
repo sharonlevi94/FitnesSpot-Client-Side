@@ -14,24 +14,24 @@
         <q-tr :props="props" >
           <!--TODO: generic v-slots -->
 
-          <!-- Activities Table -->
-          <q-td key="workoutType" :props="props" @click="goToObj(props.row.id)"> {{ props.row.workoutType }} </q-td>
-          <q-td key="date" :props="props"> {{ props.row.date }} </q-td>
-          <q-td key="time" :props="props"> {{ props.row.time }} </q-td>
-          <q-td key="location" :props="props"> {{ props.row.location }} </q-td>
-          <q-td key="calories" :props="props"> {{ props.row.calories }} </q-td>
-          <q-td key="difficulty" :props="props"> {{ props.row.difficulty }} </q-td>
-          <q-td key="note" :props="props"> {{ props.row.note }} </q-td>
+            <!-- Activities Table -->
+            <q-td  v-if="isToShow('activities')" key="workoutType" :props="props" @click="goToObj(props.row.id)"> {{ props.row.workoutType }} </q-td>
+            <q-td v-if="isToShow('activities')" key="date" :props="props"> {{ props.row.date.day }}.{{ props.row.date.month }}.{{ props.row.date.year }} </q-td>
+            <q-td v-if="isToShow('activities')" key="time" :props="props"> {{ props.row.time.hours }}:{{ props.row.time.minutes }} </q-td>
+            <q-td v-if="isToShow('activities')" key="location" :props="props"> {{ props.row.location }} </q-td>
+            <q-td v-if="isToShow('activities')" key="calories" :props="props"> {{ props.row.calories }} </q-td>
+            <q-td v-if="isToShow('activities')" key="difficulty" :props="props"> {{ props.row.difficulty }} </q-td>
+            <q-td v-if="isToShow('activities')" key="note" :props="props"> {{ props.row.note }} </q-td>
 
-          <!-- Users Table -->
-          <q-td key="first_name" :props="props" @click="goToObj(props.row.id)"> {{ props.row.first_name }} </q-td>
-          <q-td key="last_name" :props="props"> {{ props.row.last_name }} </q-td>
-          <q-td key="user_name" :props="props"> {{ props.row.user_name }} </q-td>
-          <q-td key="password" :props="props"> {{ props.row.password }} </q-td>
-          <q-td key="age" :props="props"> {{ props.row.age }} </q-td>
-          <q-td key="phone_number" :props="props"> {{ props.row.phone_number }} </q-td>
-          <q-td key="address" :props="props"> {{ props.row.address }} </q-td>
-          <q-td key="favorite_sports" :props="props"> {{ props.row.favorite_sports }} </q-td>
+            <!-- Users Table -->
+            <q-td v-if="isToShow('users')" key="first_name" :props="props" @click="goToObj(props.row.id)"> {{ props.row.first_name }} </q-td>
+            <q-td v-if="isToShow('users')" key="last_name" :props="props"> {{ props.row.last_name }} </q-td>
+            <q-td v-if="isToShow('users')" key="user_name" :props="props"> {{ props.row.user_name }} </q-td>
+            <q-td v-if="isToShow('users')" key="password" :props="props"> {{ props.row.password }} </q-td>
+            <q-td v-if="isToShow('users')" key="email" :props="props"> {{ props.row.email }} </q-td>
+            <q-td v-if="isToShow('users')" key="date_of_birth" :props="props"> {{ props.row.date_of_birth.day }}.{{ props.row.date_of_birth.month }}.{{ props.row.date_of_birth.year }} </q-td>
+            <q-td v-if="isToShow('users')" key="phone_number" :props="props"> {{ props.row.phone_number }} </q-td>
+            <q-td v-if="isToShow('users')" key="favorite_sports" :props="props"> {{ props.row.favorite_sports }} </q-td>
 
             <q-td key="actions" :props="props">
               <q-btn @click="deleteObj(props.row.id)">
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import localStorageDriver from '../middleware/local-storage/index.js';
+import api from '../middleware/api/index.js';
 
 export default {
   name: 'TableViewer',
@@ -62,25 +62,28 @@ export default {
   },
   //---------------------------------------------------------------------------------------
   methods: {
-    read(){
+    async read(){
       this.columns = [];
       this.rows = [];
-      let cols = localStorageDriver.getObjects(this.settings);
+      let objects = await api.read({entity: this.tableName});
+      for(let obj of objects ){
+        this.rows.push(obj);
+      }
+
+      let cols = await api.read({entity: this.settings, settings: true});
       for(let i in cols ){
         this.columns.push(cols[i]);
       }
       this.columns.push({name: "actions", label: "Actions", field: "actions"});
 
-      let objects =  localStorageDriver.getObjects(this.tableName);
-      for(let obj of objects ){
-        this.rows.push(obj);
-      }
+      console.log(objects);
+      console.log(cols);
     },
 
     //----------------------------------------------------------
 
     deleteObj(id){
-      localStorageDriver.remove(this.tableName, id);
+      api.remove({objId: id});
       this.read();
     },
 
@@ -89,6 +92,9 @@ export default {
     goToObj(id){
       this.$router.push(`editedObj/${id}`);
     },
+    isToShow(table_name){
+      return this.tableName == table_name;
+    }
   },
 
   //---------------------------------------------------------------------------------------
@@ -103,7 +109,7 @@ export default {
     isReload(){
       this.read();
     }
-  }
+  },
 }
 </script>
 
