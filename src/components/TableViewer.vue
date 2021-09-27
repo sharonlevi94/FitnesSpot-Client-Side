@@ -75,9 +75,6 @@ export default {
         this.columns.push(cols[i]);
       }
       this.columns.push({name: "actions", label: "Actions", field: "actions"});
-
-      console.log(objects);
-      console.log(cols);
     },
 
     //----------------------------------------------------------

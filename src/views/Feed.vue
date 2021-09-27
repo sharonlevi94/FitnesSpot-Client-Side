@@ -1,17 +1,18 @@
 <template>
-  <div class="signnin">
-    <JoinUs @addSomeThing="reloadTable()"/>
+  <div class="home">
+    <Header/>
+    <Posts :cardName="'posts'" :cardSettings="'settings-posts'"/>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import JoinUs from "../components/JoinUs";
+import Posts from "../components/Posts";
+
 
 export default {
-  name: 'SignIn',
+  name: 'Feed',
   components: {
-    JoinUs
+     Posts
   },
   data(){
     return{
@@ -21,7 +22,7 @@ export default {
   methods: {
     reloadTable(){
       this.isReload = !this.isReload;
-    },
+    }
   }
 }
 </script>

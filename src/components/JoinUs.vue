@@ -36,12 +36,13 @@
 
         </div>
 
-        <div> <q-btn push class="join-us-button" color="white" text-color="black" label="Sign In" @click="insert()"/> </div>
+        <div> <q-btn push class="join-us-button" color="white" text-color="black" label="Sign In" @click="signIn()"/> </div>
   </div>
 </template>
 
 <script>
 import api from '../middleware/api/index.js';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 export default {
 name: "JoinUs",
@@ -74,13 +75,24 @@ name: "JoinUs",
       this.$emit('addSomeThing');
     },
     async update(id){
-      await api.update({entity: 'grid-users', objId: id, newObj: this.editedObj })
+      await api.update({entity: 'users', objId: id, newObj: this.editedObj })
       return this.$router.replace(`/signin`);
+    },
+    async signIn(){
+      const auth = getAuth();
+      try{
+        let userCredential = await createUserWithEmailAndPassword(auth, this.email, this.password);
+        let user = userCredential.user;
+        await this.insert();
+        window.user = user;
+        await this.$router.push('/login');
+      }
+      catch (error){
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      }
     }
   },
-  created() {
-
-  }
 }
 </script>
 

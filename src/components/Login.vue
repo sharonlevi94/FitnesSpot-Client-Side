@@ -13,14 +13,17 @@
 
         <q-card-section class="q-pt-none">
           <div class="login-fields">
-            <q-input v-model="user_name" filled type="text" hint="User Name" />
+            <q-input v-model="email" filled type="text" hint="Email" />
 
             <q-input v-model="password" filled type="password" hint="Password" />
           </div>
         </q-card-section>
 
         <q-card-section>
-          <div> <q-btn push class="login-button" color="white" text-color="black" label="Login" @click="login()" /> </div>
+          <div>
+            <q-btn push class="login-button" color="white" text-color="black" label="Login" @click="login()" />
+            <q-btn push class="google-login-button" label="Google" @click="googleLogin()" />
+          </div>
         </q-card-section>
         <q-card-section >
           <div class="forgot-button"> <q-btn push  text-color="white" label="forgot password?" /> </div>
@@ -33,41 +36,58 @@
 </template>
 
 <script>
-import firebaseInstance from '../middleware/firebase'
+import firebaseInstance from '../middleware/firebase';
+import { getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword } from "firebase/auth";
 
 export default {
 name: "Login",
   data () {
     return {
       lorem: 'Enter your user name & password to login:',
-      user_name: '',
+      email: '',
       password: '',
     }
   },
   methods: {
-    login (){
-      const provider = new firebaseInstance.auth.GoogleAuthProvider();
-      firebaseInstance.auth()
-          .signInWithPopup(provider)
+    googleLogin (){
+      const provider = new GoogleAuthProvider();
+      const auth = getAuth();
+      signInWithPopup(auth, provider)
           .then((result) => {
-            /** @type {firebase.auth.OAuthCredential} */
-            var credential = result.credential;
-
             // This gives you a Google Access Token. You can use it to access the Google API.
-            var token = credential.accessToken;
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
             // The signed-in user info.
-            var user = result.user;
+            const user = result.user;
+            window.user = user;
+            this.$router.push('/home');
             // ...
           }).catch((error) => {
         // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
+        const errorCode = error.code;
+        const errorMessage = error.message;
         // The email of the user's account used.
-        var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        var credential = error.credential;
+        const email = error.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
       });
+    },
+    async login(){
+      const auth = getAuth();
+      try{
+        let userCredential = await signInWithEmailAndPassword(auth, this.email, this.password);
+        const user = userCredential.user;
+        window.user = user;
+        await this.$router.push('/home');
+      }
+      catch(error){
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      }
     }
   }
 }
@@ -76,5 +96,9 @@ name: "Login",
 .login-wrapper{
 width: 290px;
   font-family: "Berlin Sans FB";
+}
+.google-login-button{
+  background-color: black;
+  color: white;
 }
 </style>

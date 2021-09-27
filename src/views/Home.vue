@@ -1,7 +1,6 @@
 <template>
   <div class="home">
-    <Header/>
-    <Posts :cardName="'posts'" :cardSettings="'settings-posts'"/>
+    <Header :signInMode="true"/>
   </div>
 </template>
 

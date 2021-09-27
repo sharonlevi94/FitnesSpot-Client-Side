@@ -7,12 +7,12 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'Home',
     component: Home
   },
   {
-    path: '/login',
+    path: '/',
     name: 'Login',
     component: Login
   },
@@ -43,6 +43,16 @@ const routes = [
     path: '/login',
     name: 'LoginPage',
     component:  () => import(/* webpackChunkName: "login" */ '../views/LoginPage')
+  },
+  {
+    path: '/feed',
+    name: 'Feed',
+    component:  () => import(/* webpackChunkName: "feed" */ '../views/Feed')
+  },
+  {
+    path: '/users',
+    name: 'Users',
+    component:  () => import(/* webpackChunkName: "users" */ '../views/Users')
   },
 ]
 

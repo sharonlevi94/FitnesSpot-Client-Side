@@ -12,7 +12,7 @@
           icon="menu"
         />
 
-        <q-item clickable tag="a" href="#/">
+        <q-item clickable tag="a" href="#/home">
         <q-toolbar-title >
           FitnessSpot
         </q-toolbar-title>
@@ -21,6 +21,10 @@
         <q-item>
           <div align="right">Developed by Sharon Levi </div>
         </q-item>
+
+        <div>
+          <q-btn push class="login-button" color="white" text-color="black" label="Logout" @click="logout" />
+        </div>
 
       </q-toolbar>
       </div>
@@ -34,7 +38,7 @@
       <q-list @click="leftDrawerOpen = !leftDrawerOpen">
         <q-item-label header>What would you like to do ?</q-item-label>
 
-        <q-item clickable tag="a" href="#/" >
+        <q-item clickable tag="a" href="#/home" >
           <q-item-section avatar>
             <q-icon name="school" />
           </q-item-section>
@@ -64,7 +68,7 @@
           </q-item-section>
         </q-item>
 
-        <q-item clickable tag="a" target="_blank" href="https://github.com/quasarframework/">
+        <q-item clickable tag="a" href="#/feed">
           <q-item-section avatar>
             <q-icon name="code" />
           </q-item-section>
@@ -84,12 +88,12 @@
           </q-item-section>
         </q-item>
 
-        <q-item clickable tag="a" target="_blank" href="https://forum.quasar.dev">
+        <q-item clickable tag="a" href="#/users">
           <q-item-section avatar>
             <q-icon name="forum" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Forum</q-item-label>
+            <q-item-label>Users</q-item-label>
             <q-item-label caption></q-item-label>
           </q-item-section>
         </q-item>
@@ -137,7 +141,7 @@
 <!------------------------------------------------------------------------------->
 
 <script>
-
+import { getAuth, signOut } from "firebase/auth";
 export default {
   name: 'LayoutDefault',
 
@@ -148,6 +152,20 @@ export default {
   data () {
     return {
       leftDrawerOpen: !this.$q.platform.is.desktop
+    }
+  },
+  methods:{
+    async logout(){
+      const auth = getAuth();
+      try{
+        await signOut(auth);
+        console.log('Sign-out successful.');
+        // Sign-out successful.
+        await this.$router.replace('/login');
+      }
+      catch(error){
+        console.log('logout failure');
+      }
     }
   }
 }
