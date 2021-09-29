@@ -68,7 +68,6 @@ export default {
       this.editedObj.time = timeObj;
 
       await firebaseDataBase.create({entity: this.tableName,item: this.editedObj});
-      await api.create({entity: this.tableName,item: this.editedObj});
 
       this.$emit('addSomeThing');
 

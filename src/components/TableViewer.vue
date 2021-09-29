@@ -17,7 +17,7 @@
             <!-- Activities Table -->
             <q-td  v-if="isToShow('activities')" key="workoutType" :props="props" @click="goToObj(props.row.id)"> {{ props.row.workoutType }} </q-td>
             <q-td v-if="isToShow('activities')" key="date" :props="props"> {{ props.row.date.day }}.{{ props.row.date.month }}.{{ props.row.date.year }} </q-td>
-            <q-td v-if="isToShow('activities')" key="time" :props="props"> {{ props.row.time.hours }}:{{ props.row.time.minutes }} </q-td>
+            <q-td v-if="isToShow('activities')" key="time" :props="props"> {{ props.row.time.hours }} hours {{ props.row.time.minutes }} minutes </q-td>
             <q-td v-if="isToShow('activities')" key="location" :props="props"> {{ props.row.location }} </q-td>
             <q-td v-if="isToShow('activities')" key="calories" :props="props"> {{ props.row.calories }} </q-td>
             <q-td v-if="isToShow('activities')" key="difficulty" :props="props"> {{ props.row.difficulty }} </q-td>
@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import firebaseDataBase from '../middleware/firebase/database';
 import api from '../middleware/api/index.js';
 
 export default {
@@ -63,13 +64,13 @@ export default {
   //---------------------------------------------------------------------------------------
   methods: {
     async read(){
-      this.columns = [];
       this.rows = [];
-      let objects = await api.read({entity: this.tableName});
+      let objects = await firebaseDataBase.read({entity: this.tableName});
       for(let obj of objects ){
         this.rows.push(obj);
       }
 
+      this.columns = [];
       let cols = await api.read({entity: this.settings, settings: true});
       for(let i in cols ){
         this.columns.push(cols[i]);
