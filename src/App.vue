@@ -3,6 +3,7 @@
     <q-header elevated class="glossy">
       <div>
       <q-toolbar>
+
         <q-btn
           flat
           dense
@@ -12,7 +13,7 @@
           icon="menu"
         />
 
-        <q-item clickable tag="a" href="#/home">
+        <q-item clickable tag="a" href="#/">
         <q-toolbar-title >
           FitnessSpot
         </q-toolbar-title>
@@ -23,7 +24,7 @@
         </q-item>
 
         <div>
-          <q-btn push class="login-button" color="white" text-color="black" label="Logout" @click="logout" />
+          <q-btn v-if="isLoggedIn()" push class="login-button" color="white" text-color="black" label="Logout" @click="logout()" />
         </div>
 
       </q-toolbar>
@@ -31,6 +32,7 @@
     </q-header>
 
     <q-drawer
+        v-if="isLoggedIn()"
       v-model="leftDrawerOpen"
       bordered
       content-class="bg-grey-2"
@@ -38,7 +40,7 @@
       <q-list @click="leftDrawerOpen = !leftDrawerOpen">
         <q-item-label header>What would you like to do ?</q-item-label>
 
-        <q-item clickable tag="a" href="#/home" >
+        <q-item clickable tag="a" href="#/" >
           <q-item-section avatar>
             <q-icon name="school" />
           </q-item-section>
@@ -141,7 +143,7 @@
 <!------------------------------------------------------------------------------->
 
 <script>
-import { getAuth, signOut } from "firebase/auth";
+import firebaseInstance from './middleware/firebase';
 export default {
   name: 'LayoutDefault',
 
@@ -156,16 +158,17 @@ export default {
   },
   methods:{
     async logout(){
-      const auth = getAuth();
       try{
-        await signOut(auth);
-        console.log('Sign-out successful.');
-        // Sign-out successful.
-        await this.$router.replace('/login');
+        await firebaseInstance.firebase.auth().signOut();
+        delete window.user;
+        await this.$router.push('/login');
       }
       catch(error){
-        console.log('logout failure');
+        console.log(error);
       }
+    },
+    isLoggedIn(){
+      return window.user;
     }
   }
 }

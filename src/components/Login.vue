@@ -37,10 +37,6 @@
 
 <script>
 import firebaseInstance from '../middleware/firebase';
-import { getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  signInWithEmailAndPassword } from "firebase/auth";
 
 export default {
 name: "Login",
@@ -52,46 +48,50 @@ name: "Login",
     }
   },
   methods: {
-    googleLogin (){
-      const provider = new GoogleAuthProvider();
-      const auth = getAuth();
-      signInWithPopup(auth, provider)
-          .then((result) => {
-            // This gives you a Google Access Token. You can use it to access the Google API.
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;
-            // The signed-in user info.
-            const user = result.user;
-            window.user = user;
-            this.$router.push('/home');
-            // ...
-          }).catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
-      });
-    },
-    async login(){
-      const auth = getAuth();
+    async googleLogin (){
       try{
-        let userCredential = await signInWithEmailAndPassword(auth, this.email, this.password);
-        const user = userCredential.user;
+        const provider = new firebaseInstance.firebase.auth.GoogleAuthProvider();
+        let result = await firebaseInstance.firebase.auth().signInWithPopup(provider);
+        /** @type {firebase.auth.OAuthCredential} */
+        let credential = result.credential;
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        let token = credential.accessToken;
+        // The signed-in user info.
+        let user = result.user;
         window.user = user;
-        await this.$router.push('/home');
+        console.log(user);
+        await this.$router.push('/');
       }
       catch(error){
-        const errorCode = error.code;
-        const errorMessage = error.message;
+        console.log(error);
+        // Handle Errors here.
+        let errorCode = error.code;
+        let errorMessage = error.message;
+        // The email of the user's account used.
+        let email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        let credential = error.credential;
+      }
+    },
+    async login(){
+      try{
+        console.log(`email: ${this.email}, password: ${this.password}`);
+        let userCredential = await firebaseInstance.firebase.auth().signInWithEmailAndPassword(this.email, this.password);
+        // Signed in
+        let user = userCredential.user;
+        window.user = user;
+        console.log(user);
+        await this.$router.push('/');
+      }
+      catch(error){
+        let errorCode = error.code;
+        let errorMessage = error.message;
       }
     }
   }
 }
 </script>
+
 <style scoped>
 .login-wrapper{
 width: 290px;

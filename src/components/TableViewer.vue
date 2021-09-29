@@ -80,7 +80,7 @@ export default {
     //----------------------------------------------------------
 
     deleteObj(id){
-      api.remove({objId: id});
+      api.remove({entity:this.tableName ,objId: id});
       this.read();
     },
 

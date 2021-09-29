@@ -1,27 +1,29 @@
 <template>
   <div class="home">
-    <Header :signInMode="true"/>
+    <Header :signInMode="signInMode" />
   </div>
 </template>
 
 <script>
 import Header from "../components/Header";
-import Posts from "../components/Posts";
 
 
 export default {
   name: 'Home',
   components: {
-     Header, Posts
+     Header
   },
   data(){
     return{
-      isReload: false,
+      signInMode: true,
     }
   },
-  methods: {
-    reloadTable(){
-      this.isReload = !this.isReload;
+  created(){
+    if(window.user){
+      this.signInMode = false;
+    }
+    else{
+      this.signInMode = true;
     }
   }
 }

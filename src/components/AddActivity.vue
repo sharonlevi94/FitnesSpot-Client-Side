@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import localStorageDrive from '../middleware/local-storage/index.js';
+import firebaseDataBase from '../middleware/firebase/database';
 import api from '../middleware/api/index.js';
 
 export default {
@@ -67,6 +67,7 @@ export default {
       timeObj['minutes'] = Number(timeArr [1]);
       this.editedObj.time = timeObj;
 
+      await firebaseDataBase.create({entity: this.tableName,item: this.editedObj});
       await api.create({entity: this.tableName,item: this.editedObj});
 
       this.$emit('addSomeThing');

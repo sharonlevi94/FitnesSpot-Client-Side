@@ -13,7 +13,7 @@
     "quasar": "^1.0.0",
     "vue": "2.6.11",
     "vue-router": "3.2.0",
-    "firebase": "9.1.0"
+    "firebase": "8.10.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "4.5.0",
@@ -26,7 +26,6 @@
     "stylus-loader": "3.0.2",
     "vue-cli-plugin-quasar": "^1.0.0",
     "vue-template-compiler": "2.6.11",
-    "firebase-tools": "9.18.0",
-    "firebase-auth": "0.1.2"
+    "firebase-tools": "9.18.0"
   }
 }

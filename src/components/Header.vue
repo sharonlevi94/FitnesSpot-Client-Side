@@ -16,7 +16,7 @@ export default {
   props: ['signInMode'],
   methods:{
     login(){
-      this.$router.replace('/');
+      this.$router.replace('/login');
     },
     joinUs(){
       this.$router.replace('/signin');
