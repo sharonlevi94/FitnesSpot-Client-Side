@@ -1,0 +1,82 @@
+<template>
+  <div class="q-pa-md">
+    <q-file filled bottom-slots v-model="myFile" label="Click to choose file" counter>
+
+      <template v-slot:prepend>
+        <q-icon name="cloud_upload" @click.stop/>
+      </template>
+
+      <template v-slot:append>
+        <q-icon name="close" @click.stop="myFile = null" class="cursor-pointer"/>
+      </template>
+
+      <template v-slot:hint>
+        Upload your photo
+      </template>
+    </q-file>
+
+    <q-btn @click="upload()">
+      Upload
+    </q-btn>
+
+    <q-carousel
+        animated
+        v-model="slide"
+        arrows
+        navigation
+        infinite
+    >
+      <q-carousel-slide v-for="photo in slider" :key="photo.id" :name="photo.id" :img-src="photo.url"/>
+    </q-carousel>
+
+  </div>
+</template>
+
+<script>
+import firebaseStorage from '../middleware/firebase/storage';
+
+export default {
+  name: "UploadPhotos",
+  data() {
+    return {
+      myFile: null,
+      slider: [],
+      slide: 1
+    }
+  },
+  methods: {
+    async upload() {
+      console.log(this.myFile);
+      await firebaseStorage.upload(this.myFile);
+    },
+    async read(){
+      this.slider = [];
+      let images = [];
+      //get an array of URLs from storage:
+      images = await firebaseStorage.read();
+
+      let counter = 1;
+      //make the images to objects with Ids:
+      for(let url of images){
+        let imgObj = {};
+        imgObj.url = url;
+        imgObj.id = counter;
+        counter++;
+        this.slider.push(imgObj);
+      }
+      console.log(this.slider);
+    }
+  },
+  created(){
+    this.read();
+  }
+}
+</script>
+
+<style scoped>
+.q-pa-md {
+  font-size: 60px;
+  font-family: "Berlin Sans FB";
+  width: 25%;
+}
+</style>

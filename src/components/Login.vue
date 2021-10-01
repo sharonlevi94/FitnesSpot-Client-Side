@@ -1,5 +1,5 @@
-<template>
-  <div class="warapper"align="center">
+<template class="pagee">
+  <div class="wrapper"align="center">
     <div class="login-wrapper" >
 
       <q-card
@@ -59,7 +59,6 @@ name: "Login",
         // The signed-in user info.
         let user = result.user;
         window.user = user;
-        console.log(user);
         await this.$router.push('/');
       }
       catch(error){
@@ -80,7 +79,6 @@ name: "Login",
         // Signed in
         let user = userCredential.user;
         window.user = user;
-        console.log(user);
         await this.$router.push('/');
       }
       catch(error){
@@ -100,5 +98,8 @@ width: 290px;
 .google-login-button{
   background-color: black;
   color: white;
+}
+.wrapper{
+  background-color: #773b3b;
 }
 </style>

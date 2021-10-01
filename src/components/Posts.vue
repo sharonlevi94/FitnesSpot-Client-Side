@@ -36,10 +36,6 @@ export default {
         }
       }, 2000)
     },
-    check(){
-      console.log(this.cardName)
-      console.log((this.cardSettings))
-    }
   }
 }
 </script>

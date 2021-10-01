@@ -84,14 +84,12 @@ export default {
     },
     async signIn() {
       try{
-        console.log(this.editedObj);
         let userCredential = await firebaseInstance.firebase.auth()
             .createUserWithEmailAndPassword(this.editedObj.email, this.editedObj.password);
         // Signed in
         let user = userCredential.user;
         user.details = this.editedObj;
         window.user = user;
-        console.log(user);
         await this.$router.push('/');
       }
       catch(error){

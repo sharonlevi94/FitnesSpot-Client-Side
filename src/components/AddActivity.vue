@@ -25,13 +25,12 @@
     </div>
 
     <div> <q-btn  v-if="!editedActivity" class="join-us-button" color="white" text-color="black" label="Add" @click="insert()"/> </div>
-    <div> <q-btn  v-if="editedActivity" class="join-us-button" color="white" text-color="black" label="Update" @click="update(objId)"/> </div>
+    <div> <q-btn  v-if="editedActivity" class="join-us-button" color="white" text-color="black" label="Update" @click="update()"/> </div>
   </div>
 </template>
 
 <script>
 import firebaseDataBase from '../middleware/firebase/database';
-import api from '../middleware/api/index.js';
 
 export default {
   name: "AddActivity",
@@ -72,14 +71,18 @@ export default {
       this.$emit('addSomeThing');
 
     },
-    async update(id){
-      await api.update({entity:this.tableName, objId: id, newObj: this.editedObj })
+    async update(){
+      console.log(this.editedObj);
+      await firebaseDataBase.update({entity: this.tableName,
+                                            id: this.objId,
+                                            new: this.editedObj });
       this.$router.go(-1);
     }
   },
-  created() {
-    if(this.editedActivity){
-      this.editedObj = this.editedActivity;
+  async created() {
+    let asd = await this.editedActivity;
+    if(asd){
+      this.editedObj = asd;
     }
   }
 }

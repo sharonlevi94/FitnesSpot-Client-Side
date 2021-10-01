@@ -90,12 +90,12 @@
           </q-item-section>
         </q-item>
 
-        <q-item clickable tag="a" href="#/users">
+        <q-item clickable tag="a" href="#/upload">
           <q-item-section avatar>
             <q-icon name="forum" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Users</q-item-label>
+            <q-item-label>Upload</q-item-label>
             <q-item-label caption></q-item-label>
           </q-item-section>
         </q-item>

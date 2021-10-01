@@ -18,6 +18,11 @@
 
         </q-card-section>
 
+        <q-card-section>
+          <q-btn @click="deleteObj(row.id)">
+            Delete
+          </q-btn>
+        </q-card-section>
 
       </q-card>
 
@@ -26,6 +31,7 @@
 </template>
 
 <script>
+import firebaseDataBase from '../middleware/firebase/database';
 import api from '../middleware/api/index.js';
 
 export default {
@@ -47,7 +53,7 @@ export default {
         this.settings.push(cols[i]['label']);
       }
 
-      let objects = await api.read({entity:this.cardName});
+      let objects = await firebaseDataBase.read({entity:this.cardName});
         for (let obj of objects) {
           this.rows.push(obj);
         }
@@ -56,7 +62,7 @@ export default {
     //----------------------------------------------------------
 
     async deleteObj(id) {
-      await api.remove({entity: this.cardName, objId: id});
+      await firebaseDataBase.remove({entity: this.cardName, objId: id});
       this.read();
     },
     //----------------------------------------------------------

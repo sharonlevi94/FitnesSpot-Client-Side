@@ -17,7 +17,7 @@
             <!-- Activities Table -->
             <q-td  v-if="isToShow('activities')" key="workoutType" :props="props" @click="goToObj(props.row.id)"> {{ props.row.workoutType }} </q-td>
             <q-td v-if="isToShow('activities')" key="date" :props="props"> {{ props.row.date.day }}.{{ props.row.date.month }}.{{ props.row.date.year }} </q-td>
-            <q-td v-if="isToShow('activities')" key="time" :props="props"> {{ props.row.time.hours }} hours {{ props.row.time.minutes }} minutes </q-td>
+            <q-td v-if="isToShow('activities')" key="time" :props="props"> {{ props.row.time.hours }}:{{ props.row.time.minutes }}  </q-td>
             <q-td v-if="isToShow('activities')" key="location" :props="props"> {{ props.row.location }} </q-td>
             <q-td v-if="isToShow('activities')" key="calories" :props="props"> {{ props.row.calories }} </q-td>
             <q-td v-if="isToShow('activities')" key="difficulty" :props="props"> {{ props.row.difficulty }} </q-td>
@@ -48,7 +48,6 @@
 
 <script>
 import firebaseDataBase from '../middleware/firebase/database';
-import api from '../middleware/api/index.js';
 
 export default {
   name: 'TableViewer',
@@ -71,7 +70,7 @@ export default {
       }
 
       this.columns = [];
-      let cols = await api.read({entity: this.settings, settings: true});
+      let cols = await firebaseDataBase.readSettings({entity: this.settings});
       for(let i in cols ){
         this.columns.push(cols[i]);
       }
@@ -80,8 +79,8 @@ export default {
 
     //----------------------------------------------------------
 
-    deleteObj(id){
-      api.remove({entity:this.tableName ,objId: id});
+    deleteObj(objId){
+      firebaseDataBase.remove({entity: this.tableName, id: objId});
       this.read();
     },
 
