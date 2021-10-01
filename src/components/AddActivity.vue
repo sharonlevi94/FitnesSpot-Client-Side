@@ -102,6 +102,7 @@ export default {
 .q-pa-md{
   border: 3px solid #fff;
   padding: 20px;
+  background-image: url("../resources/header3.jpg");
 }
 
 .join-us-fields{

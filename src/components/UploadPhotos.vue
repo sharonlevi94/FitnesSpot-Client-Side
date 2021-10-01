@@ -1,5 +1,6 @@
 <template>
   <div class="q-pa-md">
+    Your Photos
     <q-file filled bottom-slots v-model="myFile" label="Click to choose file" counter>
 
       <template v-slot:prepend>
@@ -49,7 +50,7 @@ export default {
       console.log(this.myFile);
       await firebaseStorage.upload(this.myFile);
     },
-    async read(){
+    async read() {
       this.slider = [];
       let images = [];
       //get an array of URLs from storage:
@@ -57,7 +58,7 @@ export default {
 
       let counter = 1;
       //make the images to objects with Ids:
-      for(let url of images){
+      for (let url of images) {
         let imgObj = {};
         imgObj.url = url;
         imgObj.id = counter;
@@ -67,7 +68,7 @@ export default {
       console.log(this.slider);
     }
   },
-  created(){
+  created() {
     this.read();
   }
 }
@@ -77,6 +78,6 @@ export default {
 .q-pa-md {
   font-size: 60px;
   font-family: "Berlin Sans FB";
-  width: 25%;
+  width: 100%;
 }
 </style>

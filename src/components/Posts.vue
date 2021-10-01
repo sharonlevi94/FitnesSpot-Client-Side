@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md" align="center">
-    News Feed
+    {{ this.titleName }}
     <q-infinite-scroll @load="onLoad" :offset="250">
       <CardViewer :cardName="this.cardName" :settingsName="this.cardSettings"/>
       <div v-for="(item, index) in items" :key="index" class="caption">
@@ -21,7 +21,7 @@ import CardViewer from "./CardViewer";
 export default {
   name: "Posts",
   components: {CardViewer},
-  props: ['cardName', 'cardSettings'],
+  props: ['cardName', 'cardSettings', 'titleName'],
   data () {
     return {
       items: [ {}, {}, {}, {}, {}, {}, {} ]

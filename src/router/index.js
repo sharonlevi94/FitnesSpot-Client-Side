@@ -55,9 +55,9 @@ const routes = [
     component:  () => import(/* webpackChunkName: "users" */ '../views/Users')
   },
   {
-    path: '/upload',
-    name: 'UploadPhotos',
-    component:  () => import(/* webpackChunkName: "upload" */ '../views/UploadPhotos')
+    path: '/profile',
+    name: 'Profile',
+    component:  () => import(/* webpackChunkName: "profile" */ '../views/Profile')
   },
 ]
 

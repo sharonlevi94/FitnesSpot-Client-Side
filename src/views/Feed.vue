@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Header/>
-    <Posts :cardName="'posts'" :cardSettings="'settings-posts'"/>
+    <Posts :cardName="'posts'" :cardSettings="'settings-posts'" :titleName="'News Feed'"/>
   </div>
 </template>
 

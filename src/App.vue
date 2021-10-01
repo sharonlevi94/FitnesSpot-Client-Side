@@ -50,7 +50,7 @@
           </q-item-section>
         </q-item>
 
-        <q-item clickable tag="a" href="#/signin">
+        <q-item clickable tag="a" href="#/profile">
           <q-item-section avatar>
             <q-icon name="school" />
           </q-item-section>
@@ -86,16 +86,6 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>Chat with Friends</q-item-label>
-            <q-item-label caption></q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-item clickable tag="a" href="#/upload">
-          <q-item-section avatar>
-            <q-icon name="forum" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Upload</q-item-label>
             <q-item-label caption></q-item-label>
           </q-item-section>
         </q-item>
