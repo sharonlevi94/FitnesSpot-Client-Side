@@ -4,7 +4,7 @@
       <q-card
           class="my-card text-white"
           align="left"
-          style="background: radial-gradient(circle, #9d9999 0%, #434141 100%)"
+          style="background: radial-gradient(circle, #9d9999 0%, #434141 100%); width: 500px"
           v-for="row of rows"
       >
 
@@ -98,7 +98,7 @@ export default {
 
 <style scoped>
 .my-card {
-  width: 300px;
+  width: 500px;
   margin: 30px;
   border-radius: 30px;
   font-size: 20px;

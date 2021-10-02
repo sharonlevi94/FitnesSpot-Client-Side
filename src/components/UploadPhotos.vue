@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    Your Photos
+    {{titleName}}
     <q-file filled bottom-slots v-model="myFile" label="Click to choose file" counter>
 
       <template v-slot:prepend>
@@ -12,12 +12,12 @@
       </template>
 
       <template v-slot:hint>
-        Upload your photo
+        {{ hint }}
       </template>
     </q-file>
 
     <q-btn @click="upload()">
-      Upload
+      {{ buttonName }}
     </q-btn>
 
     <q-carousel
@@ -26,6 +26,7 @@
         arrows
         navigation
         infinite
+        v-if="display"
     >
       <q-carousel-slide v-for="photo in slider" :key="photo.id" :name="photo.id" :img-src="photo.url"/>
     </q-carousel>
@@ -38,6 +39,7 @@ import firebaseStorage from '../middleware/firebase/storage';
 
 export default {
   name: "UploadPhotos",
+  props: ['titleName', 'buttonName', 'hint', 'display'],
   data() {
     return {
       myFile: null,
@@ -47,8 +49,10 @@ export default {
   },
   methods: {
     async upload() {
-      console.log(this.myFile);
-      await firebaseStorage.upload(this.myFile);
+      if(this.buttonName == 'Upload')
+        await firebaseStorage.upload(this.myFile);
+      else
+        await firebaseStorage.uploadProfilePicture(this.myFile);
     },
     async read() {
       this.slider = [];
@@ -65,7 +69,6 @@ export default {
         counter++;
         this.slider.push(imgObj);
       }
-      console.log(this.slider);
     }
   },
   created() {
@@ -76,7 +79,7 @@ export default {
 
 <style scoped>
 .q-pa-md {
-  font-size: 60px;
+  font-size: 40px;
   font-family: "Berlin Sans FB";
   width: 100%;
 }

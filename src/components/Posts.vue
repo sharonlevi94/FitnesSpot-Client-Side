@@ -1,10 +1,9 @@
 <template>
-  <div class="q-pa-md" align="center">
+  <div class="q-pa-md" align="left">
     {{ this.titleName }}
     <q-infinite-scroll @load="onLoad" :offset="250">
       <CardViewer :cardName="this.cardName" :settingsName="this.cardSettings"/>
       <div v-for="(item, index) in items" :key="index" class="caption">
-
       </div>
       <template v-slot:loading>
         <div class="row justify-center q-my-md">
@@ -24,7 +23,14 @@ export default {
   props: ['cardName', 'cardSettings', 'titleName'],
   data () {
     return {
-      items: [ {}, {}, {}, {}, {}, {}, {} ]
+      items: [ {}, {}, {}, {}, {}, {}, {} ],
+      writer:''
+      /*writer:[{align:'left',
+        field:window.user.displayName,
+        label: `${window.user.displayName} says:`,
+        name:window.user.displayName,
+        required: true,
+        sortable: false}]*/
     }
   },
   methods: {
@@ -36,13 +42,16 @@ export default {
         }
       }, 2000)
     },
+  },
+  created() {
+    this.writer = window.user.displayName;
   }
 }
 </script>
 
 <style scoped>
 .q-pa-md{
-  font-size: 60px;
+  font-size: 40px;
   font-family: "Berlin Sans FB";
 }
 </style>
