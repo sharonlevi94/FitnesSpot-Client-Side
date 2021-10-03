@@ -24,8 +24,10 @@ async function read() {
 
     for (let url of urlArr) {
         let pathReference = storageRef.ref().child(`images/${url}`);
-        let downloadURL = await pathReference.getDownloadURL();
-        pathURL.push(downloadURL);
+        let imageObj = {};
+        imageObj.url = url;
+        imageObj.downloadURL = await pathReference.getDownloadURL();
+        pathURL.push(imageObj);
     }
     return pathURL;
 }
@@ -62,7 +64,6 @@ async function readProfilePicture() {
 
     return downloadURL;
 }
-
 
 export default {
     upload, read, uploadProfilePicture, readProfilePicture

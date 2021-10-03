@@ -32,7 +32,6 @@
 
 <script>
 import firebaseDataBase from '../middleware/firebase/database';
-import api from '../middleware/api/index.js';
 
 export default {
   name: "CardViewer",
@@ -48,7 +47,7 @@ export default {
     async read() {
       this.settings = [];
       this.rows = [];
-      let cols = await api.read({entity:this.settingsName, settings: true});
+      let cols = await firebaseDataBase.readSettings({entity:this.settingsName});
       for (let i in cols) {
         this.settings.push(cols[i]['label']);
       }
@@ -61,9 +60,9 @@ export default {
 
     //----------------------------------------------------------
 
-    async deleteObj(id) {
-      await firebaseDataBase.remove({entity: this.cardName, objId: id});
-      this.read();
+     deleteObj(id) {
+       firebaseDataBase.remove({entity: this.cardName, id: id});
+       this.read();
     },
     //----------------------------------------------------------
     goToObj(id) {

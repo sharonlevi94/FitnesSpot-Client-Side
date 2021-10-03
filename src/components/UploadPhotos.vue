@@ -63,8 +63,7 @@ export default {
       let counter = 1;
       //make the images to objects with Ids:
       for (let url of images) {
-        let imgObj = {};
-        imgObj.url = url;
+        let imgObj = url;
         imgObj.id = counter;
         counter++;
         this.slider.push(imgObj);

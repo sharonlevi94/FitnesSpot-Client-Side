@@ -32,6 +32,7 @@ function create(options){
 }
 
 function remove(options){
+    console.log(options);
     return firebaseInstance.firebase.database().ref(`users/${window.user.uid}/data/${options.entity}/${options.id}`).remove();
 }
 
@@ -39,6 +40,10 @@ function update(options){
     return firebaseInstance.firebase.database().ref(`users/${window.user.uid}/data/${options.entity}/${options.id}`).update(options.new);
 }
 
+function getEntityRef(options){
+    return firebaseInstance.firebase.database().ref(`users/${window.user.uid}/data/${options.entity}`);
+}
+
 export default {
-    read, create, remove, update, readSettings
+    read, create, remove, update, readSettings, getEntityRef
 }
