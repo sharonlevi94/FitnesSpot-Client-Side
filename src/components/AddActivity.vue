@@ -4,43 +4,47 @@
 
     <div class="join-us-fields">
 
-      <q-select v-model="editedObj.workoutType" :options="this.activities" label="What type of activity you did?" />
+      <q-select v-model="localEditedObj.workoutType" :options="this.activities" label="What type of activity you did?" />
 
-      <q-input v-model="editedObj.date" filled type="date" hint="Date" />
+      <q-input v-model="localEditedObj.date" filled type="date" hint="Date" />
 
-      <q-input v-model="editedObj.time" filled type="text" hint="for how long? (hh:mm)" />
+      <q-input v-model="localEditedObj.time" filled type="text" hint="for how long? (hh:mm)" />
 
-      <q-input v-model="editedObj.location" filled type="text" hint="Where?" />
+      <q-input v-model="localEditedObj.location" filled type="text" hint="Where?" />
 
     </div>
 
     <div class="join-us-fields">
 
-      <q-input v-model="editedObj.calories" filled type="number" hint="How many calories? (optional)" />
+      <q-input v-model="localEditedObj.calories" filled type="number" hint="How many calories? (optional)" />
 
-      <q-select v-model="editedObj.difficulty" :options="this.diffLevel" label="Difficulty Level (1-10)" />
+      <q-select v-model="localEditedObj.difficulty" :options="this.diffLevel" label="Difficulty Level (1-10)" />
 
-      <q-input v-model="editedObj.note" filled type="text" hint="Other notes" />
+      <q-input v-model="localEditedObj.note" filled type="text" hint="Other notes" />
 
     </div>
 
-    <div> <q-btn  v-if="!editedActivity" class="join-us-button" color="white" text-color="black" label="Add" @click="insert()"/> </div>
-    <div> <q-btn  v-if="editedActivity" class="join-us-button" color="white" text-color="black" label="Update" @click="update()"/> </div>
+    <div> <q-btn  v-if="!editedObj.id" class="join-us-button" color="white" text-color="black" label="Add" @click="insert()"/> </div>
+    <div> <q-btn  v-if="editedObj.id" class="join-us-button" color="white" text-color="black" label="Update" @click="update()"/> </div>
   </div>
 </template>
 
 <script>
-import firebaseDataBase from '../middleware/firebase/database';
+import {mapMutations, mapActions, mapState} from 'vuex';
 
 export default {
   name: "AddActivity",
-  props: ['tableName', 'settings-add', 'editedActivity', 'objId'],
+
+  props: ['tableName', 'settings-add'],
+
+  computed: mapState('activities', ['editedObj']),
 
   data () {
     return {
-      activities: ['Soccer', 'Basketball', 'Running', 'Jogging', 'Swimming', 'Gym', 'Volleyball', 'Golf', 'Baseball', 'Climbing'],
+      activities: ['Soccer', 'Basketball', 'Running', 'Jogging', 'Swimming', 'Gym',
+        'Volleyball', 'Golf', 'Baseball', 'Climbing'],
       diffLevel: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      editedObj: {
+      localEditedObj: {
         workoutType: '',
         date: '',
         time: '',
@@ -51,39 +55,51 @@ export default {
       }
     }
   },
+
   methods: {
+
+    ...mapActions('activities', ['insertActivity', 'updateActivity','setEditActivityById']),
+
+    ...mapMutations('activities', ['setEditedActivity',
+      'resetEditedActivityId',
+      'setEditedActivityId']),
+
     async insert(){
-      let dateArr = this.editedObj.date.split('-');
+      let dateArr = this.localEditedObj.date.split('-');
       let dateObj = {};
       dateObj['year'] = Number(dateArr[0]);
       dateObj['month'] = Number(dateArr [1]);
       dateObj['day'] = Number(dateArr[2]);
-      this.editedObj.date = dateObj;
+      this.localEditedObj.date = dateObj;
 
-      let timeArr = this.editedObj.time.split(':');
+      let timeArr = this.localEditedObj.time.split(':');
       let timeObj = {};
       timeObj['hours'] = Number(timeArr[0]);
       timeObj['minutes'] = Number(timeArr [1]);
-      this.editedObj.time = timeObj;
+      this.localEditedObj.time = timeObj;
 
-      await firebaseDataBase.create({entity: this.tableName,item: this.editedObj});
-
-      this.$emit('addSomeThing');
-
+      this.localToStore();
+      await this.insertActivity();
+      this.resetEditedActivityId();
+      await this.$router.replace(this.$router.currentRoute);
     },
+
     async update(){
-      console.log(this.editedObj);
-      await firebaseDataBase.update({entity: this.tableName,
-                                            id: this.objId,
-                                            new: this.editedObj });
+      this.localToStore();
+      await this.updateActivity();
       this.$router.go(-1);
-    }
+    },
+
+    localToStore(){
+      this.setEditedActivity(this.localEditedObj);
+    },
+
   },
-  async created() {
-    let asd = await this.editedActivity;
-    if(asd){
-      this.editedObj = asd;
-    }
+  created() {
+    console.log(this.editedObj.id);
+    this.setEditActivityById().then(()=>{
+      Object.assign(this.localEditedObj, this.editedObj);
+    })
   }
 }
 </script>
@@ -102,7 +118,7 @@ export default {
 .q-pa-md{
   border: 3px solid #fff;
   padding: 20px;
-  background-image: url("../resources/header3.jpg");
+ /* background-image: url("../resources/header3.jpg");*/
 }
 
 .join-us-fields{

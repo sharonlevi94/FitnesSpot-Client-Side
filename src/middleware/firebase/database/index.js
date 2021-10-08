@@ -32,7 +32,6 @@ function create(options){
 }
 
 function remove(options){
-    console.log(options);
     return firebaseInstance.firebase.database().ref(`users/${window.user.uid}/data/${options.entity}/${options.id}`).remove();
 }
 

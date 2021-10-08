@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import firebaseDataBase from '../middleware/firebase/database';
 import {event} from 'quasar'
+import {mapActions, mapMutations, mapState} from "vuex";
 
 const {stopAndPrevent} = event
 
@@ -40,6 +40,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('posts', ['editedObj']),
     textareaShadowText () {
       if (this.textareaFillCancelled === true) {
         return ''
@@ -64,9 +65,16 @@ export default {
     }
   },
   methods: {
+    ...mapActions('posts', ['insertPost', 'updatePost']),
+
+    ...mapMutations('posts', ['setEditedPost']),
+
     async add() {
-      await firebaseDataBase.create({entity: 'posts', item: {content: this.content}})
+      this.setEditedPost({content: this.content});
+      await this.insertPost();
+      await this.$router.replace(this.$router.currentRoute);
     },
+
     processTextareaFill (e) {
       if (e === void 0) {
         return

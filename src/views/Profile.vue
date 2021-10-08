@@ -26,7 +26,7 @@
       </div>
 
       <div class="float-child">
-        <WritePost/>
+        <WritePost align="center"/>
         <Posts :cardName="'posts'"
                :cardSettings="'settings-posts'"
                :titleName="'Your Posts'"/>
@@ -59,6 +59,7 @@ export default {
   methods:{
     async uploadProfilePic(){
       await firebaseStorage.uploadProfilePicture(this.profilePictureFile);
+      await this.$router.replace('/profile');
     },
     async readProfilePicture(){
       this.profilePictureURL = await firebaseStorage.readProfilePicture();

@@ -1,7 +1,9 @@
 <template>
   <div class="myActivities">
-    <AddActivity :tableName="'activities'" @addSomeThing="reloadTable()"/>
-    <tableViewer :tableName="'activities'" tableTitle="Activities" :settings="'settings-activities'" :isReload="isReload"/>
+    <AddActivity :tableName="'activities'"/>
+    <tableViewer :tableName="'activities'"
+                 tableTitle="Activities"
+                 :settings="'settings-activities'"/>
   </div>
 </template>
 
@@ -20,9 +22,6 @@ export default {
     }
   },
   methods: {
-    reloadTable(){
-      this.isReload = !this.isReload;
-    }
   }
 }
 </script>

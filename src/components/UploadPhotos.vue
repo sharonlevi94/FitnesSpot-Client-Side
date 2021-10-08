@@ -28,7 +28,10 @@
         infinite
         v-if="display"
     >
-      <q-carousel-slide v-for="photo in slider" :key="photo.id" :name="photo.id" :img-src="photo.url"/>
+      <q-carousel-slide v-for="photo in slider"
+                        :key="photo.id"
+                        :name="photo.id"
+                        :img-src="photo.downloadURL"/>
     </q-carousel>
 
   </div>

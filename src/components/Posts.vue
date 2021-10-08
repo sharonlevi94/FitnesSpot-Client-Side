@@ -1,10 +1,12 @@
 <template>
-  <div class="q-pa-md" align="left">
+  <div class="q-pa-md" align="center">
+
     {{ this.titleName }}
+
     <q-infinite-scroll @load="onLoad" :offset="250">
+
       <CardViewer :cardName="this.cardName" :settingsName="this.cardSettings"/>
-      <div v-for="(item, index) in items" :key="index" class="caption">
-      </div>
+
       <template v-slot:loading>
         <div class="row justify-center q-my-md">
           <q-spinner-dots color="primary" size="40px" />
@@ -24,13 +26,6 @@ export default {
   data () {
     return {
       items: [ {}, {}, {}, {}, {}, {}, {} ],
-      writer:''
-      /*writer:[{align:'left',
-        field:window.user.displayName,
-        label: `${window.user.displayName} says:`,
-        name:window.user.displayName,
-        required: true,
-        sortable: false}]*/
     }
   },
   methods: {
@@ -43,9 +38,6 @@ export default {
       }, 2000)
     },
   },
-  created() {
-    this.writer = window.user.displayName;
-  }
 }
 </script>
 

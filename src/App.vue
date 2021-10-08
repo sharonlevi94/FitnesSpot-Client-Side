@@ -13,18 +13,19 @@
           icon="menu"
         />
 
-        <q-item clickable tag="a" href="#/">
-        <q-toolbar-title >
-          FitnessSpot
-        </q-toolbar-title>
-        </q-item>
+          <q-item clickable tag="a" href="#/" align="center">
 
-        <q-item>
+            <q-toolbar-title class="logoItem" >
+              FitnessSpot
+            </q-toolbar-title>
+          </q-item>
+
+        <q-item align="right">
           <div align="right">Developed by Sharon Levi </div>
         </q-item>
 
         <div>
-          <q-btn v-if="isLoggedIn()" push class="login-button" color="white" text-color="black" label="Logout" @click="logout()" />
+          <q-btn  align="left" v-if="isLoggedIn()" push class="login-button" color="white" text-color="black" label="Logout" @click="logout()" />
         </div>
 
       </q-toolbar>
@@ -165,4 +166,7 @@ export default {
 </script>
 <!------------------------------------------------------------------------------->
 <style>
+.logoItem{
+  font-family: "Berlin Sans FB";
+}
 </style>

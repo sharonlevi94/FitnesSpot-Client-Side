@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div class="q-pa-md">
     <h1>Welcome to your Sport World</h1>
     <h3>Share your fitness with everyone!</h3>
 
@@ -26,7 +26,7 @@ export default {
 </script>
 
 <style scoped>
-.header{
+.q-pa-md{
   font-family: "Berlin Sans FB";
   text-align: center;
   background-image: url("../resources/header1.jpg");

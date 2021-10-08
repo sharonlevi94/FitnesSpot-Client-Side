@@ -6,7 +6,7 @@ async function upload(file) {
     let storageRef = firebaseInstance.firebase.storage();
 
     // Create a reference to the file we want to upload
-    let pathReference = storageRef.ref().child(`images/${file.name}`);
+    let pathReference = storageRef.ref().child(`users/${window.user.uid}/images/${file.name}`);
 
     await pathReference.put(file);
     console.log('Uploaded a blob or file!');
@@ -23,7 +23,7 @@ async function read() {
     let storageRef = firebaseInstance.firebase.storage();
 
     for (let url of urlArr) {
-        let pathReference = storageRef.ref().child(`images/${url}`);
+        let pathReference = storageRef.ref().child(`users/${window.user.uid}/images/${url}`);
         let imageObj = {};
         imageObj.url = url;
         imageObj.downloadURL = await pathReference.getDownloadURL();
@@ -34,17 +34,17 @@ async function read() {
 
 async function uploadProfilePicture(file) {
     // Create a reference to current Profile picture and delete it
-    let dirRef = firebaseInstance.firebase.storage().ref().child(`profileImage`);
-
-    let currentPicture = readProfilePicture();
+   /* let dirRef = firebaseInstance.firebase.storage().ref().child(`users/${window.user.uid}/profileImage`);
+    await dirRef.remove();*/
+    /*let currentPicture = readProfilePicture();
     if(currentPicture) {
         await dirRef.delete();
         await firebaseInstance.firebase.database().ref(`users/${window.user.uid}/data/profileImage`).remove();
-    }
+    }*/
 
     // Create a reference to new profile picture folder
     let storageRef = firebaseInstance.firebase.storage();
-    let pathReference = storageRef.ref().child(`profileImage/${file.name}`);
+    let pathReference = storageRef.ref().child(`users/${window.user.uid}/profileImage/${file.name}`);
 
     await pathReference.put(file);
     console.log('Uploaded a profile picture!');
@@ -58,7 +58,7 @@ async function readProfilePicture() {
     let urlArr = await firebaseDataBase.read({entity: 'profileImage'});
     // Create a reference to Profile Picture:
     let storageRef = firebaseInstance.firebase.storage();
-    let pathReference = storageRef.ref().child(`profileImage/${urlArr[0]}`);
+    let pathReference = storageRef.ref().child(`users/${window.user.uid}/profileImage/${urlArr[0]}`);
     //get the URL:
     let downloadURL = await pathReference.getDownloadURL();
 

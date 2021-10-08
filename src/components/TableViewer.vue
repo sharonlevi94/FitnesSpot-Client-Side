@@ -3,7 +3,7 @@
       {{this.tableTitle}}
     <q-table class="qtable"
         :title="this.tableTitle"
-        :data="rows"
+        :data="activities"
         :columns="columns"
         row-key="name"
         dark
@@ -16,14 +16,14 @@
 
             <!-- Activities Table -->
             <q-td  v-if="isToShow('activities')" key="workoutType" :props="props" @click="goToObj(props.row.id)"> {{ props.row.workoutType }} </q-td>
-            <q-td v-if="isToShow('activities')" key="date" :props="props"> {{ props.row.date.day }}.{{ props.row.date.month }}.{{ props.row.date.year }} </q-td>
-            <q-td v-if="isToShow('activities')" key="time" :props="props"> {{ props.row.time.hours }}:{{ props.row.time.minutes }}  </q-td>
+            <q-td v-if="isToShow('activities')" key="date" :props="props"> {{ props.row.date.dateStr }} </q-td>
+            <q-td v-if="isToShow('activities')" key="time" :props="props"> {{ props.row.time.timeStr}}  </q-td>
             <q-td v-if="isToShow('activities')" key="location" :props="props"> {{ props.row.location }} </q-td>
             <q-td v-if="isToShow('activities')" key="calories" :props="props"> {{ props.row.calories }} </q-td>
             <q-td v-if="isToShow('activities')" key="difficulty" :props="props"> {{ props.row.difficulty }} </q-td>
             <q-td v-if="isToShow('activities')" key="note" :props="props"> {{ props.row.note }} </q-td>
 
-            <!-- Users Table -->
+<!--            &lt;!&ndash; Users Table &ndash;&gt;
             <q-td v-if="isToShow('users')" key="first_name" :props="props" @click="goToObj(props.row.id)"> {{ props.row.first_name }} </q-td>
             <q-td v-if="isToShow('users')" key="last_name" :props="props"> {{ props.row.last_name }} </q-td>
             <q-td v-if="isToShow('users')" key="user_name" :props="props"> {{ props.row.user_name }} </q-td>
@@ -31,7 +31,7 @@
             <q-td v-if="isToShow('users')" key="email" :props="props"> {{ props.row.email }} </q-td>
             <q-td v-if="isToShow('users')" key="date_of_birth" :props="props"> {{ props.row.date_of_birth.day }}.{{ props.row.date_of_birth.month }}.{{ props.row.date_of_birth.year }} </q-td>
             <q-td v-if="isToShow('users')" key="phone_number" :props="props"> {{ props.row.phone_number }} </q-td>
-            <q-td v-if="isToShow('users')" key="favorite_sports" :props="props"> {{ props.row.favorite_sports }} </q-td>
+            <q-td v-if="isToShow('users')" key="favorite_sports" :props="props"> {{ props.row.favorite_sports }} </q-td>-->
 
             <q-td key="actions" :props="props">
               <q-btn @click="deleteObj(props.row.id)">
@@ -48,27 +48,23 @@
 
 <script>
 import firebaseDataBase from '../middleware/firebase/database';
+import {mapMutations, mapActions, mapState} from 'vuex';
 
 export default {
   name: 'TableViewer',
-  props: ['tableName', 'tableTitle', 'settings', 'isReload'],
+  props: ['tableName', 'tableTitle', 'settings'],
   fields: [],
   //----------------------------------------------------------
   data () {
     return {
         columns: [],
-        rows: [],
     }
   },
-  //---------------------------------------------------------------------------------------
+  computed: mapState('activities', ['editedActivityId', 'activities']),
   methods: {
-    async read(){
-      this.rows = [];
-      let objects = await firebaseDataBase.read({entity: this.tableName});
-      for(let obj of objects ){
-        this.rows.push(obj);
-      }
-
+    ...mapActions('activities', ['getActivities', 'deleteActivity']),
+    ...mapMutations('activities', ['setEditedActivityId', 'resetEditedActivityId']),
+    async readSettings(){
       this.columns = [];
       let cols = await firebaseDataBase.readSettings({entity: this.settings});
       for(let i in cols ){
@@ -76,36 +72,24 @@ export default {
       }
       this.columns.push({name: "actions", label: "Actions", field: "actions"});
     },
-
-    //----------------------------------------------------------
-
-    deleteObj(objId){
-      firebaseDataBase.remove({entity: this.tableName, id: objId});
-      this.read();
-    },
-
-    //----------------------------------------------------------
-
     goToObj(id){
+      this.setEditedActivityId(id);
       this.$router.push(`editedObj/${id}`);
     },
     isToShow(table_name){
       return this.tableName == table_name;
+    },
+    deleteObj(id){
+      this.setEditedActivityId(id);
+      this.deleteActivity();
+      this.getActivities();
+      this.resetEditedActivityId();
     }
   },
-
-  //---------------------------------------------------------------------------------------
-
   created(){
-    this.read();
-  },
-
-  //----------------------------------------------------------
-
-  watch: {
-    isReload(){
-      this.read();
-    }
+    this.getActivities();
+    this.readSettings();
+    //this.getActivityRef({entity: this.tableName});
   },
 }
 </script>
