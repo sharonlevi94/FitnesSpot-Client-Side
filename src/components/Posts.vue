@@ -5,7 +5,11 @@
 
     <q-infinite-scroll @load="onLoad" :offset="250">
 
-      <CardViewer :cardName="this.cardName" :settingsName="this.cardSettings"/>
+      <CardViewer
+          v-for="post of posts"
+          :cardObj="post"
+          :cardName="cardName"
+          :settingsName="cardSettings"/>
 
       <template v-slot:loading>
         <div class="row justify-center q-my-md">
@@ -19,6 +23,8 @@
 
 <script>
 import CardViewer from "./CardViewer";
+import {mapMutations, mapActions, mapState} from 'vuex';
+
 export default {
   name: "Posts",
   components: {CardViewer},
@@ -26,9 +32,15 @@ export default {
   data () {
     return {
       items: [ {}, {}, {}, {}, {}, {}, {} ],
+      iconImgUrl: ''
     }
   },
+  computed: mapState('posts', ['editedPostId', 'posts']),
   methods: {
+    ...mapActions('posts', ['getPosts', 'deletePost']),
+
+    ...mapMutations('posts', ['setEditedPostId']),
+
     onLoad (index, done) {
       setTimeout(() => {
         if (this.items) {
@@ -38,6 +50,9 @@ export default {
       }, 2000)
     },
   },
+  async created(){
+    await this.getPosts();
+  }
 }
 </script>
 

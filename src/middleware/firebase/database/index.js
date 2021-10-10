@@ -27,6 +27,16 @@ async function readSettings(options){
     return wantedSettings.val();
 }
 
+/*async function readAsset(options){
+    let wantedSettings = await firebaseInstance.firebase.database().ref(`assets}`).once('value');
+    let urls = wantedSettings.val();
+    for(let url of urls){
+        if(url === options.url)
+            return url;
+    }
+    return null;
+}*/
+
 function create(options){
     return firebaseInstance.firebase.database().ref(`users/${window.user.uid}/data/${options.entity}`).push(options.item);
 }

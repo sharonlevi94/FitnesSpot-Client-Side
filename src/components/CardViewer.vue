@@ -4,13 +4,10 @@
       <q-card
           class="my-card text-white"
           align="left"
-          style="background: radial-gradient(circle, #000000 0%, #000000 100%);
-                width: 500px;
-                "
-          v-for="post of posts"
-      >
+          style="background: radial-gradient(circle, #ffffff 0%, #949494 100%);
+                width: 500px;">
 
-        <q-card-section v-if="!isId(post, titleValue)" v-for="titleValue in post" >
+        <q-card-section v-if="!isId(cardObj, titleValue)" v-for="titleValue in cardObj" >
           <div class="sectionTitle" v-if="isPost()"> {{userName}} says: </div>
           <div class="sectionTitle" v-else> {{settings[counter]}}: </div>
 
@@ -22,12 +19,18 @@
         </q-card-section>
 
         <q-card-section>
-          <q-btn @click="deleteObj(post.id)">
-            Delete
-          </q-btn>
+          <div>
+            <q-btn @click="deleteObj(cardObj.id)">Delete</q-btn>
+            <q-btn push class="post-buttons" :icon="loadIcon('like.png')"/>
+            <q-btn push class="post-buttons" :icon="loadIcon('comment.png')"/>
+          </div>
         </q-card-section>
-
       </q-card>
+
+      <div class="commentParent">
+        <q-input outlined class="commentChild1" v-model="comment" label="Left a comment..." align="center"/>
+        <q-btn class="commentChild2" align="center">Comment</q-btn>
+      </div>
 
     </div>
   </div>
@@ -36,16 +39,17 @@
 <script>
 import firebaseDataBase from '../middleware/firebase/database';
 import {mapMutations, mapActions, mapState} from 'vuex';
+import fireBaseStorage from "../middleware/firebase/storage";
 
 export default {
   name: "CardViewer",
-  props: ['cardName', 'settingsName'],
+  props: ['cardObj','cardName', 'settingsName'],
   data() {
     return {
       settings: [],
-      rows: [],
       counter: 0,
-      userName:''
+      userName:'',
+      comment: '',
     }
   },
   computed: mapState('posts', ['editedPostId', 'posts']),
@@ -73,9 +77,9 @@ export default {
     },
 
     increase(){
+      if(this.counter < this.settings.length){
         this.counter++;
-      if(this.counter == this.settings.length){
-        this.counter = 0;
+        console.log(this.counter);
       }
     },
 
@@ -93,11 +97,15 @@ export default {
         return true;
       }
       return false;
+    },
+    async loadIcon(iconName){
+      let assetURL = await fireBaseStorage.readAsset(iconName);
+      console.log(assetURL);
+      return `img:${assetURL}`;
     }
   },
   //---------------------------------------------------------------------------------------
   async created() {
-    await this.getPosts();
     await this.readSettings();
   }
 }
@@ -105,14 +113,20 @@ export default {
 
 <style scoped>
 .my-card {
-  width: 500px;
-  margin: 30px;
+  width: 100%;
+  margin: 10px;
   border-radius: 30px;
   font-size: 20px;
   font-family: "Berlin Sans FB";
 }
 .sectionTitle{
-  color: gray;
+  color: #000000;
 }
 
+.commentChild1{
+  width: 500px;
+}
+.commentChild2{
+  width: 100px;
+}
 </style>

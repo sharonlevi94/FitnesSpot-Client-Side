@@ -44,10 +44,4 @@ export default {
         }
         commit('setEditedActivity', activity);
     },
-
-    /*getActivityRef: async ({state, commit}, options) =>{
-        database.getEntityRef(options).on('child_changed', (snapshot)=>{
-            this.getActivities({commit});
-        })
-    }*/
 }

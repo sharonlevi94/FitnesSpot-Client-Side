@@ -1,5 +1,5 @@
 <template>
-    <div class="q-pa-md">
+    <div class="q-pa-md" :style="backgroundImgURL">
         <div class="col-6">
 
             <div class="about-us">
@@ -17,8 +17,19 @@
 </template>
 
 <script>
+import fireBaseStorage from "../middleware/firebase/storage";
+
 export default {
-name: "AboutUs"
+name: "AboutUs",
+  data(){
+  return{
+    backgroundImgURL:''
+  }
+  },
+  async created(){
+    let assetURL = await fireBaseStorage.readAsset('header3.jpg');
+    this.backgroundImgURL = `background-image: url(${assetURL})`;
+  }
 }
 </script>
 
@@ -28,7 +39,6 @@ name: "AboutUs"
   font-family: "Berlin Sans FB";
   display: table;
   margin: 0 auto;
-  background-image: url("../resources/header2.jpg");
   font-size: 45px;
   color: #000000;
   width: 100%;

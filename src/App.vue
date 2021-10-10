@@ -25,8 +25,14 @@
         </q-item>
 
         <div>
-          <q-btn  align="left" v-if="isLoggedIn()" push class="login-button" color="white" text-color="black" label="Logout" @click="logout()" />
+          <q-btn  class="logout-btn" align="left" v-if="isLoggedIn()" push color="white" text-color="black" label="Logout" @click="logout()" />
         </div>
+
+          <q-input class="search-bar" v-if="isLoggedIn()" v-model="search" filled type="search" label="Search">
+            <template v-slot:append>
+              <q-icon name="search" @click="searchSomething()" />
+            </template>
+          </q-input>
 
       </q-toolbar>
       </div>
@@ -144,7 +150,8 @@ export default {
 
   data () {
     return {
-      leftDrawerOpen: !this.$q.platform.is.desktop
+      leftDrawerOpen: !this.$q.platform.is.desktop,
+      search: '',
     }
   },
   methods:{
@@ -160,6 +167,9 @@ export default {
     },
     isLoggedIn(){
       return window.user;
+    },
+    searchSomething(){
+
     }
   }
 }
@@ -168,5 +178,13 @@ export default {
 <style>
 .logoItem{
   font-family: "Berlin Sans FB";
+}
+.search-bar{
+  width: 500px;
+  background-color: white;
+  border-radius: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 930px;
 }
 </style>

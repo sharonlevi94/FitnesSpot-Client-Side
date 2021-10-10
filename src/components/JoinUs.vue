@@ -88,7 +88,8 @@ export default {
             .createUserWithEmailAndPassword(this.editedObj.email, this.editedObj.password);
         // Signed in
         let user = userCredential.user;
-        user.details = this.editedObj;
+        user.userDetails = this.editedObj;
+        console.log(user)
         window.user = user;
         await this.$router.push('/');
       }

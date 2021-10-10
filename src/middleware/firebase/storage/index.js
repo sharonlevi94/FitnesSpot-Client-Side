@@ -65,6 +65,12 @@ async function readProfilePicture() {
     return downloadURL;
 }
 
+async function readAsset(fileName){
+    let storageRef = firebaseInstance.firebase.storage();
+    let pathReference = storageRef.ref().child(`assets/${fileName}`);
+    return await pathReference.getDownloadURL();
+}
+
 export default {
-    upload, read, uploadProfilePicture, readProfilePicture
+    upload, read, uploadProfilePicture, readProfilePicture, readAsset
 }
