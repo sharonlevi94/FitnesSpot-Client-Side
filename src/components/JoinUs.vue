@@ -46,7 +46,7 @@
 <script>
 import api from '../middleware/api/index.js';
 import firebaseInstance from '../middleware/firebase/index.js';
-
+import firestoreDB from '../middleware/firebase/firestore/users/index.js';
 
 export default {
   name: "JoinUs",
@@ -74,9 +74,7 @@ export default {
       dateObj['month'] = Number(dateArr [1]);
       dateObj['day'] = Number(dateArr[2]);
       this.editedObj.date_of_birth = dateObj;
-
-      await api.create({entity: 'users', item: this.editedObj});
-      this.$emit('addSomeThing');
+      await firestoreDB.createNewUser(this.editedObj);
     },
     async update(id) {
       await api.update({entity: 'users', objId: id, newObj: this.editedObj})
@@ -88,6 +86,7 @@ export default {
             .createUserWithEmailAndPassword(this.editedObj.email, this.editedObj.password);
         // Signed in
         let user = userCredential.user;
+        await this.insert();
         user.userDetails = this.editedObj;
         console.log(user)
         window.user = user;
@@ -95,8 +94,6 @@ export default {
       }
       catch(error){
         console.log(error);
-        let errorCode = error.code;
-        let errorMessage = error.message;
       }
     }
   },

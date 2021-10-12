@@ -3,7 +3,9 @@ export default {
 
     setEditedPostId: ((state, id) => state.editedPostId = id),
 
-    setEditedPost: ((state, post) => state.editedObj = post),
+    setEditedPost: function (state, post) {
+    state.editedObj = post;
+},
 
     resetEditedPostId: ((state) => state.editedPostId = ''),
 
@@ -26,5 +28,6 @@ export default {
 
     insertPost: ((state, post) =>{
         state.posts.push(post)
+        console.log(state.posts);
     })
 }

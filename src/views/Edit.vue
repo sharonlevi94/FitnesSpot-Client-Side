@@ -15,10 +15,7 @@ import {mapMutations, mapActions, mapState} from 'vuex';
 
 export default {
   name: "Edit",
-
-  components: {
-    AddActivity, tableViewer
-  },
+  components: {AddActivity, tableViewer},
   data() {
     return {
       editedObj: {},
@@ -26,21 +23,21 @@ export default {
     }
   },
   computed: mapState('activities', ['editedActivityId', 'activities']),
+
   methods: {
     ...mapActions('activities', ['getActivities']),
     ...mapMutations('activities', ['setEditedActivityId', 'resetEditedActivityId', 'setEditedActivity']),
-    getId() {
-      return this.$route.params.id;
-    },
+
     async getObj() {
-      let options = {entity: this.tableType, Id: this.$route.params.id};
-      let arr = await firebaseDataBase.read(options);
+      let arr = await firebaseDataBase.read({entity: this.tableType, Id: this.$route.params.id});
       this.editedObj = arr[0];
     }
   },
-  created(){
-    console.log(this.$router.params.id);
-    this.setEditedActivityId(this.$router.params.id);
+  created() {
+    if (this.$router.params.id) {
+      console.log(this.$router.params.id);
+      this.setEditedActivityId(this.$router.params.id);
+    }
   }
 }
 </script>

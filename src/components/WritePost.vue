@@ -40,7 +40,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('posts', ['editedObj']),
+    ...mapState('posts', ['editedObj', 'posts']),
     textareaShadowText () {
       if (this.textareaFillCancelled === true) {
         return ''
@@ -65,14 +65,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions('posts', ['insertPost', 'updatePost']),
+    ...mapActions('posts', ['insertPost', 'updatePost','getPosts']),
 
-    ...mapMutations('posts', ['setEditedPost']),
+    ...mapMutations('posts', ['setEditedPost','resetEditedPostId']),
 
     async add() {
-      this.setEditedPost({content: this.content});
-      await this.insertPost();
-      await this.$router.replace(this.$router.currentRoute);
+      await this.setEditedPost({content: this.content, likes:0, comments:[]});
+      await this.insertPost({content: this.content, likes:0, comments:[]});
+      //this.resetEditedPostId()
+      //await this.getPosts();
     },
 
     processTextareaFill (e) {

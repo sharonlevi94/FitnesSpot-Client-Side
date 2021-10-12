@@ -1,28 +1,25 @@
 import firebaseInstance from '../';
-import firebaseStorage from '../storage';
 
 async function read(options) {
-    if(options.Id){
+    if (options.Id) {
         let objects = await firebaseInstance.firebase.database().ref(`users/${window.user.uid}/data/${options.entity}/${options.Id}`).once('value');
         let map = objects.val();
         let objectsArr = [];
         objectsArr.push(map);
         return objectsArr;
     }
-
     let objects = await firebaseInstance.firebase.database().ref(`users/${window.user.uid}/data/${options.entity}`).once('value');
-
     let objectsArr = [];
     let map = objects.val();
-    for(let key in map){
+    for (let key in map) {
         if(typeof map[key] === 'object')
-            map[key].id = key;
+        map[key].id = key;
         objectsArr.push(map[key]);
     }
     return objectsArr;
 }
 
-async function readSettings(options){
+async function readSettings(options) {
     let wantedSettings = await firebaseInstance.firebase.database().ref(`settings/${options.entity}`).once('value');
     return wantedSettings.val();
 }
@@ -37,19 +34,19 @@ async function readSettings(options){
     return null;
 }*/
 
-function create(options){
+function create(options) {
     return firebaseInstance.firebase.database().ref(`users/${window.user.uid}/data/${options.entity}`).push(options.item);
 }
 
-function remove(options){
+function remove(options) {
     return firebaseInstance.firebase.database().ref(`users/${window.user.uid}/data/${options.entity}/${options.id}`).remove();
 }
 
-function update(options){
+function update(options) {
     return firebaseInstance.firebase.database().ref(`users/${window.user.uid}/data/${options.entity}/${options.id}`).update(options.new);
 }
 
-function getEntityRef(options){
+function getEntityRef(options) {
     return firebaseInstance.firebase.database().ref(`users/${window.user.uid}/data/${options.entity}`);
 }
 

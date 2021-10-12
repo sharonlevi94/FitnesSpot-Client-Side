@@ -4,8 +4,9 @@
     <h3>Share your fitness with everyone!</h3>
 
     <div v-if="signInMode">
-      <q-btn push class="login-button" color="black" text-color="white" label="Login" @click="login" />
-      <q-btn push class="google-login-button" color="black" text-color="white" label="Sign Up"  @click="joinUs"/>
+      <q-btn push class="header-button" color="black" text-color="white" label="Login" @click="login" />
+      <q-btn push class="header-button" color="black" text-color="white" label="Sign Up"  @click="joinUs"/>
+      <q-btn push class="header-button" label="Google" @click="googleLogin()"/>
     </div>
 
     <div v-else>
@@ -21,6 +22,8 @@
 
 <script>
 import fireBaseStorage from '../middleware/firebase/storage'
+import firebaseInstance from "../middleware/firebase";
+import firestoreDB from "../middleware/firebase/firestore"
 
 export default {
   name: "Header",
@@ -31,6 +34,28 @@ export default {
     }
   },
   methods:{
+    async googleLogin() {
+      try {
+        const provider = new firebaseInstance.firebase.auth.GoogleAuthProvider();
+        let result = await firebaseInstance.firebase.auth().signInWithPopup(provider);
+        /** @type {firebase.auth.OAuthCredential} */
+        let credential = result.credential;
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        let token = credential.accessToken;
+        // The signed-in user info.
+        let user = result.user;
+        window.user = user;
+        await firestoreDB.modules.users.createNewUser({name:window.user.displayName, email:window.user.email})
+        await this.$router.replace('/profile');
+
+      } catch (error) {
+        console.log(error);
+        /*let errorCode = error.code;
+        let errorMessage = error.message;
+        let email = error.email;
+        let credential = error.credential;*/
+      }
+    },
     login(){
       this.$router.replace('/login');
     },
@@ -66,4 +91,11 @@ export default {
   font-size: 25px;
   width: 200px;
 }
+.header-button {
+  background-color: black;
+  color: white;
+  margin: 10px;
+  padding: 10px;
+}
+
 </style>

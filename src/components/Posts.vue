@@ -6,8 +6,6 @@
     <q-infinite-scroll @load="onLoad" :offset="250">
 
       <CardViewer
-          v-for="post of posts"
-          :cardObj="post"
           :cardName="cardName"
           :settingsName="cardSettings"/>
 
@@ -50,8 +48,8 @@ export default {
       }, 2000)
     },
   },
-  async created(){
-    await this.getPosts();
+   created(){
+     this.getPosts()
   }
 }
 </script>

@@ -20,10 +20,7 @@
         </q-card-section>
 
         <q-card-section>
-          <div>
             <q-btn push class="login-button" color="white" text-color="black" label="Login" @click="login()"/>
-            <q-btn push class="google-login-button" label="Google" @click="googleLogin()"/>
-          </div>
         </q-card-section>
         <q-card-section>
           <div class="forgot-button">
@@ -50,30 +47,6 @@ export default {
     }
   },
   methods: {
-    async googleLogin() {
-      try {
-        const provider = new firebaseInstance.firebase.auth.GoogleAuthProvider();
-        let result = await firebaseInstance.firebase.auth().signInWithPopup(provider);
-        /** @type {firebase.auth.OAuthCredential} */
-        let credential = result.credential;
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        let token = credential.accessToken;
-        // The signed-in user info.
-        let user = result.user;
-        window.user = user;
-
-        await this.$router.push('/');
-      } catch (error) {
-        console.log(error);
-        // Handle Errors here.
-        let errorCode = error.code;
-        let errorMessage = error.message;
-        // The email of the user's account used.
-        let email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        let credential = error.credential;
-      }
-    },
     async login() {
       try {
         console.log(`email: ${this.email}, password: ${this.password}`);
@@ -84,8 +57,9 @@ export default {
         console.log(user);
         await this.$router.push('/');
       } catch (error) {
-        let errorCode = error.code;
-        let errorMessage = error.message;
+        console.log(error)
+       /* let errorCode = error.code;
+        let errorMessage = error.message;*/
       }
     }
   }
@@ -98,12 +72,6 @@ export default {
   height: 600px;
   font-family: "Berlin Sans FB";
 }
-
-.google-login-button {
-  background-color: black;
-  color: white;
-}
-
 .wrapper {
   background-color: #773b3b;
 }

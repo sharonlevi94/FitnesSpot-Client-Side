@@ -11,7 +11,6 @@
       <q-input v-model="localEditedObj.time.timeStr" filled type="text" hint="for how long? (hh:mm)" />
 
       <q-input v-model="localEditedObj.location" filled type="text" hint="Where?" />
-
     </div>
 
     <div class="join-us-fields">
@@ -81,7 +80,7 @@ export default {
       this.localToStore();
       await this.insertActivity();
       this.resetEditedActivityId();
-      await this.$router.replace(this.$router.currentRoute);
+      //await this.$router.replace(this.$router.currentRoute);
     },
 
     async update(){
@@ -96,7 +95,6 @@ export default {
 
   },
   created() {
-    console.log(this.editedObj.id);
     this.setEditActivityById().then(()=>{
       Object.assign(this.localEditedObj, this.editedObj);
     })

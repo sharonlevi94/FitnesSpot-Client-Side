@@ -1,14 +1,13 @@
-import database from "../../middleware/firebase/database";
+import firestore from "../../middleware/firebase/firestore/posts/index.js"
 
 export default {
-
     getPosts: async ({commit}) => {
-        const activities = await database.read({entity: 'posts'});
-        commit('setPosts', activities);
+        const posts = await firestore.getPosts({entity: 'posts'});
+        commit('setPosts', posts);
     },
 
     deletePost: async ({state, commit}) =>{
-        await database.remove({entity: 'posts', id: state.editedPostId});
+        await firestore.deletePost(state.editedPostId)
         commit('resetEditedPostId')
         commit('deletePost', state.editedPostId)
     },
@@ -18,19 +17,26 @@ export default {
         Object.assign(post, state.editedObj)
         post.id = state.editedPostId;
         //save in DB:
-        await database.update({entity:'posts', id: state.editedPostId, post});
+        await firestore.updatePost({id: state.editedPostId, new: post})
         //save in store:
         commit('resetEditedPost');
         commit('resetEditedPostId');
         commit('editPost', post);
+
     },
 
-    insertPost: async ({state, commit}) =>{
+    insertPost: async ({state, commit},localPost) =>{
         let post = {};
-        Object.assign(post, state.editedObj);
-        post.id = (await database.create({entity: 'posts', item: post })).key
+        Object.assign(post, localPost);
+        let postId = await new Date().getTime();
+        // insert to firestore database
+
+        await firestore.insertPostToDB({item: post, id: postId});
+        // insert to RT database
+        // post.id = (await database.create({entity: 'posts', item: post })).key
+        post.id = postId;
         commit('resetEditedPost');
-        commit(' insertPost', post)
+        commit('insertPost', post)
     },
 
     setEditPostById: async ({state, commit}) => {
@@ -39,7 +45,7 @@ export default {
             post = state.posts.find(post => post.id === state.editedPostId);
         }
         else{
-            post = await database.read({entity: 'posts', id: state.editedPostId});
+            post = await firestore.getPostById(state.editedPostId)
         }
         commit('setEditedPost', post);
     }

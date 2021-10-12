@@ -34,13 +34,14 @@ async function read() {
 
 async function uploadProfilePicture(file) {
     // Create a reference to current Profile picture and delete it
-   /* let dirRef = firebaseInstance.firebase.storage().ref().child(`users/${window.user.uid}/profileImage`);
-    await dirRef.remove();*/
-    /*let currentPicture = readProfilePicture();
-    if(currentPicture) {
+    let dirRef = firebaseInstance.firebase.storage().ref().child(`users/${window.user.uid}/profileImage`);
+    await dirRef.remove();
+
+    let currentPicture = readProfilePicture();
+    if (currentPicture) {
         await dirRef.delete();
         await firebaseInstance.firebase.database().ref(`users/${window.user.uid}/data/profileImage`).remove();
-    }*/
+    }
 
     // Create a reference to new profile picture folder
     let storageRef = firebaseInstance.firebase.storage();
@@ -65,7 +66,7 @@ async function readProfilePicture() {
     return downloadURL;
 }
 
-async function readAsset(fileName){
+async function readAsset(fileName) {
     let storageRef = firebaseInstance.firebase.storage();
     let pathReference = storageRef.ref().child(`assets/${fileName}`);
     return await pathReference.getDownloadURL();

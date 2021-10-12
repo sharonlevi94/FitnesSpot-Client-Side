@@ -2,6 +2,11 @@
   <div class="home">
     <WritePost align="center"/>
     <Posts :cardName="'posts'" :cardSettings="'settings-posts'" :titleName="'News Feed'"/>
+<!--    <CardViewer
+        v-for="post of posts"
+        :cardObj="post"
+        :cardName="'posts'"
+        :settingsName="'settings-posts'"/>-->
   </div>
 </template>
 

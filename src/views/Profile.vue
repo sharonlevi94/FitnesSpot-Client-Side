@@ -51,7 +51,7 @@ export default {
   },
   data(){
     return{
-      userName:'',
+      userName: window.user.displayName,
       profilePictureFile: null,
       profilePictureURL: 'https://placeimg.com/500/300/nature',
     }
@@ -66,7 +66,6 @@ export default {
     }
   },
   created() {
-    this.userName = window.user.displayName;
     this.readProfilePicture();
   }
 }
