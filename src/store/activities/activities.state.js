@@ -7,8 +7,10 @@ export default {
             day: 0,
             month: 0,
             year: 0,
+            dateStr:''
         },
         time: {
+            timeStr: '',
             hours:0,
             minutes: 0
         },

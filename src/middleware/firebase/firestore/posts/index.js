@@ -2,11 +2,12 @@ import firebaseInstance from '../../';
 import firestore from "firebase/firestore"
 
 async function insertPostToDB(options) {
-    console.log(options)
-    return firebaseInstance.firebase.firestore().collection('allPosts').doc(`${options.id}`).set(options.item)
+    return firebaseInstance.firebase.firestore().collection('allPosts')
+        .doc(`${options.id}`).set(options.item)
         .then(()=>{
-            console.log('post added to DB')
-            return  firebaseInstance.firebase.firestore().collection('users').doc(window.user.uid).collection('posts')
+            return  firebaseInstance.firebase.firestore()
+                .collection('users').doc(window.user.uid)
+                .collection('posts')
                 .doc(`${options.id}`).set(options.item)
         })
 }
@@ -14,7 +15,6 @@ async function insertPostToDB(options) {
 function getPosts(){
     return firebaseInstance.firebase.firestore().collection('allPosts').get()
         .then((querySnapshot)=>{
-
             let posts = [];
             querySnapshot.forEach((doc) => {
                 let post = {}

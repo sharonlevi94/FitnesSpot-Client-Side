@@ -16,8 +16,8 @@
 
             <!-- Activities Table -->
             <q-td  v-if="isToShow('activities')" key="workoutType" :props="props" @click="goToObj(props.row.id)"> {{ props.row.workoutType }} </q-td>
-            <q-td v-if="isToShow('activities')" key="date" :props="props"> {{ props.row.date.dateStr }} </q-td>
-            <q-td v-if="isToShow('activities')" key="time" :props="props"> {{ props.row.time.timeStr}}  </q-td>
+            <q-td v-if="isToShow('activities')" key="date" :props="props"> {{ props.row.date.day }}/{{ props.row.date.month }}/{{ props.row.date.year }} </q-td>
+            <q-td v-if="isToShow('activities')" key="time" :props="props"> {{ props.row.time.hours}}:{{ props.row.time.minutes}}  </q-td>
             <q-td v-if="isToShow('activities')" key="location" :props="props"> {{ props.row.location }} </q-td>
             <q-td v-if="isToShow('activities')" key="calories" :props="props"> {{ props.row.calories }} </q-td>
             <q-td v-if="isToShow('activities')" key="difficulty" :props="props"> {{ props.row.difficulty }} </q-td>
@@ -82,13 +82,14 @@ export default {
     deleteObj(id){
       this.setEditedActivityId(id);
       this.deleteActivity();
-      this.getActivities();
+      //this.getActivities();
       this.resetEditedActivityId();
     }
   },
   created(){
     this.getActivities();
     this.readSettings();
+    console.log(this.activities)
     //this.getActivityRef({entity: this.tableName});
   },
 }

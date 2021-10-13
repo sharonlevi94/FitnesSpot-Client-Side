@@ -6,9 +6,9 @@
 
       <q-select v-model="localEditedObj.workoutType" :options="this.activities" label="What type of activity you did?" />
 
-      <q-input v-model="localEditedObj.date.dateStr" filled type="date" hint="Date" />
+      <q-input v-model="localEditedObj.date" filled type="date" hint="Date" />
 
-      <q-input v-model="localEditedObj.time.timeStr" filled type="text" hint="for how long? (hh:mm)" />
+      <q-input v-model="localEditedObj.time" filled type="text" hint="for how long? (hh:mm)" />
 
       <q-input v-model="localEditedObj.location" filled type="text" hint="Where?" />
     </div>
@@ -80,6 +80,7 @@ export default {
       this.localToStore();
       await this.insertActivity();
       this.resetEditedActivityId();
+      await this.getActivities();
       //await this.$router.replace(this.$router.currentRoute);
     },
 

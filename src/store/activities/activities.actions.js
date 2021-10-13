@@ -1,14 +1,14 @@
-import database from "../../middleware/firebase/database";
+import firestore from "../../middleware/firebase/firestore/activities";
 
 export default {
 
     getActivities: async ({commit}) => {
-        const activities = await database.read({entity: 'activities'});
+        const activities = await firestore.getActivities();
         commit('setActivities', activities);
     },
 
     deleteActivity: async ({state, commit}) =>{
-        await database.remove({entity: 'activities', id: state.editedActivityId});
+        await firestore.removeActivity(state.editedActivityId);
         commit('resetEditedActivityId')
         commit('deleteActivity', state.editedActivityId)
     },
@@ -18,7 +18,7 @@ export default {
         Object.assign(activity, state.editedObj)
         activity.id = state.editedActivityId;
         //save in DB:
-        await database.update({entity:'activities', id: state.editedActivityId, activity});
+        await  firestore.updateActivity({entity:'activities', id: state.editedActivityId, activity})
         //save in store:
         commit('resetEditedActivity');
         commit('resetEditedActivityId');
@@ -28,7 +28,10 @@ export default {
     insertActivity: async ({state, commit}) =>{
         let activity = {};
         Object.assign(activity, state.editedObj);
-        activity.id = (await database.create({entity: 'activities', item: activity })).key
+        let activityId = await new Date().getTime();
+
+        await firestore.insertActivityToDB({item: activity, id: activityId});
+
         commit('resetEditedActivity');
         commit('insertActivity', activity)
     },
@@ -40,7 +43,7 @@ export default {
             activity = state.activities.find(activity => activity.id === state.editedActivityId);
         }
         else{
-            activity = await database.read({entity: 'activities', id: state.editedActivityId});
+            activity = await firestore.getActivityById(state.editedActivityId)
         }
         commit('setEditedActivity', activity);
     },
