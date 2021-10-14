@@ -2,6 +2,7 @@ import firebaseInstance from '../../../firebase';
 import firestore from "firebase/firestore"
 
 function uploadImage(options){
+    //console.log(options)
     return firebaseInstance.firebase.firestore()
         .collection('users').doc(window.user.uid)
         .collection(options.entity)
@@ -22,8 +23,7 @@ function getImages(){
             let images = [];
             querySnapshot.forEach((doc) => {
                 let image = {}
-                Object.assign(image, doc.data());
-                images.id = doc.id;
+                image = doc.data();
                 images.push(image);
             });
             return images;
@@ -38,23 +38,43 @@ function uploadProfilePicture(options){
         .get().then((doc)=>{
             if(doc.exists){
                 removeImage({entity:'profilePicture' ,id: options.id});
+                console.log('old picture removed')
             }
-            return uploadImage({entity:'profilePicture',
+            return uploadImage(
+                {entity:'profilePicture',
                 id: options.id,
                 item: options.new})
     })
 }
 
-function readProfilePicture(id){
-    firebaseInstance.firebase.firestore()
+function readProfilePicture(){
+    return firebaseInstance.firebase.firestore()
         .collection('users')
         .doc(window.user.uid)
         .collection('profilePicture')
+        .get().then((querySnapshot)=>{
+            let images= []
+        querySnapshot.forEach((doc)=>{
+            let image = {}
+            image = doc.data();
+            images.push(image);
+        })
+        return images[0]
+    })
+}
+
+function getImageById(id){
+    return firebaseInstance.firebase.firestore()
+        .collection('users')
+        .doc(window.user.uid)
+        .collection('images')
         .doc(id).get().then((doc)=>{
             if(doc.exists){
-                return doc.data()
+                return doc.data();
             }
-    })
+        }).catch((err)=>{
+            console.log(err)
+        })
 }
 
 export default {
@@ -62,5 +82,6 @@ export default {
     removeImage,
     getImages,
     uploadProfilePicture,
-    readProfilePicture
+    readProfilePicture,
+    getImageById
 }

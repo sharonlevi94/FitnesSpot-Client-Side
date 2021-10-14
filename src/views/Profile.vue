@@ -6,26 +6,48 @@
 
       <q-header class="profile-header">
         <q-img
-            :src="profilePictureURL"
+            :src="currProfilePictureURL"
             spinner-color="white"
             style="height: 140px; max-width: 150px"
-            @click="uploadProfilePic()"
         />
         {{userName}}
       </q-header>
 
       <div class="float-child">
-        <UploadPhotos titleName="Your Photos"
-                      buttonName="Upload"
-                      hint="Upload your photo"
-                      :display="true"/>
         <UploadPhotos titleName="Change Profile Picture"
                       buttonName="Change"
                       hint="change your profile photo"
                       :display="false"/>
+        <UploadPhotos titleName="Your Photos"
+                      buttonName="Upload"
+                      hint="Upload your photo"
+                      :display="true"/>
       </div>
 
       <div class="float-child">
+
+        <div   align="center">
+          <q-btn class="popup-buttons" label="Your Workouts" color="primary" @click="dialog = true"/>
+          <q-dialog  v-model="dialog">
+            <q-card >
+              <q-card-section>
+                <tableViewer :tableName="'activities'"
+                             tableTitle="Activities"
+                             :settings="'settings-activities'"/>
+              </q-card-section>
+            </q-card>
+          </q-dialog>
+
+          <q-btn class="popup-buttons" label="Add Workout" color="primary" @click="dialog2 = true"/>
+          <q-dialog  v-model="dialog2">
+            <q-card >
+              <q-card-section>
+                <AddActivity :tableName="'activities'"/>
+              </q-card-section>
+            </q-card>
+          </q-dialog>
+        </div>
+
         <WritePost align="center"/>
         <Posts :cardName="'posts'"
                :cardSettings="'settings-posts'"
@@ -42,31 +64,29 @@
 import Posts from "../components/Posts";
 import UploadPhotos from "../components/UploadPhotos";
 import WritePost from "../components/WritePost";
-import firebaseStorage from '../middleware/firebase/storage';
+import TableViewer from "../components/TableViewer";
+import AddActivity from "../components/AddActivity";
+import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   name: "Profile",
   components: {
-    Posts, UploadPhotos, WritePost
+    Posts, UploadPhotos, WritePost, AddActivity, TableViewer
   },
   data(){
     return{
       userName: window.user.displayName,
-      profilePictureFile: null,
-      profilePictureURL: 'https://placeimg.com/500/300/nature',
+      userEmail: window.user.email,
+      dialog: false,
+      dialog2: false,
     }
   },
-  methods:{
-    async uploadProfilePic(){
-      await firebaseStorage.uploadProfilePicture(this.profilePictureFile);
-      await this.$router.replace('/profile');
-    },
-    async readProfilePicture(){
-      this.profilePictureURL = await firebaseStorage.readProfilePicture();
-    }
+  computed:{
+    ...mapState('images', ['currProfilePictureURL'])
   },
   created() {
-    this.readProfilePicture();
+    console.log(this.currProfilePictureURL)
+
   }
 }
 </script>
@@ -87,6 +107,11 @@ export default {
 .profile-header{
   height: 150px;
   font-size: 60px;
+  font-family: "Berlin Sans FB";
+}
+.popup-buttons{
+  margin: 10px;
+  padding: 5px;
   font-family: "Berlin Sans FB";
 }
 </style>

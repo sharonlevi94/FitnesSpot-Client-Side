@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import firebaseStorage from '../middleware/firebase/storage';
+import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   name: "UploadPhotos",
@@ -50,23 +50,35 @@ export default {
       slide: 1
     }
   },
+  computed:{
+    ...mapState('images',[ 'editedImageId','editedImage','images','currProfilePictureURL','profilePictureId'])
+  },
   methods: {
+    ...mapActions('images', ['uploadImage','getImages','uploadProfilePicture','getProfilePicture']),
+
+    ...mapMutations('images',['setEditedImage','resetEditedImageId','setNewProfilePicture']),
+
     async upload() {
-      if(this.buttonName == 'Upload')
-        await firebaseStorage.upload(this.myFile);
-      else
-        await firebaseStorage.uploadProfilePicture(this.myFile);
+      if(this.buttonName == 'Upload') {
+        this.setEditedImage(this.myFile)
+        await this.uploadImage()
+        this.resetEditedImageId()
+        await this.read()
+      }
+      else {
+        this.setNewProfilePicture(this.myFile)
+        await this.uploadProfilePicture();
+        console.log(this.currProfilePictureURL)
+      }
     },
     async read() {
       this.slider = [];
-      let images = [];
-      //get an array of URLs from storage:
-      images = await firebaseStorage.read();
-
+      await this.getImages();
       let counter = 1;
       //make the images to objects with Ids:
-      for (let url of images) {
-        let imgObj = url;
+      for (let url of this.images) {
+        let imgObj = {}
+        imgObj.downloadURL = url;
         imgObj.id = counter;
         counter++;
         this.slider.push(imgObj);
@@ -74,7 +86,8 @@ export default {
     }
   },
   created() {
-    this.read();
+    this.read()
+    this.getProfilePicture()
   }
 }
 </script>

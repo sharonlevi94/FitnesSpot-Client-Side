@@ -89,7 +89,6 @@ export default {
   created(){
     this.getActivities();
     this.readSettings();
-    console.log(this.activities)
     //this.getActivityRef({entity: this.tableName});
   },
 }

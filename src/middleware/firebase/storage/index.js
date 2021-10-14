@@ -1,76 +1,64 @@
 import firebaseInstance from '../';
 import firebaseFireStore from '../firestore';
 
-async function upload(file) {
+async function upload(options) {
+    //options = {id,file}
     // Create a root reference
+    console.log(options)
     let storageRef = firebaseInstance.firebase.storage();
 
     // Create a reference to the file we want to upload
-    let pathReference = storageRef.ref().child(`users/${window.user.uid}/images/${file.name}`);
+    let pathReference = storageRef.ref().child(`users/${window.user.uid}/images/${options.file.name}`);
 
-    await pathReference.put(file);
+    await pathReference.put(options.file);
     console.log('Uploaded a blob or file!');
-
-    //add the url to the database:
-
-    let imageId = new Date().getTime()
-    await firebaseFireStore.modules.images.uploadImage
-    ({entity:'images', id: imageId, item: file.name })
 }
 
-async function read() {
-    //get the URLs from DB:
-
-    let urlArr = await firebaseFireStore.modules.images.getImages()
+async function read(urlArr) {
     let pathURL = [];
     // Create a reference to Storage:
     let storageRef = firebaseInstance.firebase.storage();
 
     for (let url of urlArr) {
-        let pathReference = storageRef.ref().child(`users/${window.user.uid}/images/${url}`);
+        let pathReference = storageRef.ref().child(`users/${window.user.uid}/images/${url.name}`);
         let imageObj = {};
-        imageObj.url = url;
+        Object.assign(imageObj, url)
         imageObj.downloadURL = await pathReference.getDownloadURL();
-        pathURL.push(imageObj);
+        pathURL.push(imageObj.downloadURL);
     }
     return pathURL;
 }
 
-async function uploadProfilePicture(file) {
-    // Create a reference to current Profile picture and delete it
-/*    let dirRef = firebaseInstance.firebase.storage().ref()
-        .child(`users/${window.user.uid}/profileImage`);*/
-    /*await dirRef.remove();
-
-    let currentPicture = readProfilePicture();
-    if (currentPicture) {
-        await dirRef.delete();
-        await firebaseInstance.firebase.database().ref(`users/${window.user.uid}/data/profileImage`).remove();
-    }*/
-
-    // Create a reference to new profile picture folder
+async function uploadProfilePicture(options) {
+    //options = {currPicture(downloadURL), file(the file uploaded)}}
     let storageRef = firebaseInstance.firebase.storage();
-    let pathReference = storageRef.ref()
-        .child(`users/${window.user.uid}/profileImage/${file.name}`);
-
-    await pathReference.put(file);
-    console.log('Uploaded a profile picture!');
-
-    //add the url to the database:
-    let imageId = new Date().getTime()
-    firebaseFireStore.modules.images.uploadProfilePicture
-    ({ id: imageId, item: file.name})
+    /*storageRef.ref().child(`users/${window.user.uid}/profileImage/${options.currPicture}`).delete()
+        .then(() => {
+            let pathRef = storageRef.ref()
+                .child(`users/${window.user.uid}/profileImage/${options.file.name}`)
+            pathRef.put(options.file);
+            console.log('Uploaded a profile picture!');
+            return pathRef.getDownloadURL();
+        }).catch(() =>  {
+        console.log(options)*/
+    let pathRef = storageRef.ref(`users/${window.user.uid}/profileImage/${options.file.name}`)
+    return await pathRef.put(options.file).then(() => {
+        console.log('Uploaded a profile picture!');
+        return pathRef.getDownloadURL().then((downloadURL) => {
+        return downloadURL
+        });
+    });
+    //console.log('cannot delete image in storage')
+    //   })
 }
 
-async function readProfilePicture(id) {
-    //get the URLs from DB:
-    let url = await firebaseFireStore.modules.images.readProfilePicture(id)
+async function readProfilePicture(imageObj) {
+    console.log(imageObj)
     // Create a reference to Profile Picture:
     let storageRef = firebaseInstance.firebase.storage();
-    let pathReference = storageRef.ref().child(`users/${window.user.uid}/profileImage/${url}`);
+    let pathReference = storageRef.ref().child(`users/${window.user.uid}/profileImage/${imageObj.name}`);
     //get the URL:
     let downloadURL = await pathReference.getDownloadURL();
-
     return downloadURL;
 }
 
