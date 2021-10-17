@@ -66,7 +66,7 @@ import UploadPhotos from "../components/UploadPhotos";
 import WritePost from "../components/WritePost";
 import TableViewer from "../components/TableViewer";
 import AddActivity from "../components/AddActivity";
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: "Profile",
@@ -86,7 +86,6 @@ export default {
   },
   created() {
     console.log(this.currProfilePictureURL)
-
   }
 }
 </script>

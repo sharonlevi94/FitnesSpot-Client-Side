@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout class="q-pa-md" view="lHh Lpr lFf">
     <q-header elevated class="glossy">
       <div>
       <q-toolbar>
@@ -186,5 +186,8 @@ export default {
   margin-top: 10px;
   margin-bottom: 10px;
   margin-left: 930px;
+}
+.q-pa-md{
+  background-color: #ffffff;
 }
 </style>
