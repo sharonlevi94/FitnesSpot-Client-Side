@@ -47,10 +47,10 @@ function uploadProfilePicture(options){
     })
 }
 
-function readProfilePicture(){
+function readProfilePicture(id){
     return firebaseInstance.firebase.firestore()
         .collection('users')
-        .doc(window.user.uid)
+        .doc(id)
         .collection('profilePicture')
         .get().then((querySnapshot)=>{
             let images= []

@@ -53,13 +53,14 @@ async function uploadProfilePicture(options) {
 }
 
 async function readProfilePicture(imageObj) {
-    console.log(imageObj)
     // Create a reference to Profile Picture:
     let storageRef = firebaseInstance.firebase.storage();
-    let pathReference = storageRef.ref().child(`users/${window.user.uid}/profileImage/${imageObj.name}`);
+    let pathReference = storageRef.ref().child(`users/${imageObj.authorId}/profileImage/${imageObj.name}`);
     //get the URL:
-    let downloadURL = await pathReference.getDownloadURL();
-    return downloadURL;
+    return pathReference.getDownloadURL().then((downloadURL)=>{
+        return downloadURL;
+    });
+
 }
 
 async function readAsset(fileName) {

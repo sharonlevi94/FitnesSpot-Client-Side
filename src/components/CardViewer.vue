@@ -10,6 +10,10 @@
                 width: 500px;">
 
         <q-card-section>
+<!--            <q-avatar>
+              <img :src="getAuthorImage(post.authorId)">
+            </q-avatar>-->
+
           <div class="sectionTitle" v-if="isPost()"> {{ post.author }} says:</div>
           <div>{{ post.content }}</div>
         </q-card-section>
@@ -36,7 +40,7 @@
 
      <!--Write A Comment-->
       <div class="comment-parent" align="center" style="width: 530px">
-        <q-input outlined bottom-slots v-model="comment" label="left your comment here" :dense="dense">
+        <q-input outlined bottom-slots v-model="post.currComment" label="left your comment here" :dense="dense">
           <template v-slot:before>
             <q-avatar>
               <img :src="currProfilePictureURL">
@@ -44,11 +48,11 @@
           </template>
 
           <template v-slot:append>
-            <q-icon v-if="comment !== ''" name="close" @click="comment = ''" class="cursor-pointer" />
+            <q-icon v-if="post.currComment !== ''" name="close" @click="post.currComment = ''" class="cursor-pointer" />
           </template>
 
           <template v-slot:after>
-            <q-btn round dense flat icon="send" @click="leftComment(post.id)"/>
+            <q-btn round dense flat icon="send" @click="leftComment(post.id, post.currComment)"/>
           </template>
         </q-input>
       </div>
@@ -88,9 +92,9 @@ export default {
       settings: [],
       counter: 0,
       userName: '',
-      comment: '',
       dense: false,
-      commentDialog: false
+      commentDialog: false,
+      authorImage: '',
     }
   },
   computed: {
@@ -100,7 +104,7 @@ export default {
   methods: {
     ...mapActions('posts', ['getPosts', 'deletePost', 'updatePost', 'setEditPostById','getPost']),
 
-    ...mapActions('images',['getProfilePicture']),
+    ...mapActions('images',['getProfilePicture','getProfilePictureById']),
 
     ...mapMutations('posts', ['setEditedPostId', 'setEditedPost', 'resetEditedPostId']),
 
@@ -136,7 +140,7 @@ export default {
       await this.updatePost();
     },
 
-    async leftComment(id) {
+    async leftComment(id, currComment) {
       await this.setEditedPostId(id);
       await this.setEditPostById();
       let localObj = {}
@@ -145,7 +149,7 @@ export default {
       let comment = {
         author: window.user.displayName,
         image: this.currProfilePictureURL,
-        content: this.currComment
+        content: currComment
       }
 
       localObj.comments.push(comment)
@@ -159,6 +163,11 @@ export default {
       return post.authorId == window.user.uid
     },
 
+    getAuthorImage(id){
+      return this.getProfilePictureById(id).then((image)=>{
+        return image;
+      })
+    },
   },
   created() {
     this.getProfilePicture()

@@ -20,6 +20,7 @@ function getPosts(){
                 let post = {}
                 Object.assign(post, doc.data());
                 post.id = doc.id;
+                post.currComment = '';
                 posts.push(post);
             });
             return posts;
@@ -64,6 +65,7 @@ function getUserPosts(){
                 let post = {}
                 Object.assign(post, doc.data());
                 post.id = doc.id;
+                post.currComment = '';
                 posts.push(post);
             });
             return posts;

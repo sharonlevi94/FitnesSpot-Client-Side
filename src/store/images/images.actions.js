@@ -9,8 +9,9 @@ export default {
     },
 
     getProfilePicture: async ({commit}) => {
-        let imageObj =  await firestore.readProfilePicture();
+        let imageObj =  await firestore.readProfilePicture(window.user.uid);
         //imageObj with id & name
+        imageObj.authorId = window.user.uid;
         let downloadURL = await firebaseStorage.readProfilePicture(imageObj)
         commit('insertProfilePicture', downloadURL)
     },
@@ -63,6 +64,19 @@ export default {
             image = await firestore.getImageById(state.editedImageId)
         }
         commit('setEditedImage', image);
+    },
+
+    getProfilePictureById: async ({state, commit}, id) => {
+        return firestore.readProfilePicture(id).then((imageObj)=>{
+            imageObj.authorId = id;
+            //imageObj with id & name & authorId
+
+            return firebaseStorage.readProfilePicture(imageObj).then((downloadURL)=>{
+                return downloadURL;
+            })
+        })
+
+
     },
 
 }
