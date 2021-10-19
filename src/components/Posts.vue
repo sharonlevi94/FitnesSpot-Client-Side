@@ -26,7 +26,7 @@ import {mapMutations, mapActions, mapState} from 'vuex';
 export default {
   name: "Posts",
   components: {CardViewer},
-  props: ['cardName', 'cardSettings', 'titleName'],
+  props: ['cardName', 'cardSettings', 'titleName','isUser'],
   data () {
     return {
       items: [ {}, {}, {}, {}, {}, {}, {} ],
@@ -49,7 +49,7 @@ export default {
     },
   },
    created(){
-     this.getPosts()
+     this.getPosts(this.isUser)
   }
 }
 </script>

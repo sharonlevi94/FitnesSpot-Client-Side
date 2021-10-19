@@ -6,5 +6,7 @@ export default {
         content: '',
         likes: 0,
         comments:[],
+        author: '',
+        authorId:'',
     }
 }

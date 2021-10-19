@@ -1,7 +1,10 @@
 <template>
   <div class="home">
     <WritePost align="center"/>
-    <Posts :cardName="'posts'" :cardSettings="'settings-posts'" :titleName="'News Feed'"/>
+    <Posts :cardName="'posts'"
+           :cardSettings="'settings-posts'"
+           :titleName="'News Feed'"
+            :isUser="false"/>
 <!--    <CardViewer
         v-for="post of posts"
         :cardObj="post"
@@ -13,7 +16,6 @@
 <script>
 import Posts from "../components/Posts";
 import WritePost from "../components/WritePost";
-
 
 export default {
   name: 'Feed',

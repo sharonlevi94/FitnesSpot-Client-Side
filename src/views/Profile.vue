@@ -51,7 +51,8 @@
         <WritePost align="center"/>
         <Posts :cardName="'posts'"
                :cardSettings="'settings-posts'"
-               :titleName="'Your Posts'"/>
+               :titleName="'Your Posts'"
+                :isUser="true"/>
       </div>
 
     </div>
@@ -91,9 +92,11 @@ export default {
 </script>
 
 <style scoped>
+
 .float-container {
   border: 3px solid #fff;
   padding: 20px;
+  display: flex;
 }
 
 .float-child {

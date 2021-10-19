@@ -1,8 +1,12 @@
 import firestore from "../../middleware/firebase/firestore/posts/index.js"
 
 export default {
-    getPosts: async ({commit}) => {
-        const posts = await firestore.getPosts({entity: 'posts'});
+    getPosts: async ({commit}, userPosts) => {
+        let posts = []
+        if(userPosts)
+            posts = await firestore.getUserPosts()
+        else
+            posts = await firestore.getPosts()
         commit('setPosts', posts);
     },
 
@@ -17,7 +21,7 @@ export default {
         Object.assign(post, state.editedObj)
         post.id = state.editedPostId;
         //save in DB:
-        await firestore.updatePost({id: state.editedPostId, new: post})
+        await firestore.updatePost({id: state.editedPostId, new: post, authorId: post.authorId})
         //save in store:
         commit('resetEditedPost');
         commit('resetEditedPostId');
@@ -48,5 +52,12 @@ export default {
             post = await firestore.getPostById(state.editedPostId)
         }
         commit('setEditedPost', post);
+    },
+
+    getPost: async ({state, commit}, id) => {
+        let post = {}
+        post = await firestore.getPostById(id)
+        console.log(post)
+        return post
     }
 }

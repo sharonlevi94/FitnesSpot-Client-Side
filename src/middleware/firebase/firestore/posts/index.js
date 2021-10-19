@@ -49,8 +49,23 @@ function updatePost(options){
     return firebaseInstance.firebase.firestore().collection('allPosts')
         .doc(`${options.id}`).update(options.new).then(()=>{
             return  firebaseInstance.firebase.firestore().collection('users')
-                .doc(window.user.uid).collection('posts')
+                .doc(options.authorId).collection('posts')
                 .doc(`${options.id}`).update(options.new).then(()=>{})
+        })
+}
+
+function getUserPosts(){
+    return firebaseInstance.firebase.firestore().collection('users')
+        .doc(window.user.uid).collection('posts').get()
+        .then((querySnapshot)=>{
+            let posts = [];
+            querySnapshot.forEach((doc) => {
+                let post = {}
+                Object.assign(post, doc.data());
+                post.id = doc.id;
+                posts.push(post);
+            });
+            return posts;
         })
 }
 
@@ -59,5 +74,6 @@ export default {
     getPosts,
     getPostById,
     deletePost,
-    updatePost
+    updatePost,
+    getUserPosts
 }

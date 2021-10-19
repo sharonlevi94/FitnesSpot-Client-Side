@@ -70,8 +70,15 @@ export default {
     ...mapMutations('posts', ['setEditedPost','resetEditedPostId']),
 
     async add() {
-      await this.setEditedPost({content: this.content, likes:0, comments:[]});
-      await this.insertPost({content: this.content, likes:0, comments:[]});
+      let newPost = {
+        content: this.content,
+        likes:0,
+        comments:[],
+        author: window.user.displayName,
+        authorId: window.user.uid,
+      }
+      await this.setEditedPost(newPost);
+      await this.insertPost(newPost);
       //this.resetEditedPostId()
       //await this.getPosts();
     },
