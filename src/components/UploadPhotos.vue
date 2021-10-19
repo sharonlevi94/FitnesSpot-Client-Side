@@ -64,6 +64,8 @@ export default {
         await this.uploadImage()
         this.resetEditedImageId()
         await this.read()
+        await this.getProfilePicture()
+        window.user.downloadURL = this.currProfilePictureURL;
       }
       else {
         this.setNewProfilePicture(this.myFile)

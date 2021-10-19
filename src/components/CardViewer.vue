@@ -33,7 +33,7 @@
 
       </q-card>
 
-      <div class="comment-parent" align="center" style="width: 32%">
+      <div class="comment-parent" align="center" style="width: 530px">
         <q-input outlined bottom-slots v-model="comment" label="left your comment here" :dense="dense">
           <template v-slot:before>
             <q-avatar>
@@ -46,7 +46,7 @@
           </template>
 
           <template v-slot:after>
-            <q-btn round dense flat icon="send" />
+            <q-btn round dense flat icon="send" @click="leftComment(post.id)"/>
           </template>
         </q-input>
       </div>
