@@ -2,6 +2,7 @@
   <div class="warapper" align="center">
     <div class="cards-wrapper" v-for="post of posts">
 
+      <!--Post Content-->
       <q-card
           class="my-card text-white"
           align="left"
@@ -25,7 +26,7 @@
             />
             <q-btn push class="post-buttons"
                    icon="img:https://firebasestorage.googleapis.com/v0/b/fitnesspot-10d17.appspot.com/o/assets%2Fcomment.png?alt=media&token=5cad8e5f-d33a-429e-8aae-bed65f666e2a"
-                   @click="leftComment(post.id)"
+                   @click="commentDialog = true"
             />
             {{ post.likes }} likes
           </div>
@@ -33,6 +34,7 @@
 
       </q-card>
 
+     <!--Write A Comment-->
       <div class="comment-parent" align="center" style="width: 530px">
         <q-input outlined bottom-slots v-model="comment" label="left your comment here" :dense="dense">
           <template v-slot:before>
@@ -51,6 +53,25 @@
         </q-input>
       </div>
 
+      <!--View Comments-->
+      <q-dialog v-model="commentDialog" transition-show="rotate" transition-hide="rotate">
+        <q-card dark bordered class="bg-grey-9 my-card" v-for="comment of post.comments">
+          <q-card-section>
+              <q-avatar>
+                <img :src="comment.image">
+              </q-avatar>
+
+              {{comment.author}}
+
+          </q-card-section>
+
+          <q-separator dark inset />
+
+          <q-card-section>
+            {{ comment.content }}
+          </q-card-section>
+        </q-card>
+      </q-dialog>
     </div>
   </div>
 </template>
@@ -69,6 +90,7 @@ export default {
       userName: '',
       comment: '',
       dense: false,
+      commentDialog: false
     }
   },
   computed: {
@@ -95,6 +117,7 @@ export default {
       this.deletePost();
       this.resetEditedPostId();
     },
+
     isPost() {
       if (this.cardName === 'posts') {
         this.userName = window.user.displayName;
@@ -102,6 +125,7 @@ export default {
       }
       return false;
     },
+
     async like(id) {
       await this.setEditedPostId(id);
       await this.setEditPostById();
@@ -111,22 +135,30 @@ export default {
       await this.setEditedPost(localObj);
       await this.updatePost();
     },
+
     async leftComment(id) {
       await this.setEditedPostId(id);
       await this.setEditPostById();
       let localObj = {}
+
       Object.assign(localObj, this.editedObj)
-      localObj.comments.push(this.currComment)
+      let comment = {
+        author: window.user.displayName,
+        image: this.currProfilePictureURL,
+        content: this.currComment
+      }
+
+      localObj.comments.push(comment)
       //reset current comment
       await this.setEditedPost(localObj);
       await this.updatePost();
     },
+
     async isBelong(id) {
       let post = await this.getPost(id)
-      console.log(post.authorId)
-      console.log(window.user.uid)
       return post.authorId == window.user.uid
-    }
+    },
+
   },
   created() {
     this.getProfilePicture()

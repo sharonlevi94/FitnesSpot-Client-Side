@@ -25,8 +25,7 @@ export default {
         //save in store:
         commit('resetEditedPost');
         commit('resetEditedPostId');
-        commit('editPost', post);
-
+        commit('editPost', post)
     },
 
     insertPost: async ({state, commit},localPost) =>{
@@ -57,7 +56,6 @@ export default {
     getPost: async ({state, commit}, id) => {
         let post = {}
         post = await firestore.getPostById(id)
-        console.log(post)
         return post
     }
 }

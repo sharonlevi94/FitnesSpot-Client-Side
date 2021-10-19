@@ -46,6 +46,7 @@ function deletePost(id){
 }
 
 function updatePost(options){
+    console.log(options)
     return firebaseInstance.firebase.firestore().collection('allPosts')
         .doc(`${options.id}`).update(options.new).then(()=>{
             return  firebaseInstance.firebase.firestore().collection('users')
