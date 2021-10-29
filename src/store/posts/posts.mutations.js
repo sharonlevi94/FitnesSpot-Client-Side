@@ -1,6 +1,8 @@
 export default {
     setPosts: ((state, posts) => state.posts = posts),
 
+    setComments: ((state, comments)=> state.editedComments = comments),
+
     setEditedPostId: ((state, id) => state.editedPostId = id),
 
     setEditedPost: function (state, post) {

@@ -20,8 +20,8 @@
             </q-toolbar-title>
           </q-item>
 
-        <q-item align="right">
-          <div align="right">Developed by Sharon Levi </div>
+        <q-item class="credit" align="right">
+          <div class="credit">Developed by Sharon Levi </div>
         </q-item>
 
         <div>
@@ -49,7 +49,7 @@
 
         <q-item clickable tag="a" href="#/" >
           <q-item-section avatar>
-            <q-icon name="school" />
+            <q-icon name="home" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Home</q-item-label>
@@ -59,7 +59,7 @@
 
         <q-item clickable tag="a" href="#/profile">
           <q-item-section avatar>
-            <q-icon name="school" />
+            <q-icon name="person" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Profile</q-item-label>
@@ -69,7 +69,7 @@
 
         <q-item clickable tag="a" href="#/activities">
           <q-item-section avatar>
-            <q-icon name="school" />
+            <q-icon name="directions" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Your Activities</q-item-label>
@@ -79,7 +79,7 @@
 
         <q-item clickable tag="a" href="#/feed">
           <q-item-section avatar>
-            <q-icon name="code" />
+            <q-icon name="feed" />
           </q-item-section>
           <q-item-section>
             <q-item-label>New Feed</q-item-label>
@@ -109,7 +109,7 @@
 
         <q-item clickable tag="a" target="_blank" href="https://github.com/sharonlevi94">
           <q-item-section avatar>
-            <q-icon name="rss_feed" />
+            <q-icon name="code" />
           </q-item-section>
           <q-item-section>
             <q-item-label>My GitHub</q-item-label>
@@ -119,7 +119,7 @@
 
         <q-item clickable tag="a" target="_blank" href="https://www.linkedin.com/in/sharon-levy-8434471a5/">
           <q-item-section avatar>
-            <q-icon name="rss_feed" />
+            <q-icon name="code" />
           </q-item-section>
           <q-item-section>
             <q-item-label>My LinkedIn</q-item-label>
@@ -189,5 +189,14 @@ export default {
 }
 .q-pa-md{
   background-color: #ffffff;
+}
+
+@media (max-width: 500px){
+  .credit{
+    display: none;
+  }
+  .search-bar{
+    display: none;
+  }
 }
 </style>

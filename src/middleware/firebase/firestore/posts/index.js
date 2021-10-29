@@ -28,9 +28,11 @@ function getPosts(){
 }
 
 function getPostById(id){
+    //console.log(id)
     return firebaseInstance.firebase.firestore().collection('allPosts')
         .doc(id).get().then((doc)=>{
             if(doc.exists){
+                //console.log(doc.data())
                 return doc.data();
             }
         }).catch((err)=>{

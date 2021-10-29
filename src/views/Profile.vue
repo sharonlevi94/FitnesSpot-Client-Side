@@ -26,7 +26,7 @@
 
       <div class="float-child">
 
-        <div   align="center">
+        <div align="center">
           <q-btn class="popup-buttons" label="Your Workouts" color="primary" @click="dialog = true"/>
           <q-dialog  v-model="dialog">
             <q-card >
@@ -115,5 +115,19 @@ export default {
   margin: 10px;
   padding: 5px;
   font-family: "Berlin Sans FB";
+}
+
+@media (max-width: 500px) {
+  .float-container{
+    display: grid;
+    align-items: start;
+  }
+  .float-child{
+    width:100%;
+
+  }
+  .profile-header{
+    font-size: 30px;
+  }
 }
 </style>

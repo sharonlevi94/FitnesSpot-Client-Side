@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md" :style="backgroundImgURL">
-    <h1>Welcome to FitnesSpot</h1>
-    <h3>Share your fitness with everyone!</h3>
+    <h1 class="title">Welcome to FitnesSpot</h1>
+    <h3 class="sub-title">Share your fitness with everyone!</h3>
 
     <div v-if="signInMode">
       <q-btn push class="header-button" color="black" text-color="white" label="Login" @click="login" />
@@ -56,6 +56,7 @@ export default {
         let credential = error.credential;*/
       }
     },
+
     login(){
       this.$router.replace('/login');
     },
@@ -98,4 +99,23 @@ export default {
   padding: 10px;
 }
 
+@media (max-width: 500px) {
+  .q-pa-md{
+
+  }
+.nav-buttons{
+  padding: 5px;
+  margin: 7px;
+  font-size: 10px;
+  width: 100px;
+}
+  .title{
+    font-size: 20px;
+    color: #ff5000;
+    font-family: "Font Awesome 5 Free";
+  }
+  .sub-title{
+    display: none;
+  }
+}
 </style>

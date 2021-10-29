@@ -10,10 +10,6 @@
                 width: 500px;">
 
         <q-card-section>
-<!--            <q-avatar>
-              <img :src="getAuthorImage(post.authorId)">
-            </q-avatar>-->
-
           <div class="sectionTitle" v-if="isPost()"> {{ post.author }} says:</div>
           <div>{{ post.content }}</div>
         </q-card-section>
@@ -30,7 +26,7 @@
             />
             <q-btn push class="post-buttons"
                    icon="img:https://firebasestorage.googleapis.com/v0/b/fitnesspot-10d17.appspot.com/o/assets%2Fcomment.png?alt=media&token=5cad8e5f-d33a-429e-8aae-bed65f666e2a"
-                   @click="commentDialog = true"
+                   @click="showPostComments(post.id)"
             />
             {{ post.likes }} likes
           </div>
@@ -38,7 +34,7 @@
 
       </q-card>
 
-     <!--Write A Comment-->
+      <!--Write A Comment-->
       <div class="comment-parent" align="center" style="width: 530px">
         <q-input outlined bottom-slots v-model="post.currComment" label="left your comment here" :dense="dense">
           <template v-slot:before>
@@ -48,7 +44,7 @@
           </template>
 
           <template v-slot:append>
-            <q-icon v-if="post.currComment !== ''" name="close" @click="post.currComment = ''" class="cursor-pointer" />
+            <q-icon v-if="post.currComment !== ''" name="close" @click="post.currComment = ''" class="cursor-pointer"/>
           </template>
 
           <template v-slot:after>
@@ -58,24 +54,12 @@
       </div>
 
       <!--View Comments-->
-      <q-dialog v-model="commentDialog" transition-show="rotate" transition-hide="rotate">
-        <q-card dark bordered class="bg-grey-9 my-card" v-for="comment of post.comments">
-          <q-card-section>
-              <q-avatar>
-                <img :src="comment.image">
-              </q-avatar>
-
-              {{comment.author}}
-
-          </q-card-section>
-
-          <q-separator dark inset />
-
-          <q-card-section>
-            {{ comment.content }}
-          </q-card-section>
-        </q-card>
+      <q-dialog v-model="commentDialog"
+                transition-show="rotate"
+                transition-hide="rotate">
+        <Comments/>
       </q-dialog>
+
     </div>
   </div>
 </template>
@@ -83,9 +67,13 @@
 <script>
 import firebaseDataBase from '../middleware/firebase/database';
 import {mapMutations, mapActions, mapState} from 'vuex';
+import Comments from "./Comments";
 
 export default {
   name: "CardViewer",
+  components: {
+    Comments
+  },
   props: ['cardObj', 'cardName', 'settingsName'],
   data() {
     return {
@@ -95,6 +83,7 @@ export default {
       dense: false,
       commentDialog: false,
       authorImage: '',
+      lock: false,
     }
   },
   computed: {
@@ -102,11 +91,13 @@ export default {
     ...mapState('images', ['currProfilePictureURL'])
   },
   methods: {
-    ...mapActions('posts', ['getPosts', 'deletePost', 'updatePost', 'setEditPostById','getPost']),
+    ...mapActions('posts', ['getPosts', 'deletePost', 'updatePost',
+      'setEditPostById', 'getPost']),
 
-    ...mapActions('images',['getProfilePicture','getProfilePictureById']),
+    ...mapActions('images', ['getProfilePicture', 'getProfilePictureById']),
 
-    ...mapMutations('posts', ['setEditedPostId', 'setEditedPost', 'resetEditedPostId']),
+    ...mapMutations('posts', ['setEditedPostId', 'setEditedPost',
+      'resetEditedPostId','setComments']),
 
     async readSettings() {
       this.settings = [];
@@ -163,11 +154,20 @@ export default {
       return post.authorId == window.user.uid
     },
 
-    getAuthorImage(id){
-      return this.getProfilePictureById(id).then((image)=>{
+    getAuthorImage(id) {
+      return this.getProfilePictureById(id).then((image) => {
         return image;
       })
     },
+
+     showPostComments(id){
+      this.setEditedPostId(id)
+        console.log(id)
+        // this.getPost(id)
+        //console.log(this.editedObj)
+        // this.setComments(this.editedObj.comments)
+        this.commentDialog = true
+    }
   },
   created() {
     this.getProfilePicture()
@@ -190,11 +190,12 @@ export default {
   color: #000000;
 }
 
-.comment-parent{
+.comment-parent {
   border: 3px solid #fff;
   padding: 5px;
 }
-.comment-child{
+
+.comment-child {
   width: 32%;
   float: left;
   padding: 5px;

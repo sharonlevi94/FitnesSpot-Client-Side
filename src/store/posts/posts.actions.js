@@ -55,7 +55,8 @@ export default {
 
     getPost: async ({state, commit}, id) => {
         let post = {}
+
         post = await firestore.getPostById(id)
-        return post
-    }
+        commit('setEditedPost', post);
+    },
 }
