@@ -23,8 +23,7 @@
 
     </div>
 
-    <div> <q-btn  v-if="!editedObj.id" class="join-us-button" color="white" text-color="black" label="Add" @click="insert()"/> </div>
-    <div> <q-btn  v-if="editedObj.id" class="join-us-button" color="white" text-color="black" label="Update" @click="update()"/> </div>
+    <div> <q-btn class="join-us-button" color="white" text-color="black" label="Add" @click="insert()"/> </div>
   </div>
 </template>
 
@@ -64,24 +63,12 @@ export default {
       'setEditedActivityId']),
 
     async insert(){
-      let dateArr = this.localEditedObj.date.split('-');
-      let dateObj = {};
-      dateObj['year'] = Number(dateArr[0]);
-      dateObj['month'] = Number(dateArr [1]);
-      dateObj['day'] = Number(dateArr[2]);
-      this.localEditedObj.date = dateObj;
-
-      let timeArr = this.localEditedObj.time.split(':');
-      let timeObj = {};
-      timeObj['hours'] = Number(timeArr[0]);
-      timeObj['minutes'] = Number(timeArr [1]);
-      this.localEditedObj.time = timeObj;
+     this.fixDateTime()
 
       this.localToStore();
       await this.insertActivity();
       this.resetEditedActivityId();
       await this.getActivities();
-      //await this.$router.replace(this.$router.currentRoute);
     },
 
     async update(){
@@ -94,6 +81,20 @@ export default {
       this.setEditedActivity(this.localEditedObj);
     },
 
+    fixDateTime(){
+      let dateArr = this.localEditedObj.date.split('-');
+      let dateObj = {};
+      dateObj['year'] = Number(dateArr[0]);
+      dateObj['month'] = Number(dateArr [1]);
+      dateObj['day'] = Number(dateArr[2]);
+      this.localEditedObj.date = dateObj;
+
+      let timeArr = this.localEditedObj.time.split(':');
+      let timeObj = {};
+      timeObj['hours'] = Number(timeArr[0]);
+      timeObj['minutes'] = Number(timeArr [1]);
+      this.localEditedObj.time = timeObj;
+    }
   },
   created() {
     this.setEditActivityById().then(()=>{

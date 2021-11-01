@@ -1,14 +1,14 @@
-import database from "../../middleware/firebase/database";
+import firestore from '../../middleware/firebase/firestore/users'
 
 export default {
 
     getUsers: async ({commit}) => {
-        const users = await database.read({entity: 'users'});
+        const users = await firestore.getUsers()
         commit('setUsers', users);
     },
 
     deleteUser: async ({state, commit}) =>{
-        await database.remove({entity: 'users', id: state.editedUserId});
+        await firestore.removeUser(state.editedUserId)
         commit('resetEditedUserId')
         commit('deleteUser', state.editedUserId)
     },
@@ -18,7 +18,7 @@ export default {
         Object.assign(user, state.editedObj)
         user.id = state.editedUserId;
         //save in DB:
-        await database.update({entity:'users', id: state.editedUserId, user});
+        await firestore.updateUser({ id: state.editedUserId, user});
         //save in store:
         commit('setEditedUser');
         commit('resetEditedUserId');
@@ -28,9 +28,10 @@ export default {
     insertUser: async ({state, commit}) =>{
         let user = {};
         Object.assign(user, state.editedObj);
-        user.id = (await database.create({entity: 'users', item: user })).key
+        user.id = new Date().getTime()
+        await firestore.createNewUser(user)
         commit('resetEditedUser');
-        commit(' insertUser', user)
+        commit('insertUser', user)
     },
 
     setEditUserById: async ({state, commit}) => {
@@ -39,7 +40,7 @@ export default {
             user = state.users.find(user => user.id === state.editedUserId);
         }
         else{
-            user = await database.read({entity: 'users', id: state.editedUserId});
+            user = await firestore.getUserById( state.editedUserId);
         }
         commit('setEditedUser', user);
     }

@@ -76,6 +76,7 @@ export default {
     async read() {
       this.slider = [];
       await this.getImages();
+      console.log(this.images)
       let counter = 1;
       //make the images to objects with Ids:
       for (let url of this.images) {
@@ -89,6 +90,7 @@ export default {
   },
   created() {
     this.read()
+    console.log(this.images)
     this.getProfilePicture()
   }
 }

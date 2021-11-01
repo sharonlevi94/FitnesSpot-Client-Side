@@ -1,95 +1,150 @@
 <template>
   <div class="q-pa-md">
-      {{this.tableTitle}}
-    <q-table class="qtable"
+    {{ this.tableTitle }}
+    <q-table
         :title="this.tableTitle"
-        :data="activities"
+        :data="localActivities"
         :columns="columns"
         row-key="name"
+        card-class="text-bold"
         dark
         color="amber"
+        bordered
+        flat
     >
 
       <template v-slot:body="props">
-        <q-tr :props="props" >
-          <!--TODO: generic v-slots -->
+        <q-tr :props="props" @click="editActivity(props.row.id)">
 
-            <!-- Activities Table -->
-            <q-td  v-if="isToShow('activities')" key="workoutType" :props="props" @click="goToObj(props.row.id)"> {{ props.row.workoutType }} </q-td>
-            <q-td v-if="isToShow('activities')" key="date" :props="props"> {{ props.row.date.day }}/{{ props.row.date.month }}/{{ props.row.date.year }} </q-td>
-            <q-td v-if="isToShow('activities')" key="time" :props="props"> {{ props.row.time.hours}}:{{ props.row.time.minutes}}  </q-td>
-            <q-td v-if="isToShow('activities')" key="location" :props="props"> {{ props.row.location }} </q-td>
-            <q-td v-if="isToShow('activities')" key="calories" :props="props"> {{ props.row.calories }} </q-td>
-            <q-td v-if="isToShow('activities')" key="difficulty" :props="props"> {{ props.row.difficulty }} </q-td>
-            <q-td v-if="isToShow('activities')" key="note" :props="props"> {{ props.row.note }} </q-td>
+          <q-td key="workoutType" :props="props">
+            {{ props.row.workoutType }}
+          </q-td>
 
-<!--            &lt;!&ndash; Users Table &ndash;&gt;
-            <q-td v-if="isToShow('users')" key="first_name" :props="props" @click="goToObj(props.row.id)"> {{ props.row.first_name }} </q-td>
-            <q-td v-if="isToShow('users')" key="last_name" :props="props"> {{ props.row.last_name }} </q-td>
-            <q-td v-if="isToShow('users')" key="user_name" :props="props"> {{ props.row.user_name }} </q-td>
-            <q-td v-if="isToShow('users')" key="password" :props="props"> {{ props.row.password }} </q-td>
-            <q-td v-if="isToShow('users')" key="email" :props="props"> {{ props.row.email }} </q-td>
-            <q-td v-if="isToShow('users')" key="date_of_birth" :props="props"> {{ props.row.date_of_birth.day }}.{{ props.row.date_of_birth.month }}.{{ props.row.date_of_birth.year }} </q-td>
-            <q-td v-if="isToShow('users')" key="phone_number" :props="props"> {{ props.row.phone_number }} </q-td>
-            <q-td v-if="isToShow('users')" key="favorite_sports" :props="props"> {{ props.row.favorite_sports }} </q-td>-->
+          <q-td key="date" :props="props">
+            {{ props.row.date.day }}/{{ props.row.date.month }}/{{ props.row.date.year }}
+          </q-td>
 
-            <q-td key="actions" :props="props">
-              <q-btn @click="deleteObj(props.row.id)">
-                Delete
-              </q-btn>
-            </q-td>
+          <q-td key="time" :props="props">
+            {{ props.row.time.hours }}:{{ props.row.time.minutes }}
+          </q-td>
+
+          <q-td key="location" :props="props">
+            {{ props.row.location }}
+          </q-td>
+
+          <q-td key="calories" :props="props">
+            {{ props.row.calories }}
+          </q-td>
+
+          <q-td key="difficulty" :props="props">
+            {{ props.row.difficulty }}
+          </q-td>
+
+          <q-td key="note" :props="props">
+            {{ props.row.note }}
+          </q-td>
+
+          <q-td key="actions" :props="props">
+            <q-btn @click="deleteObj(props.row.id)">
+              <q-icon name="delete"/>
+            </q-btn>
+          </q-td>
 
         </q-tr>
       </template>
 
     </q-table>
+
+    <q-dialog v-model="popUpEdit">
+      <EditActivity />
+    </q-dialog>
+
   </div>
 </template>
 
 <script>
 import firebaseDataBase from '../middleware/firebase/database';
 import {mapMutations, mapActions, mapState} from 'vuex';
+import EditActivity from "./EditActivity";
 
 export default {
   name: 'TableViewer',
   props: ['tableName', 'tableTitle', 'settings'],
   fields: [],
+  components:{
+    EditActivity
+  },
   //----------------------------------------------------------
-  data () {
+  data() {
     return {
-        columns: [],
+      columns: [],
+      localActivities: [],
+      popUpEdit: false,
     }
   },
-  computed: mapState('activities', ['editedActivityId', 'activities']),
+  computed: mapState('activities', ['editedActivityId', 'activities','editedObj']),
   methods: {
-    ...mapActions('activities', ['getActivities', 'deleteActivity']),
+    ...mapActions('activities', ['getActivities', 'deleteActivity','setEditActivityById']),
     ...mapMutations('activities', ['setEditedActivityId', 'resetEditedActivityId']),
-    async readSettings(){
+    async readSettings() {
       this.columns = [];
       let cols = await firebaseDataBase.readSettings({entity: this.settings});
-      for(let i in cols ){
+      for (let i in cols) {
         this.columns.push(cols[i]);
       }
       this.columns.push({name: "actions", label: "Actions", field: "actions"});
     },
-    goToObj(id){
+    goToObj(id) {
       this.setEditedActivityId(id);
       this.$router.push(`editedObj/${id}`);
     },
-    isToShow(table_name){
+    isToShow(table_name) {
       return this.tableName == table_name;
     },
-    deleteObj(id){
+    deleteObj(id) {
       this.setEditedActivityId(id);
       this.deleteActivity();
       //this.getActivities();
       this.resetEditedActivityId();
+    },
+    editActivity(id) {
+      console.log(id)
+      this.setEditedActivityId(id)
+      this.setEditActivityById()
+
+      this.$q.dialog({
+        component: EditActivity,
+
+        // optional if you want to have access to
+        // Router, Vuex store, and so on, in your
+        // custom component:
+        parent: this, // becomes child of this Vue node
+                      // ("this" points to your Vue component)
+                      // (prop was called "root" in < 1.1.0 and
+                      // still works, but recommending to switch
+                      // to the more appropriate "parent" name)
+
+        // props forwarded to component
+        // (everything except "component" and "parent" props above):
+        text: 'something',
+        // ...more.props...
+      }).onOk( () => {
+         this.getActivities().then(()=>{
+           this.localActivities = this.activities
+         })
+        console.log('OK')
+      }).onCancel(() => {
+        console.log('Cancel')
+      }).onDismiss(() => {
+        console.log('Called on OK or Cancel')
+      })
     }
   },
-  created(){
-    this.getActivities();
-    this.readSettings();
-    //this.getActivityRef({entity: this.tableName});
+  created() {
+    this.getActivities().then(()=>{
+      this.localActivities = this.activities
+      this.readSettings();
+    })
   },
 }
 </script>

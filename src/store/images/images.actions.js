@@ -3,8 +3,8 @@ import firebaseStorage from "../../middleware/firebase/storage"
 
 export default {
     getImages: async ({commit}) => {
-        const images = await firestore.getImages();
-        const downloadsURLS = await firebaseStorage.read(images)
+        let images = await firestore.getImages();
+        let downloadsURLS = await firebaseStorage.read(images)
         commit('setImages', downloadsURLS);
     },
 

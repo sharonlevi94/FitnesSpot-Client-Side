@@ -6,7 +6,7 @@
 
       <q-header class="profile-header">
         <q-img
-            :src="currProfilePictureURL"
+            :src="this.currProfilePictureURL"
             spinner-color="white"
             style="height: 140px; max-width: 150px"
         />

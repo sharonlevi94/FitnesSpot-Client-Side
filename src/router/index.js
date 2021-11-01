@@ -64,6 +64,12 @@ const routes = [
     component:  () => import(/* webpackChunkName: "profile" */ '../views/Profile'),
     meta: { authNotRequired: false }
   },
+  {
+    path: '/users',
+    name: 'Users',
+    component: ()=> import(/* webpackChunkName: "users" */'../views/Users'),
+    meta: { authNotRequired: false }
+  }
 ]
 
 const router = new VueRouter({

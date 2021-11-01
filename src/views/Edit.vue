@@ -1,21 +1,21 @@
 <template>
   <div>
     <AddActivity :tableName="'activities'"/>
-    <tableViewer :tableName="'activities'"
+    <TableViewer :tableName="'activities'"
                  tableTitle="Activities"
                  :settings="'settings-activities'"/>
   </div>
 </template>
 
 <script>
-import tableViewer from '../components/TableViewer.vue';
+import TableViewer from '../components/TableViewer.vue';
 import firebaseDataBase from '../middleware/firebase/database';
 import AddActivity from "../components/AddActivity";
 import {mapMutations, mapActions, mapState} from 'vuex';
 
 export default {
   name: "Edit",
-  components: {AddActivity, tableViewer},
+  components: {AddActivity, TableViewer},
   data() {
     return {
       editedObj: {},

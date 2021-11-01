@@ -107,6 +107,16 @@
           </q-item-section>
         </q-item>
 
+        <q-item clickable tag="a" href="#/users">
+          <q-item-section avatar>
+            <q-icon name="person" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Users</q-item-label>
+            <q-item-label caption>See all users in the app</q-item-label>
+          </q-item-section>
+        </q-item>
+
         <q-item clickable tag="a" target="_blank" href="https://github.com/sharonlevi94">
           <q-item-section avatar>
             <q-icon name="code" />
