@@ -1,75 +1,84 @@
 <template>
-  <div class="q-pa-md" :style="backgroundImgURL">
-    <h1 class="title">Welcome to FitnesSpot</h1>
-    <h3 class="sub-title">Share your fitness with everyone!</h3>
-
+  <div class="q-pa-sm bg-orange-1" >
+    <div v-if="!isLoggedIn">
+      <h1 class="title">Welcome to FitnesSpot</h1>
+      <h3 class="sub-title">Share your fitness with everyone!</h3>
+    </div>
     <div v-if="signInMode">
-      <q-btn push class="header-button" color="black" text-color="white" label="Login" @click="login" />
-      <q-btn push class="header-button" color="black" text-color="white" label="Sign Up"  @click="joinUs"/>
-      <q-btn push class="header-button" label="Google" @click="googleLogin()"/>
+      <q-card >
+        <q-tabs
+            v-model="tab"
+            dense
+            class="text-grey"
+            active-color="primary"
+            indicator-color="primary"
+            align="justify"
+            narrow-indicator
+        >
+          <q-tab name="login" label="Login" />
+          <q-tab name="sign up" label="Sign Up" />
+        </q-tabs>
+
+        <q-separator />
+
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="login">
+            <Login/>
+          </q-tab-panel>
+
+          <q-tab-panel name="sign up">
+            <JoinUs/>
+          </q-tab-panel>
+
+        </q-tab-panels>
+      </q-card>
     </div>
 
     <div v-else>
-      <q-btn push class="nav-buttons" align="center" color="white" text-color="black" label="Profile" @click="changePage('/profile')" />
-      <q-btn push class="nav-buttons" color="white" text-color="black" label="News Feed"  @click="changePage('/feed')"/> <br>
-      <q-btn push class="nav-buttons" color="white" text-color="black" label="Workouts"  @click="changePage('/activities')"/>
-      <q-btn push class="nav-buttons" color="white" text-color="black" label="Chat"  @click="changePage('/')"/> <br>
-      <q-btn push class="nav-buttons" color="white" text-color="black" label="Groups"  @click="changePage('/')"/>
-      <q-btn push class="nav-buttons" color="white" text-color="black" label="Forums"  @click="changePage('/')"/>
+      <q-btn push class="nav-buttons" align="center" color="black"
+             text-color="white" label="Profile" @click="changePage('/profile')" />
+      <q-btn push class="nav-buttons" color="black"
+             text-color="white" label="News Feed"  @click="changePage('/feed')"/> <br>
+      <q-btn push class="nav-buttons" color="black"
+             text-color="white" label="Workouts"  @click="changePage('/activities')"/>
+      <q-btn push class="nav-buttons" color="black"
+             text-color="white" label="Chat"  @click="changePage('/chat-users')"/> <br>
+      <q-btn push class="nav-buttons" color="black"
+             text-color="white" label="Groups"  @click="changePage('/')"/>
+      <q-btn push class="nav-buttons" color="black"
+             text-color="white" label="Forums"  @click="changePage('/')"/>
     </div>
   </div>
 </template>
 
 <script>
 import fireBaseStorage from '../middleware/firebase/storage'
-import firebaseInstance from "../middleware/firebase";
-import firestoreDB from "../middleware/firebase/firestore"
+import JoinUs from "./JoinUs";
+import Login from "./Login";
 
 export default {
   name: "Header",
+  components:{
+    JoinUs, Login
+  },
   props: ['signInMode'],
   data(){
     return{
       backgroundImgURL: '',
+      tab: 'login',
     }
   },
   methods:{
-    async googleLogin() {
-      try {
-        const provider = new firebaseInstance.firebase.auth.GoogleAuthProvider();
-        let result = await firebaseInstance.firebase.auth().signInWithPopup(provider);
-        /** @type {firebase.auth.OAuthCredential} */
-        let credential = result.credential;
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        let token = credential.accessToken;
-        // The signed-in user info.
-        let user = result.user;
-        window.user = user;
-        await firestoreDB.modules.users.createNewUser({name:window.user.displayName, email:window.user.email})
-        await this.$router.replace('/profile');
-
-      } catch (error) {
-        console.log(error);
-        /*let errorCode = error.code;
-        let errorMessage = error.message;
-        let email = error.email;
-        let credential = error.credential;*/
-      }
-    },
-
-    login(){
-      this.$router.replace('/login');
-    },
-    joinUs(){
-      this.$router.replace('/signin');
-    },
     changePage(path){
       this.$router.push(path);
     },
     loadAsset(fileName){
       let assetURL =  fireBaseStorage.readAsset(fileName);
       return `background-image: url(${assetURL})`;
-    }
+    },
+    isLoggedIn(){
+      return window.user;
+    },
   },
   async created(){
     let assetURL = await fireBaseStorage.readAsset('header1.jpg');
@@ -79,7 +88,7 @@ export default {
 </script>
 
 <style scoped>
-.q-pa-md{
+.q-pa-sm{
   font-family: "Berlin Sans FB";
   text-align: center;
   color: black;
@@ -92,17 +101,7 @@ export default {
   font-size: 25px;
   width: 200px;
 }
-.header-button {
-  background-color: black;
-  color: white;
-  margin: 10px;
-  padding: 10px;
-}
-
 @media (max-width: 500px) {
-  .q-pa-md{
-
-  }
 .nav-buttons{
   padding: 5px;
   margin: 7px;
@@ -112,7 +111,7 @@ export default {
   .title{
     font-size: 20px;
     color: #ff5000;
-    font-family: "Font Awesome 5 Free";
+    font-family: "Berlin Sans FB";
   }
   .sub-title{
     display: none;

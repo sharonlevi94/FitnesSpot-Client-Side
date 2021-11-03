@@ -66,9 +66,16 @@ export default {
      this.fixDateTime()
 
       this.localToStore();
-      await this.insertActivity();
-      this.resetEditedActivityId();
-      await this.getActivities();
+      await this.insertActivity().then(async ()=>{
+        this.resetEditedActivityId();
+        await this.getActivities();
+        this.$q.notify({
+          message: ' Activity added Successfully! ',
+          color: 'green',
+          icon: 'event_available',
+          type: 'warning',
+        })
+      })
     },
 
     async update(){

@@ -40,10 +40,9 @@ export default {
     ...mapActions('posts',['getPost','setEditPostById'])
   },
   created() {
-    console.log(this.editedPostId)
     this.setEditPostById()
-    Object.assign(this.localPost, this.editedObj)
-    console.log(this.localPost)
+    this.localPost = this.editedObj
+    //Object.assign(this.localPost, this.editedObj)
   }
 }
 </script>

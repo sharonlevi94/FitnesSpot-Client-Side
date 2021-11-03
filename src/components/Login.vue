@@ -3,8 +3,7 @@
     <div class="login-wrapper">
 
       <q-card
-          class="my-card text-white"
-          style="background: radial-gradient(circle, #e37c47 0%, #ee5700 100%)"
+          class="my-card text-black"
       >
         <q-card-section>
           <div class="text-h6">Login</div>
@@ -20,11 +19,12 @@
         </q-card-section>
 
         <q-card-section>
-            <q-btn push class="login-button" color="white" text-color="black" label="Login" @click="login()"/>
+          <q-btn push class="login-button" color="white" text-color="black" label="Login" @click="login()"/>
+          <q-btn push class="login-button" color="white" text-color="black" label="Google" @click="googleLogin()"/>
         </q-card-section>
         <q-card-section>
           <div class="forgot-button">
-            <q-btn push text-color="white" label="forgot password?"/>
+            <q-btn push text-color="black" label="forgot password?"/>
           </div>
         </q-card-section>
       </q-card>
@@ -36,6 +36,7 @@
 
 <script>
 import firebaseInstance from '../middleware/firebase';
+import firestoreDB from "../middleware/firebase/firestore";
 
 export default {
   name: "Login",
@@ -58,8 +59,30 @@ export default {
         await this.$router.push('/');
       } catch (error) {
         console.log(error)
-       /* let errorCode = error.code;
-        let errorMessage = error.message;*/
+        /* let errorCode = error.code;
+         let errorMessage = error.message;*/
+      }
+    },
+    async googleLogin(){
+      try {
+        const provider = new firebaseInstance.firebase.auth.GoogleAuthProvider();
+        let result = await firebaseInstance.firebase.auth().signInWithPopup(provider);
+        /** @type {firebase.auth.OAuthCredential} */
+        let credential = result.credential;
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        let token = credential.accessToken;
+        // The signed-in user info.
+        let user = result.user;
+        window.user = user;
+        await firestoreDB.modules.users.createNewUser({name:window.user.displayName, email:window.user.email})
+        await this.$router.replace('/profile');
+
+      } catch (error) {
+        console.log(error);
+        /*let errorCode = error.code;
+        let errorMessage = error.message;
+        let email = error.email;
+        let credential = error.credential;*/
       }
     }
   }
@@ -69,10 +92,6 @@ export default {
 <style scoped>
 .login-wrapper {
   width: 290px;
-  height: 600px;
   font-family: "Berlin Sans FB";
-}
-.wrapper {
-  background-color: #773b3b;
 }
 </style>

@@ -68,12 +68,18 @@ export default {
 
     getProfilePictureById: async ({state, commit}, id) => {
         return firestore.readProfilePicture(id).then((imageObj)=>{
-            imageObj.authorId = id;
-            //imageObj with id & name & authorId
-
-            return firebaseStorage.readProfilePicture(imageObj).then((downloadURL)=>{
-                return downloadURL;
-            })
+            console.log(imageObj)
+            if(imageObj){
+                imageObj.authorId = id;
+                //imageObj with id & name & authorId
+                return firebaseStorage.readProfilePicture(imageObj)
+                    .then((downloadURL)=>{
+                        return downloadURL;
+                    })
+            }
+            else{
+                return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+            }
         })
 
 

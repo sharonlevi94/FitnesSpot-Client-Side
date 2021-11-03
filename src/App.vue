@@ -1,5 +1,5 @@
 <template>
-  <q-layout class="q-pa-md" view="lHh Lpr lFf">
+  <q-layout class="q-pa-sm" view="lHh Lpr lFf">
     <q-header elevated class="glossy">
       <div>
       <q-toolbar>
@@ -27,6 +27,7 @@
         <div>
           <q-btn  class="logout-btn" align="left" v-if="isLoggedIn()" push color="white" text-color="black" label="Logout" @click="logout()" />
         </div>
+
 
           <q-input class="search-bar" v-if="isLoggedIn()" v-model="search" filled type="search" label="Search">
             <template v-slot:append>
@@ -87,7 +88,7 @@
           </q-item-section>
         </q-item>
 
-        <q-item clickable tag="a" target="_blank" href="https://chat.quasar.dev">
+        <q-item clickable tag="a" href="#/chat-users">
           <q-item-section avatar>
             <q-icon name="chat" />
           </q-item-section>
@@ -140,9 +141,8 @@
       </q-list>
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container class="container">
       <router-view/>
-
     </q-page-container>
   </q-layout>
 </template>
@@ -153,11 +153,6 @@
 import firebaseInstance from './middleware/firebase';
 export default {
   name: 'LayoutDefault',
-
-  components: {
-
-  },
-
   data () {
     return {
       leftDrawerOpen: !this.$q.platform.is.desktop,
@@ -169,7 +164,7 @@ export default {
       try{
         await firebaseInstance.firebase.auth().signOut();
         delete window.user;
-        await this.$router.push('/login');
+        await this.$router.push('/');
       }
       catch(error){
         console.log(error);
@@ -195,7 +190,7 @@ export default {
   border-radius: 20px;
   margin-top: 10px;
   margin-bottom: 10px;
-  margin-left: 930px;
+  /*margin-left: 930px;*/
 }
 .q-pa-md{
   background-color: #ffffff;
