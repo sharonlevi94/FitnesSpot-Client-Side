@@ -14,13 +14,13 @@ async function upload(options) {
     console.log('Uploaded a blob or file!');
 }
 
-async function read(urlArr) {
+async function read(urlArr, id) {
     let pathURL = [];
     // Create a reference to Storage:
     let storageRef = firebaseInstance.firebase.storage();
 
     for (let url of urlArr) {
-        let pathReference = storageRef.ref().child(`users/${window.user.uid}/images/${url.name}`);
+        let pathReference = storageRef.ref().child(`users/${id}/images/${url.name}`);
         let imageObj = {};
         Object.assign(imageObj, url)
         imageObj.downloadURL = await pathReference.getDownloadURL();

@@ -1,6 +1,6 @@
 <template>
   <q-page class="chat-layout">
-    <q-item-label class="toolbar-title bg-amber">
+    <q-item-label class="toolbar-title text-center bg-amber">
       ChatSpot
       <q-icon name="chat"/>
     </q-item-label>
@@ -9,7 +9,12 @@
         class="full-width"
         separator
         bordered>
-      <q-item v-for="(contact, index) in localUsers" :key="index" class="q-my-sm" clickable v-ripple>
+      <q-item
+          v-for="(contact, index) in users"
+          :key="index" class="q-my-sm"
+          clickable
+          v-ripple
+          :to="`/chat-room-page/${contact.id}`">
         <q-item-section avatar>
           <q-avatar color="primary" text-color="white">
             <img :src="avatars[index]">
@@ -17,13 +22,13 @@
         </q-item-section>
 
         <q-item-section>
-          <q-item-label>{{ contact.name }}</q-item-label>
+          <q-item-label>{{ contact.name ? contact.name : contact.first_name + ' ' + contact.last_name }}</q-item-label>
           <q-item-label caption lines="1">{{ contact.email }}</q-item-label>
         </q-item-section>
 
         <q-item-section side>
           <q-badge :color="contact.online? 'light-green-5' : 'grey-4'">
-            {{ contact.online? 'Online' : 'Offline' }}
+            {{ contact.online ? 'Online' : 'Offline' }}
           </q-badge>
         </q-item-section>
       </q-item>
@@ -33,11 +38,11 @@
 </template>
 
 <script>
-import {mapState, mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 
 export default {
   name: "ChatUsersPage",
-  computed: mapState('users', ['users']),
+  computed: mapGetters('users', ['users']),
   data() {
     return {
       localUsers: [],
@@ -45,27 +50,29 @@ export default {
     }
   },
   methods: {
-    ...mapActions('users', ['getUsers']),
+    ...mapActions('users', ['getUsers', 'usersChangedListener']),
+
     ...mapActions('images', ['getProfilePictureById']),
+
     getAvatar(id) {
       return this.getProfilePictureById(id).then((downloadURL) => {
         return downloadURL
       })
-    }
-  },
-  created() {
-    this.getUsers().then(() => {
+    },
+
+    setLocalUsers() {
       this.localUsers = this.users
-      console.log(this.localUsers)
       for (let user of this.localUsers) {
-        user.online = false;
         this.getAvatar(user.id).then((downloadURL) => {
-          console.log(user.id)
-          console.log(downloadURL)
           this.avatars.push(downloadURL)
         })
       }
-      console.log(this.localUsers)
+    },
+  },
+  created() {
+    this.getUsers().then(() => {
+      console.log(this.users)
+      this.setLocalUsers()
     })
   }
 }

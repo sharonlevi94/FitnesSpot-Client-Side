@@ -58,9 +58,9 @@ function updatePost(options){
         })
 }
 
-function getUserPosts(){
+function getUserPosts(id){
     return firebaseInstance.firebase.firestore().collection('users')
-        .doc(window.user.uid).collection('posts').get()
+        .doc(id).collection('posts').get()
         .then((querySnapshot)=>{
             let posts = [];
             querySnapshot.forEach((doc) => {

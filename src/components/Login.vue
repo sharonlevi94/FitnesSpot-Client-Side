@@ -20,7 +20,7 @@
 
         <q-card-section>
           <q-btn push class="login-button" color="white" text-color="black" label="Login" @click="login()"/>
-          <q-btn push class="login-button" color="white" text-color="black" label="Google" @click="googleLogin()"/>
+          <q-btn push class="login-button" color="white" text-color="black" label="Google" @click="loginGoogle()"/>
         </q-card-section>
         <q-card-section>
           <div class="forgot-button">
@@ -37,6 +37,7 @@
 <script>
 import firebaseInstance from '../middleware/firebase';
 import firestoreDB from "../middleware/firebase/firestore";
+import { mapActions } from 'vuex'
 
 export default {
   name: "Login",
@@ -48,42 +49,19 @@ export default {
     }
   },
   methods: {
+    ...mapActions('users',['loginUser', 'googleLogin']),
     async login() {
-      try {
-        console.log(`email: ${this.email}, password: ${this.password}`);
-        let userCredential = await firebaseInstance.firebase.auth().signInWithEmailAndPassword(this.email, this.password);
-        // Signed in
-        let user = userCredential.user;
-        window.user = user;
-        console.log(user);
-        await this.$router.push('/');
-      } catch (error) {
-        console.log(error)
-        /* let errorCode = error.code;
-         let errorMessage = error.message;*/
-      }
+      await this.loginUser({
+        email: this.email,
+        password: this.password
+      })
+      await this.$router.push(`/profile/${window.user.uid}`);
     },
-    async googleLogin(){
-      try {
-        const provider = new firebaseInstance.firebase.auth.GoogleAuthProvider();
-        let result = await firebaseInstance.firebase.auth().signInWithPopup(provider);
-        /** @type {firebase.auth.OAuthCredential} */
-        let credential = result.credential;
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        let token = credential.accessToken;
-        // The signed-in user info.
-        let user = result.user;
-        window.user = user;
-        await firestoreDB.modules.users.createNewUser({name:window.user.displayName, email:window.user.email})
-        await this.$router.replace('/profile');
+    async loginGoogle(){
+      await this.googleLogin().then(()=>{
+         this.$router.push(`/profile/${window.user.uid}`);
+      })
 
-      } catch (error) {
-        console.log(error);
-        /*let errorCode = error.code;
-        let errorMessage = error.message;
-        let email = error.email;
-        let credential = error.credential;*/
-      }
     }
   }
 }

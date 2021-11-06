@@ -13,6 +13,7 @@ export default {
             year:''
         },
         phone_number: '',
-        favorite_sports:''
+        favorite_sports:'',
+        online: false,
     }
 }

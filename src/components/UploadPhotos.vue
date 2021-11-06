@@ -1,24 +1,28 @@
 <template>
   <div class="q-pa-md">
     {{titleName}}
-    <q-file filled bottom-slots v-model="myFile" label="Click to choose file" counter>
+    <div v-if="isMyPhotos()">
 
-      <template v-slot:prepend>
-        <q-icon name="cloud_upload" @click.stop/>
-      </template>
+      <q-file filled bottom-slots v-model="myFile" label="Click to choose file" counter>
 
-      <template v-slot:append>
-        <q-icon name="close" @click.stop="myFile = null" class="cursor-pointer"/>
-      </template>
+        <template v-slot:prepend>
+          <q-icon name="cloud_upload" @click.stop/>
+        </template>
 
-      <template v-slot:hint>
-        {{ hint }}
-      </template>
-    </q-file>
+        <template v-slot:append>
+          <q-icon name="close" @click.stop="myFile = null" class="cursor-pointer"/>
+        </template>
 
-    <q-btn @click="upload()">
-      {{ buttonName }}
-    </q-btn>
+        <template v-slot:hint>
+          {{ hint }}
+        </template>
+      </q-file>
+
+      <q-btn @click="upload()">
+        {{ buttonName }}
+      </q-btn>
+
+    </div>
 
     <q-carousel
         animated
@@ -42,7 +46,7 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   name: "UploadPhotos",
-  props: ['titleName', 'buttonName', 'hint', 'display'],
+  props: ['titleName', 'buttonName', 'hint', 'display','id'],
   data() {
     return {
       myFile: null,
@@ -70,13 +74,11 @@ export default {
       else {
         this.setNewProfilePicture(this.myFile)
         await this.uploadProfilePicture();
-        console.log(this.currProfilePictureURL)
       }
     },
     async read() {
       this.slider = [];
       await this.getImages();
-      console.log(this.images)
       let counter = 1;
       //make the images to objects with Ids:
       for (let url of this.images) {
@@ -86,11 +88,13 @@ export default {
         counter++;
         this.slider.push(imgObj);
       }
+    },
+    isMyPhotos(){
+      return this.$route.params.id == window.user.uid
     }
   },
   created() {
     this.read()
-    console.log(this.images)
     this.getProfilePicture()
   }
 }

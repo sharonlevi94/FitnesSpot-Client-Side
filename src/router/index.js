@@ -59,7 +59,7 @@ const routes = [
         meta: {authNotRequired: false}
     },
     {
-        path: '/profile',
+        path: '/profile/:id',
         name: 'Profile',
         component: () => import(/* webpackChunkName: "profile" */ '../views/Profile'),
         meta: {authNotRequired: false}
@@ -71,9 +71,9 @@ const routes = [
         meta: {authNotRequired: false}
     },
     {
-        path: '/chat-home',
-        name: 'ChatHomePage',
-        component: () => import(/* webpackChunkName: "users" */'../views/ChatPages/ChatHomePage'),
+        path: '/chat-room-page/:otherUserId',
+        name: 'ChatRoomPage',
+        component: () => import(/* webpackChunkName: "users" */'../views/ChatPages/ChatRoomPage'),
         meta: {authNotRequired: false},
     },
     {

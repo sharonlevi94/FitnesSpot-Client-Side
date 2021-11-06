@@ -2,9 +2,9 @@ import firestore from "../../middleware/firebase/firestore/images/index.js"
 import firebaseStorage from "../../middleware/firebase/storage"
 
 export default {
-    getImages: async ({commit}) => {
-        let images = await firestore.getImages();
-        let downloadsURLS = await firebaseStorage.read(images)
+    getImages: async ({commit}, id) => {
+        let images = await firestore.getImages(id);
+        let downloadsURLS = await firebaseStorage.read(images, id)
         commit('setImages', downloadsURLS);
     },
 
@@ -68,7 +68,6 @@ export default {
 
     getProfilePictureById: async ({state, commit}, id) => {
         return firestore.readProfilePicture(id).then((imageObj)=>{
-            console.log(imageObj)
             if(imageObj){
                 imageObj.authorId = id;
                 //imageObj with id & name & authorId

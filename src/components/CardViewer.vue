@@ -74,7 +74,7 @@ export default {
   components: {
     Comments
   },
-  props: ['cardObj', 'cardName', 'settingsName'],
+  props: ['cardObj', 'cardName', 'settingsName', 'id'],
   data() {
     return {
       settings: [],
@@ -192,12 +192,6 @@ export default {
 
 .comment-parent {
   border: 3px solid #fff;
-  padding: 5px;
-}
-
-.comment-child {
-  width: 32%;
-  float: left;
   padding: 5px;
 }
 </style>

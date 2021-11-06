@@ -17,8 +17,9 @@
       </div>
     </q-item-label>
 
-    <q-banner class="bg-grey-4 text-center">
-      User is offline.
+    <q-banner
+        class="bg-grey-4 text-center">
+      {{ contact.online ? 'User is online' : 'User is offline' }}
     </q-banner>
 
     <div class="q-pa-md column col justify-end">
@@ -28,7 +29,7 @@
           :name="message.from"
           :avatar="message.avatar"
           :text="[message.text]"
-          :sent="message.from == 'me' ? true : false"
+          :sent="message.from === 'me'"
           stamp="7 minutes ago"
       />
     </div>
@@ -80,47 +81,49 @@
 </template>
 
 <script>
-import {mapState, mapActions} from 'vuex'
+import {mapState, mapActions, mapMutations} from 'vuex'
 
 export default {
-  name: "ChatHomePage",
+  name: "ChatRoomPage",
   data() {
     return {
       newMessage: '',
       dense: false,
       profilePic: '',
-      messages: [
-        {
-          text: 'Hello there! ',
-          from: 'me',
-          avatar: this.profilePic
-        },
-        {
-          text: 'Hi! Whats up with you?',
-          from: 'Avital'
-        },
-        {
-          text: 'Im fine, tnx!',
-          from: 'me',
-          avatar: this.profilePic
-        }
-      ]
+      contact:'',
     }
   },
-  computed: mapState('images', ['currProfilePictureURL']),
+  computed: {
+    ...mapState('users', ['users','editedObj']),
+    ...mapState('images', ['currProfilePictureURL']),
+    ...mapState('chat',['messages','editedMessage'])
+  },
   methods: {
     ...mapActions('images', ['getProfilePictureById']),
+    ...mapActions('chat', ['insertMessage', 'getMessages']),
+    ...mapMutations('chat', ['setEditedMessage']),
+    ...mapMutations('users',['setEditedUserId']),
+    ...mapActions('users',['setEditUserById']),
     goBack() {
-      this.$router.push('/chat-users');
+      this.$router.replace('/chat-users');
     },
-    sendMessage() {
-      this.messages.push({
+
+    async sendMessage() {
+      console.log(window.user)
+      await this.setEditedMessage({
         text: this.newMessage,
-        from: 'me',
+        from: window.user.details.first_name + ' ' + window.user.details.last_name ,
         avatar: this.profilePic
       })
+      await this.insertMessage(this.$route.params.otherUserId)
       this.newMessage=''
     }
+  },
+  mounted() {
+    this.setEditedUserId(this.$route.params.otherUserId)
+    this.setEditUserById()
+    this.contact = this.editedObj
+    this.getMessages(this.$route.params.otherUserId)
   },
   created() {
     this.getProfilePictureById(window.user.uid).then((res) => {

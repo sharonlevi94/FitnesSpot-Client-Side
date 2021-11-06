@@ -2,7 +2,9 @@ import firebaseInstance from '../';
 
 async function read(options) {
     if (options.Id) {
-        let objects = await firebaseInstance.firebase.database().ref(`users/${window.user.uid}/data/${options.entity}/${options.Id}`).once('value');
+        let objects = await firebaseInstance.firebase.database()
+            .ref(`users/${window.user.uid}/data/${options.entity}/${options.Id}`)
+            .once('value');
         let map = objects.val();
         let objectsArr = [];
         objectsArr.push(map);

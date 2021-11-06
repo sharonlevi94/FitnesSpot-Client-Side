@@ -125,5 +125,7 @@ export default {
 </script>
 
 <style scoped>
-
+.q-dialog-plugin{
+  width: 1000px;
+}
 </style>

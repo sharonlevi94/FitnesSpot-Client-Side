@@ -1,10 +1,10 @@
 <template>
   <div class="q-pa-sm bg-orange-1" >
-    <div v-if="!isLoggedIn">
+    <div v-if="isLoggedIn">
       <h1 class="title">Welcome to FitnesSpot</h1>
       <h3 class="sub-title">Share your fitness with everyone!</h3>
     </div>
-    <div v-if="signInMode">
+    <div v-if="!isLoggedIn()">
       <q-card >
         <q-tabs
             v-model="tab"
@@ -33,10 +33,9 @@
         </q-tab-panels>
       </q-card>
     </div>
-
     <div v-else>
       <q-btn push class="nav-buttons" align="center" color="black"
-             text-color="white" label="Profile" @click="changePage('/profile')" />
+             text-color="white" label="Profile" @click="changePage(`/profile/${getMyId()}`)" />
       <q-btn push class="nav-buttons" color="black"
              text-color="white" label="News Feed"  @click="changePage('/feed')"/> <br>
       <q-btn push class="nav-buttons" color="black"
@@ -79,6 +78,10 @@ export default {
     isLoggedIn(){
       return window.user;
     },
+    getMyId(){
+      let myId = window.user.uid
+      return myId
+    }
   },
   async created(){
     let assetURL = await fireBaseStorage.readAsset('header1.jpg');
@@ -112,6 +115,7 @@ export default {
     font-size: 20px;
     color: #ff5000;
     font-family: "Berlin Sans FB";
+
   }
   .sub-title{
     display: none;

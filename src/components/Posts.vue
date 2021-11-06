@@ -7,11 +7,12 @@
 
       <CardViewer
           :cardName="cardName"
-          :settingsName="cardSettings"/>
+          :settingsName="cardSettings"
+          :id="userId"/>
 
       <template v-slot:loading>
         <div class="row justify-center q-my-md">
-          <q-spinner-dots color="primary" size="40px" />
+          <q-spinner-dots color="primary" size="40px"/>
         </div>
       </template>
 
@@ -26,10 +27,10 @@ import {mapMutations, mapActions, mapState} from 'vuex';
 export default {
   name: "Posts",
   components: {CardViewer},
-  props: ['cardName', 'cardSettings', 'titleName','isUser'],
-  data () {
+  props: ['cardName', 'cardSettings', 'titleName', 'isUser', 'userId'],
+  data() {
     return {
-      items: [ {}, {}, {}, {}, {}, {}, {} ],
+      items: [{}, {}, {}, {}, {}, {}, {}],
       iconImgUrl: ''
     }
   },
@@ -39,7 +40,7 @@ export default {
 
     ...mapMutations('posts', ['setEditedPostId']),
 
-    onLoad (index, done) {
+    onLoad(index, done) {
       setTimeout(() => {
         if (this.items) {
           this.items.push({}, {}, {}, {}, {}, {}, {})
@@ -48,14 +49,18 @@ export default {
       }, 2000)
     },
   },
-   created(){
-     this.getPosts(this.isUser)
+  created() {
+    let userOptions = {
+      isUser: this.isUser,
+      id: this.userId
+    }
+    this.getPosts(userOptions)
   }
 }
 </script>
 
 <style scoped>
-.q-pa-md{
+.q-pa-md {
   font-size: 40px;
   font-family: "Berlin Sans FB";
 }

@@ -25,7 +25,7 @@
         </q-item>
 
         <div>
-          <q-btn  class="logout-btn" align="left" v-if="isLoggedIn()" push color="white" text-color="black" label="Logout" @click="logout()" />
+          <q-btn  class="logout-btn" align="left" v-if="isLoggedIn()" push color="white" text-color="black" icon="logout" @click="logout()" />
         </div>
 
 
@@ -58,7 +58,7 @@
           </q-item-section>
         </q-item>
 
-        <q-item clickable tag="a" href="#/profile">
+        <q-item clickable tag="a" :href="`#/profile/${getMyId()}`">
           <q-item-section avatar>
             <q-icon name="person" />
           </q-item-section>
@@ -113,7 +113,7 @@
             <q-icon name="person" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Users</q-item-label>
+            <q-item-label>Friends</q-item-label>
             <q-item-label caption>See all users in the app</q-item-label>
           </q-item-section>
         </q-item>
@@ -151,6 +151,8 @@
 
 <script>
 import firebaseInstance from './middleware/firebase';
+import {mapActions, mapMutations} from 'vuex'
+
 export default {
   name: 'LayoutDefault',
   data () {
@@ -160,11 +162,14 @@ export default {
     }
   },
   methods:{
+    ...mapActions('users', ['handleAuthStateChanged','logoutUser']),
+    ...mapMutations('users', ['setEditedUserId']),
     async logout(){
       try{
-        await firebaseInstance.firebase.auth().signOut();
+        this.setEditedUserId(window.user.uid)
+        await this.logoutUser()
         delete window.user;
-        await this.$router.push('/');
+        await this.$router.replace('/login');
       }
       catch(error){
         console.log(error);
@@ -175,7 +180,14 @@ export default {
     },
     searchSomething(){
 
-    }
+    },
+    getMyId(){
+      let myId = window.user.uid
+      return myId
+    },
+  },
+  mounted() {
+    this.handleAuthStateChanged()
   }
 }
 </script>

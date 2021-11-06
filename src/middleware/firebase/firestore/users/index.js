@@ -2,13 +2,17 @@ import firebaseInstance from '../../';
 import firestore from "firebase/firestore"
 
 function createNewUser(userRecords){
-    console.log(userRecords)
     return firebaseInstance.firebase.firestore()
         .collection('users')
         .doc(window.user.uid).set(userRecords)
 }
 
 function getUsers(){
+   /* firebaseInstance.firebase.firestore()
+        .collection('users').onSnapshot(res =>{
+        return res.docChanges()
+    })
+*/
     return firebaseInstance.firebase.firestore()
         .collection('users')
         .get()
@@ -21,6 +25,13 @@ function getUsers(){
                 users.push(user);
             });
             return users;
+        })
+}
+
+function changesListener(){
+    return firebaseInstance.firebase.firestore()
+        .collection('users').onSnapshot(res =>{
+            return res.docChanges()
         })
 }
 
@@ -51,10 +62,18 @@ function getUserById(id){
         })
 }
 
+async function setAuthState(id, state){
+    let currUser = await this.getUserById(id)
+    currUser.online = state
+    await this.updateUser({id:id, new: currUser})
+}
+
 export default {
     createNewUser,
     getUsers,
     removeUser,
     updateUser,
-    getUserById
+    getUserById,
+    setAuthState,
+    changesListener
 }

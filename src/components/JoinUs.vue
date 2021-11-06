@@ -62,6 +62,7 @@ export default {
         date_of_birth: '',
         phone_number: '',
         favorite_sports: '',
+        online: false
       },
     }
   },

@@ -153,6 +153,5 @@ export default {
 .q-pa-md {
   font-size: 60px;
   font-family: "Berlin Sans FB";
-
 }
 </style>

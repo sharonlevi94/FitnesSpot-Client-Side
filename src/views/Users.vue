@@ -7,29 +7,32 @@
       </template>
     </q-input>
 
-    <q-table
-        grid
-        title="Friends"
-        :data="localUsers"
-        :columns="settings"
-        row-key="name"
-        title-class="text-h5 text-bold text-black-9"
-        card-class="text-bold"
-        :pagination="initialPagination"
-        card-style="border-radius: 2em; box-shadow: rgba(255, 168, 19, 0.50) 0px 1px 2px 0px; border:none; padding: 2em"
-        bordered
-        flat
-    />
+    <template>
+
+      <div class="q-pa-md" style="width: 100%">
+        <q-list bordered v-for="(user, index) in localUsers" :key="index">
+          <q-item clickable v-ripple :to="`/profile/${user.id}`">
+            <q-item-section>{{user.first_name+ ' '+ user.last_name}}</q-item-section>
+            <q-item-section avatar>
+              <q-avatar>
+                <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+              </q-avatar>
+            </q-item-section>
+          </q-item>
+          <q-separator />
+        </q-list>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
 import firebaseDataBase from '../middleware/firebase/database';
-import {mapState, mapActions} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 
 export default {
   name: 'Users',
-  computed: mapState('users', ['users']),
+  computed: mapGetters('users', ['users']),
   data() {
     return {
       initialPagination: {
@@ -45,7 +48,7 @@ export default {
   },
   methods: {
     ...mapActions('users', ['getUsers']),
-
+    ...mapActions('images', ['getProfilePictureById']),
     reloadTable() {
       this.isReload = !this.isReload;
     },
@@ -65,7 +68,13 @@ export default {
 
     searchSomething() {
 
-    }
+    },
+
+    getAvatar(id) {
+      return this.getProfilePictureById(id).then((downloadURL) => {
+        return downloadURL
+      })
+    },
   },
   created() {
     this.getAllUsers()

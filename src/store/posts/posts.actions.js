@@ -1,10 +1,11 @@
 import firestore from "../../middleware/firebase/firestore/posts/index.js"
 
 export default {
-    getPosts: async ({commit}, userPosts) => {
+    getPosts: async ({commit}, userOptions) => {
+        // userOptions = { isUser, id }
         let posts = []
-        if(userPosts)
-            posts = await firestore.getUserPosts()
+        if(userOptions.isUser)
+            posts = await firestore.getUserPosts(userOptions.id)
         else
             posts = await firestore.getPosts()
         commit('setPosts', posts);

@@ -15,9 +15,9 @@ function removeImage(options){
         .doc(options.id).delete().then(()=>{})
 }
 
-function getImages(){
+function getImages(id){
     return firebaseInstance.firebase.firestore()
-        .collection('users').doc(window.user.uid)
+        .collection('users').doc(id)
         .collection('images').get()
         .then((querySnapshot)=>{
             let images = [];
