@@ -15,7 +15,7 @@ firebase.initializeApp(
         storageBucket: "fitnesspot-10d17.appspot.com",
         messagingSenderId: "172495419834",
         appId: "1:172495419834:web:a55aa22bc74ad06fe6c583",
-        databaseURL: "https://fitnesspot-10d17-default-rtdb.europe-west1.firebasedatabase.app",
+        databaseURL: "https://fitnesspot-10d17-default-rtdb.europe-west1.firebasedatabase.app/",
     });
 
 export default {

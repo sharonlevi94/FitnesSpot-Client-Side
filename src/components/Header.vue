@@ -92,7 +92,7 @@ export default {
 
 <style scoped>
 .q-pa-sm{
-  font-family: "Berlin Sans FB";
+  font-family: BN United;
   text-align: center;
   color: black;
   width: 100%;

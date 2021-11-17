@@ -150,7 +150,6 @@
 <!------------------------------------------------------------------------------->
 
 <script>
-import firebaseInstance from './middleware/firebase';
 import {mapActions, mapMutations} from 'vuex'
 
 export default {

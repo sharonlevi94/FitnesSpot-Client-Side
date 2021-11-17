@@ -1,14 +1,24 @@
 <template>
-  <q-layout view="hhh lpr fff">
+  <q-layout view="lhh Lpr fFf">
     <q-page-container class="float-container">
-      <q-header class="profile-header">
-        <q-img
-            :src="profilePicURL"
-            spinner-color="white"
-            style="height: 140px; max-width: 150px"
-        />
-        {{ localUser.first_name + ' ' + localUser.last_name }}
-      </q-header>
+      <q-banner rounded class="text-h2 bg-primary">
+        <template v-slot:avatar>
+          <img
+              :src="profilePicURL"
+              style="width: 150px; height: 140px"
+          >
+        </template>
+
+        <div class="title text-h3">{{ localUser.first_name + ' ' + localUser.last_name }}</div>
+
+        <template v-slot:action>
+          <q-btn
+              v-if="isMyProfile()"
+              flat
+              label="Settings"
+              icon="settings"/>
+        </template>
+      </q-banner>
 
       <div class="float-child">
         <UploadPhotos
@@ -102,7 +112,11 @@ export default {
       this.setEditedUserId(this.$route.params.id)
       this.setEditUserById()
       this.localUser = this.editedObj
-      console.log(this.localUser)
+
+      this.setEditedUserId(window.user.uid)
+      this.setEditUserById()
+      window.user.details = this.editedObj
+
       this.getProfilePictureById(this.$route.params.id).then((url) => {
         this.profilePicURL = url
       })
@@ -116,7 +130,7 @@ export default {
 .float-container {
   border: 3px solid #fff;
   padding: 20px;
-  display: flex;
+  display: grid;
   width: 100%;
 }
 
@@ -126,13 +140,6 @@ export default {
   padding: 20px;
 
 }
-
-.profile-header {
-  height: 150px;
-  font-size: 60px;
-  font-family: "Berlin Sans FB";
-}
-
 .popup-buttons {
   margin: 10px;
   padding: 5px;
@@ -149,14 +156,12 @@ export default {
     width: 100%;
 
   }
-
-  .profile-header {
-    font-size: 30px;
-    width: 100%;
-  }
 }
 
 .activities-popup {
   width: 1000px;
+}
+.title{
+  font-family: BN United;
 }
 </style>

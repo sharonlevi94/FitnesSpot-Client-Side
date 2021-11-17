@@ -78,7 +78,7 @@ export default {
     },
     async read() {
       this.slider = [];
-      await this.getImages();
+      await this.getImages(this.$route.params.id);
       let counter = 1;
       //make the images to objects with Ids:
       for (let url of this.images) {

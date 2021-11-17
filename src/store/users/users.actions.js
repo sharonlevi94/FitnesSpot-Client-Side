@@ -54,6 +54,7 @@ export default {
             }
             else{
                 // User is logged out
+                console.log('user logout')
                 firestore.setAuthState(state.editedUserId,false)
             }
         })
@@ -108,12 +109,15 @@ export default {
                 email: user.email,
                 online: true,
             }
-            window.user = user;
-            window.user.details = details
+            user.details = details
+            //Object.assign(user.details, details)
+            //window.user = user
+            Object.assign(window.user, user)
+            console.log(window.user)
             await firestore.createNewUser(details)
 
         }catch (error) {
-            console.log(error);
+            console.log(error.message);
             /*let errorCode = error.code;
             let errorMessage = error.message;
             let email = error.email;
@@ -128,5 +132,11 @@ export default {
     usersChangedListener: async ({})=>{
         let users = await firestore.users.changesListener()
         commit('setUsers', users);
+    },
+
+    getUserDetails: async ({},id)=>{
+        return firestore.getUserById(id).then((userRecords)=>{
+            return userRecords
+        })
     }
 }

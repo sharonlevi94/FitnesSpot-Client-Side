@@ -71,7 +71,6 @@ export default {
   },
   created() {
     this.getUsers().then(() => {
-      console.log(this.users)
       this.setLocalUsers()
     })
   }

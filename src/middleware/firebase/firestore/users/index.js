@@ -2,17 +2,13 @@ import firebaseInstance from '../../';
 import firestore from "firebase/firestore"
 
 function createNewUser(userRecords){
+    console.log(userRecords)
     return firebaseInstance.firebase.firestore()
         .collection('users')
         .doc(window.user.uid).set(userRecords)
 }
 
 function getUsers(){
-   /* firebaseInstance.firebase.firestore()
-        .collection('users').onSnapshot(res =>{
-        return res.docChanges()
-    })
-*/
     return firebaseInstance.firebase.firestore()
         .collection('users')
         .get()
@@ -53,19 +49,21 @@ function updateUser(options){
 function getUserById(id){
     return firebaseInstance.firebase.firestore()
         .collection('users')
-        .doc(id).get().then((doc)=>{
+        .doc(`${id}`).get().then((doc)=>{
             if(doc.exists){
                 return doc.data();
             }
-        }).catch(()=>{
-            console.log('user doesnt exist')
+        }).catch((error)=>{
+            console.log(error.message)
         })
 }
 
 async function setAuthState(id, state){
-    let currUser = await this.getUserById(id)
-    currUser.online = state
-    await this.updateUser({id:id, new: currUser})
+    this.getUserById(id).then((currUser)=>{
+        currUser.online = state
+        this.updateUser({id:id, new: currUser})
+    })
+
 }
 
 export default {

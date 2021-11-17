@@ -55,10 +55,20 @@ export default {
         email: this.email,
         password: this.password
       })
+      this.$q.notify({
+        message: ' You are Logged In, Welcome back ! ',
+        color: 'green',
+        type: 'warning',
+      })
       await this.$router.push(`/profile/${window.user.uid}`);
     },
     async loginGoogle(){
       await this.googleLogin().then(()=>{
+        this.$q.notify({
+          message: ' You are Logged In, Welcome back ! ',
+          color: 'green',
+          type: 'warning',
+        })
          this.$router.push(`/profile/${window.user.uid}`);
       })
 
