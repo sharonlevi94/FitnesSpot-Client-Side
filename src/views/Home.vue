@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home bg-orange-1">
     <Header :signInMode="signInMode" />
   </div>
 </template>

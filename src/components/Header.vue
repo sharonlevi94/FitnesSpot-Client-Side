@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-sm bg-orange-1" >
+  <div class="q-pa-sm" >
     <div v-if="isLoggedIn">
       <h1 class="title">Welcome to FitnesSpot</h1>
       <h3 class="sub-title">Share your fitness with everyone!</h3>
@@ -42,10 +42,10 @@
              text-color="white" label="Workouts"  @click="changePage('/activities')"/>
       <q-btn push class="nav-buttons" color="black"
              text-color="white" label="Chat"  @click="changePage('/chat-users')"/> <br>
-      <q-btn push class="nav-buttons" color="black"
+<!--      <q-btn push class="nav-buttons" color="black"
              text-color="white" label="Groups"  @click="changePage('/')"/>
       <q-btn push class="nav-buttons" color="black"
-             text-color="white" label="Forums"  @click="changePage('/')"/>
+             text-color="white" label="Forums"  @click="changePage('/')"/>-->
     </div>
   </div>
 </template>

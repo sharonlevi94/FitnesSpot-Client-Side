@@ -110,9 +110,7 @@ export default {
                 online: true,
             }
             user.details = details
-            //Object.assign(user.details, details)
-            //window.user = user
-            Object.assign(window.user, user)
+            window.user = user
             console.log(window.user)
             await firestore.createNewUser(details)
 

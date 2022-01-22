@@ -141,7 +141,7 @@
       </q-list>
     </q-drawer>
 
-    <q-page-container class="container">
+    <q-page-container>
       <router-view/>
     </q-page-container>
   </q-layout>

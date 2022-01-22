@@ -1,17 +1,14 @@
 <template>
-  <div class="q-pa-md" align="center">
-
+  <div class="q-pa-md justify-center">
     {{ this.titleName }}
-
     <q-infinite-scroll @load="onLoad" :offset="250">
-
       <CardViewer
           :cardName="cardName"
           :settingsName="cardSettings"
           :id="userId"/>
 
       <template v-slot:loading>
-        <div class="row justify-center q-my-md">
+        <div class="row">
           <q-spinner-dots color="primary" size="40px"/>
         </div>
       </template>

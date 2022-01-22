@@ -1,28 +1,23 @@
 <template>
   <div class="q-pa-md">
     What is on your mind?
-
-    <div class="q-gutter-y-md column" style="max-width: 500px">
-      <q-input
-          v-model="content"
-          filled
-          clearable
-          type="textarea"
-          color="red-12"
-          label="share your fitness life here "
-          hint="Press TAB to autocomplete suggested value or ESC to cancel suggestion"
-          :shadow-text="textareaShadowText"
-          @keydown="processTextareaFill"
-          @focus="processTextareaFill"
-      />
-    </div>
-
+    <q-input
+        style="width: 100%"
+        v-model="content"
+        filled
+        clearable
+        type="textarea"
+        color="red-12"
+        label="share your fitness life here "
+        hint="Press TAB to autocomplete suggested value or ESC to cancel suggestion"
+        :shadow-text="textareaShadowText"
+        @keydown="processTextareaFill"
+        @focus="processTextareaFill"
+    />
     <q-btn @click="add()">
       Post
     </q-btn>
-
   </div>
-
 </template>
 
 <script>
@@ -41,7 +36,7 @@ export default {
   },
   computed: {
     ...mapState('posts', ['editedObj', 'posts']),
-    textareaShadowText () {
+    textareaShadowText() {
       if (this.textareaFillCancelled === true) {
         return ''
       }
@@ -52,8 +47,7 @@ export default {
 
       if (empty === true) {
         return t.split('\n')[0]
-      }
-      else if (t.indexOf(this.content) !== 0) {
+      } else if (t.indexOf(this.content) !== 0) {
         return ''
       }
 
@@ -65,15 +59,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions('posts', ['insertPost', 'updatePost','getPosts']),
+    ...mapActions('posts', ['insertPost', 'updatePost', 'getPosts']),
 
-    ...mapMutations('posts', ['setEditedPost','resetEditedPostId']),
+    ...mapMutations('posts', ['setEditedPost', 'resetEditedPostId']),
 
     async add() {
       let newPost = {
         content: this.content,
-        likes:0,
-        comments:[],
+        likes: 0,
+        comments: [],
         author: window.user.displayName,
         authorId: window.user.uid,
       }
@@ -83,7 +77,7 @@ export default {
       //await this.getPosts();
     },
 
-    processTextareaFill (e) {
+    processTextareaFill(e) {
       if (e === void 0) {
         return
       }
@@ -92,14 +86,12 @@ export default {
         if (this.textareaFillCancelled !== true) {
           this.textareaFillCancelled = true
         }
-      }
-      else if (e.keyCode === 9) {
+      } else if (e.keyCode === 9) {
         if (this.textareaFillCancelled !== true && this.textareaShadowText.length > 0) {
           stopAndPrevent(e)
           this.content = (typeof this.content === 'string' ? this.content : '') + this.textareaShadowText
         }
-      }
-      else if (this.textareaFillCancelled === true) {
+      } else if (this.textareaFillCancelled === true) {
         this.textareaFillCancelled = false
       }
     }
@@ -111,6 +103,5 @@ export default {
 .q-pa-md {
   font-size: 40px;
   font-family: "Berlin Sans FB";
-  width: 100%;
 }
 </style>

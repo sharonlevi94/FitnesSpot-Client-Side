@@ -1,26 +1,23 @@
 <template>
-  <q-layout view="lhh Lpr fFf">
-    <q-page-container class="float-container">
-      <q-banner rounded class="text-h2 bg-primary">
-        <template v-slot:avatar>
-          <img
-              :src="profilePicURL"
-              style="width: 150px; height: 140px"
-          >
-        </template>
-
+  <q-page class="text-center items-center">
+    <q-banner rounded class="text-h2 bg-primary">
+      <template v-slot:avatar>
+        <img
+            :src="profilePicURL"
+            style="width: 150px; height: 140px"
+        >
         <div class="title text-h3">{{ localUser.first_name + ' ' + localUser.last_name }}</div>
-
-        <template v-slot:action>
-          <q-btn
-              v-if="isMyProfile()"
-              flat
-              label="Settings"
-              icon="settings"/>
-        </template>
-      </q-banner>
-
-      <div class="float-child">
+      </template>
+      <template v-slot:action>
+        <q-btn
+            v-if="isMyProfile()"
+            flat
+            label="Settings"
+            icon="settings"/>
+      </template>
+    </q-banner>
+    <div class="row wrap justify-center q-pa-lg">
+      <q-card bordered class="text-center q-pa-lg q-ma-lg">
         <UploadPhotos
             v-if="isMyProfile()"
             titleName="Change Profile Picture"
@@ -34,44 +31,42 @@
             hint="Upload your photo"
             :display="true"
             :id="editedUserId"/>
-      </div>
+      </q-card>
+      <q-card bordered class="text-center q-pa-lg q-ma-lg">
+        <q-btn class="popup-buttons" label="Workouts" color="primary" @click="dialog = true"/>
+        <q-dialog v-model="dialog">
+          <q-card>
+            <q-card-section>
+              <tableViewer
+                  class="activities-popup"
+                  :tableName="'activities'"
+                  tableTitle="Activities"
+                  :settings="'settings-activities'"/>
+            </q-card-section>
+          </q-card>
+        </q-dialog>
 
-      <div class="float-child">
+        <q-btn v-if="isMyProfile()" class="popup-buttons" label="Add Workout" color="primary"
+               @click="dialog2 = true"/>
+        <q-dialog v-model="dialog2">
+          <q-card>
+            <q-card-section>
+              <AddActivity :tableName="'activities'"/>
+            </q-card-section>
+          </q-card>
+        </q-dialog>
 
-        <div align="center">
-          <q-btn class="popup-buttons" label="Workouts" color="primary" @click="dialog = true"/>
-          <q-dialog v-model="dialog">
-            <q-card>
-              <q-card-section>
-                <tableViewer
-                    class="activities-popup"
-                    :tableName="'activities'"
-                    tableTitle="Activities"
-                    :settings="'settings-activities'"/>
-              </q-card-section>
-            </q-card>
-          </q-dialog>
 
-          <q-btn v-if="isMyProfile()" class="popup-buttons" label="Add Workout" color="primary"
-                 @click="dialog2 = true"/>
-          <q-dialog v-model="dialog2">
-            <q-card>
-              <q-card-section>
-                <AddActivity :tableName="'activities'"/>
-              </q-card-section>
-            </q-card>
-          </q-dialog>
-        </div>
-
-        <WritePost align="center"/>
+        <WritePost/>
         <Posts :cardName="'posts'"
                :cardSettings="'settings-posts'"
                :titleName="'Posts'"
                :isUser="true"
                :userId="this.$route.params.id"/>
-      </div>
-    </q-page-container>
-  </q-layout>
+
+      </q-card>
+    </div>
+  </q-page>
 </template>
 
 <script>
@@ -126,20 +121,10 @@ export default {
 </script>
 
 <style scoped>
-
-.float-container {
-  border: 3px solid #fff;
-  padding: 20px;
-  display: grid;
-  width: 100%;
+.text-center {
+  font-family: "Berlin Sans FB";
 }
 
-.float-child {
-  width: 50%;
-  float: left;
-  padding: 20px;
-
-}
 .popup-buttons {
   margin: 10px;
   padding: 5px;
@@ -147,21 +132,8 @@ export default {
 }
 
 @media (max-width: 500px) {
-  .float-container {
-    display: grid;
-    align-items: start;
+  .title {
+    font-family: BN United;
   }
-
-  .float-child {
-    width: 100%;
-
-  }
-}
-
-.activities-popup {
-  width: 1000px;
-}
-.title{
-  font-family: BN United;
 }
 </style>

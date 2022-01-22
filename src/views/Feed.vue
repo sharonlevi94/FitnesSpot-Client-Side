@@ -1,16 +1,22 @@
 <template>
-  <div class="home">
-    <WritePost align="center"/>
-    <Posts :cardName="'posts'"
-           :cardSettings="'settings-posts'"
-           :titleName="'News Feed'"
-            :isUser="false"/>
-<!--    <CardViewer
-        v-for="post of posts"
-        :cardObj="post"
-        :cardName="'posts'"
-        :settingsName="'settings-posts'"/>-->
-  </div>
+  <q-page class="q-pa-md text-center items-center">
+    <div class="row wrap justify-center">
+      <q-card
+          bordered
+          style="width: 700px; max-width: 700px"
+      >
+        <WritePost/>
+        <q-card>
+          <Posts :cardName="'posts'"
+                 :cardSettings="'settings-posts'"
+                 :titleName="'News Feed'"
+                 :isUser="false"/>
+
+        </q-card>
+
+      </q-card>
+    </div>
+  </q-page>
 </template>
 
 <script>
@@ -20,17 +26,21 @@ import WritePost from "../components/WritePost";
 export default {
   name: 'Feed',
   components: {
-     Posts, WritePost
+    Posts, WritePost
   },
-  data(){
-    return{
+  data() {
+    return {
       isReload: false,
     }
   },
   methods: {
-    reloadTable(){
+    reloadTable() {
       this.isReload = !this.isReload;
     }
   }
 }
+
 </script>
+
+<style lang="scss">
+</style>

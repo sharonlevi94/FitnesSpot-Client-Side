@@ -25,13 +25,12 @@
 
     <div class="q-pa-md column col justify-end">
       <q-chat-message
-          v-for="message of localMessages"
+          v-for="message of messages"
           :key="message.text"
           :name="message.from"
           :avatar="message.avatar"
           :text="[message.text]"
           :sent="!isThisMe(message.from)"
-          stamp="7 minutes ago"
       />
     </div>
 
@@ -126,13 +125,14 @@ export default {
       return from === this.myDetails.first_name + ' ' + this.myDetails.last_name
     }
   },
+  mounted() {
+    this.getMessages(this.$route.params.otherUserId).then(()=>{})
+  },
   created() {
     this.setEditedUserId(this.$route.params.otherUserId)
     this.setEditUserById()
     this.contact = this.editedObj
-    this.getMessages(this.$route.params.otherUserId).then(()=>{
-      this.localMessages = this.messages
-    })
+
     this.getUserDetails(window.user.uid).then((res)=>{
       this.myDetails = res
     })

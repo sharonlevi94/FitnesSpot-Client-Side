@@ -1,13 +1,12 @@
 <template>
-  <div class="warapper" align="center">
-    <div class="cards-wrapper" v-for="post of posts">
+  <div class="text-center items-center">
+    <div v-for="post of posts">
 
       <!--Post Content-->
       <q-card
-          class="my-card text-white"
-          align="left"
-          style="background: radial-gradient(circle, #ff0303 0%, #ff6a0d 100%);
-                width: 500px;">
+          bordered
+          class="my-card text-black text-left glossy"
+      >
 
         <q-card-section>
           <div class="sectionTitle" v-if="isPost()"> {{ post.author }} says:</div>
@@ -35,11 +34,11 @@
       </q-card>
 
       <!--Write A Comment-->
-      <div class="comment-parent" align="center" style="width: 530px">
+      <div class="comment-parent">
         <q-input outlined bottom-slots v-model="post.currComment" label="left your comment here" :dense="dense">
           <template v-slot:before>
             <q-avatar>
-              <img :src="currProfilePictureURL">
+              <img :src="this.currProfilePictureURL">
             </q-avatar>
           </template>
 
@@ -97,7 +96,7 @@ export default {
     ...mapActions('images', ['getProfilePicture', 'getProfilePictureById']),
 
     ...mapMutations('posts', ['setEditedPostId', 'setEditedPost',
-      'resetEditedPostId','setComments']),
+      'resetEditedPostId', 'setComments']),
 
     async readSettings() {
       this.settings = [];
@@ -160,13 +159,13 @@ export default {
       })
     },
 
-     showPostComments(id){
+    showPostComments(id) {
       this.setEditedPostId(id)
-        console.log(id)
-        // this.getPost(id)
-        //console.log(this.editedObj)
-        // this.setComments(this.editedObj.comments)
-        this.commentDialog = true
+      console.log(id)
+      // this.getPost(id)
+      //console.log(this.editedObj)
+      // this.setComments(this.editedObj.comments)
+      this.commentDialog = true
     }
   },
   created() {
@@ -181,7 +180,7 @@ export default {
 .my-card {
   width: 100%;
   margin: 10px;
-  border-radius: 30px;
+  border-radius: 15px;
   font-size: 20px;
   font-family: "Berlin Sans FB";
 }
@@ -190,8 +189,4 @@ export default {
   color: #000000;
 }
 
-.comment-parent {
-  border: 3px solid #fff;
-  padding: 5px;
-}
 </style>

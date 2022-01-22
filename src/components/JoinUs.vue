@@ -91,7 +91,7 @@ export default {
         user.userDetails = this.editedObj;
         console.log(user)
         window.user = user;
-        await this.$router.push('/');
+        await this.$router.push(`/profile/${window.user.uid}`);
       }
       catch(error){
         console.log(error);
